@@ -6,7 +6,7 @@
     <div class="comtent-list">
       <el-table :data="loggerData.list" border style="width: 100%">
         <el-table-column label="日期" width="213">
-          <template scope="scope">
+          <template scope="scope">   
             <el-icon name="time"></el-icon>
             <span style="margin-left: 10px">{{ scope.row.date }}</span>
           </template>
