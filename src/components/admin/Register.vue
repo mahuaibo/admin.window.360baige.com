@@ -3,7 +3,7 @@
     <div class="layout-sidebar-header">
       <div class="layout-sidebar-header-left">
         <img src="../../assets/logo.png" height="60" width="60"/>
-        <label class="layout-sidebar-header-left-text">百鸽·<label style="font-size: 14px;">开放平台</label></label>
+        <label class="layout-sidebar-header-left-text">百鸽·<label style="font-size: 14px;">管理平台</label></label>
       </div>
       <div class="layout-sidebar-header-right">
         <el-menu class="el-menu-demo" router :default-active="activeIndex" mode="horizontal"
@@ -19,10 +19,10 @@
           <el-form :model="registerDataForm" :rules="registerDataRules" ref="ruleForm2" label-width="100px"
                    class="demo-ruleForm">
             <el-form-item label="用户名" prop="username">
-              <el-input v-model="registerDataForm.username" auto-complete="off"></el-input>
+              <el-input v-model="registerDataForm.username"></el-input>
             </el-form-item>
             <el-form-item label="密码" prop="password">
-              <el-input type="password" v-model="registerDataForm.password" auto-complete="off"></el-input>
+              <el-input type="password" v-model="registerDataForm.password"></el-input>
             </el-form-item>
             <el-form-item>
               <el-button style="width: 210px;" type="success" @click="submitForm('loginDataForm')">注册</el-button>
@@ -57,16 +57,6 @@
     },
     components: {CommonHeader, CommonSidebar},
     data () {
-      var validateUsername = (rule, value, callback) => {
-        if (!value) {
-          return callback(new Error('用户名不能为空'))
-        }
-      }
-      var validatePass = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请输入密码'))
-        }
-      }
       return {
         activeIndex: '1',
         registerDataForm: {
@@ -75,10 +65,12 @@
         },
         registerDataRules: {
           username: [
-            {validator: validateUsername, trigger: 'blur'}
+            {required: true, message: '请输入用户名', trigger: 'blur'},
+            {min: 3, max: 15, message: '长度在 3 到 15 个字符', trigger: 'blur'}
           ],
           password: [
-            {validator: validatePass, trigger: 'blur'}
+            {required: true, message: '请输入密码', trigger: 'blur'},
+            {min: 6, max: 12, message: '长度在 6 到 12 个字符', trigger: 'blur'}
           ]
         }
       }

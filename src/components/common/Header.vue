@@ -30,20 +30,19 @@
       logout () {
         axios({
           method: 'POST',
-          url: 'http://localhost:9090/v1/admin/logout',
+          url: 'http://localhost:30000/cloud/window/v1/user/logout',
           params: {
-            Username: localStorage.getItem('username'),
-            AccessToken: localStorage.getItem('accessToken')
+            access_token: localStorage.getItem('loginAccessToken')
           }
         }).then(function (response) {
-          if (response.data.AccessToken) {
+          console.log(localStorage.getItem('loginAccessToken'))
+          console.log(response.data)
+          if (response.data.code === '200') {
             localStorage.removeItem('username')
-            localStorage.removeItem('accessToken')
+            localStorage.removeItem('loginAccessToken')
             window.location.href = '#/login'
           } else {
-            localStorage.removeItem('username')
-            localStorage.removeItem('accessToken')
-            window.location.href = '#/login'
+            window.location.href = '#/'
           }
         }).catch(function (error) {
           console.log(error)

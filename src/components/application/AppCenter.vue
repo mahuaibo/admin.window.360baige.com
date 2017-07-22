@@ -1,7 +1,7 @@
 <template>
   <div class="index">
     <div class="appCenter-operatingArea">
-      <el-input class="appCenter-seek" placeholder="请选择名称" icon="search" v-model="appSeek"
+      <el-input class="appCenter-seek" placeholder="请输入名称..." icon="search" v-model="appListData.appSeek"
                 :on-icon-click="handleIconClick"></el-input>
       <el-button class="appCenter-shop" type="success" @click="handleClick('/appStore')">应用商店</el-button>
     </div>
@@ -40,8 +40,8 @@
     </div>
     <div class="cappCenter-paging">
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                     :current-page.sync="currentPage" :page-sizes="[100, 200, 300, 400]"
-                     :page-size="100" layout="sizes, prev, pager, next" :total="1000">
+                     :current-page.sync="appListData.current" :page-sizes="[50, 100, 200]"
+                     :page-size="appListData.pageSize" layout="sizes, prev, pager, next" :total="appListData.total">
       </el-pagination>
     </div>
   </div>
@@ -50,6 +50,9 @@
   //  import axios from 'axios'
   import {mapGetters, mapActions} from 'vuex'
   export default {
+    created () {
+      this.initApplicationData(this.appListData)
+    },
     computed: {
       ...mapGetters([
         'appCenterData'
@@ -57,12 +60,17 @@
     },
     data () {
       return {
-        appSeek: null,
-        currentPage: 2
+        appListData: {
+          pageSize: 50,
+          current: 1,
+          total: 0,
+          appSeek: ''
+        }
       }
     },
     methods: {
       ...mapActions([
+        'initApplicationData',
         'increment',
         'decrement',
         'handleClick',
@@ -74,7 +82,7 @@
         'handleCurrentChange'
       ]),
       handleIconClick (ev) {
-        console.log(ev)
+        this.initApplicationData(this.appListData)
       },
       handleEdit (index, row) {
         console.log(index, row)
@@ -83,10 +91,10 @@
         console.log(index, row)
       },
       handleSizeChange (val) {
-        console.log(`每页 ${val} 条`)
+        this.initApplicationData(this.appListData)
       },
       handleCurrentChange (val) {
-        console.log(`当前页: ${val}`)
+        this.initApplicationData(this.appListData)
       }
     }
   }

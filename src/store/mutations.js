@@ -11,27 +11,96 @@ export const handleClick = (state, index, row) => {
   }
 }
 
+// ///////////////////////我的信息数据//////////////////////////////
+export const initMyInfoData = (state, index, row) => {
+  axios({
+    method: 'get',
+    url: 'http://localhost:30000/cloud/window/v1/user/detail',
+    params: {
+      access_token: localStorage.getItem('positionAccessToken')
+    }
+  }).then(function (response) {
+    console.log(response.data)
+    if (response.data.code === '200') {
+      index.id = response.data.data.id
+      index.username = response.data.data.username
+      index.phone = response.data.data.phone
+      index.email = response.data.data.email
+    } else {
+
+    }
+  }).catch(function (error) {
+    console.log(error)
+  })
+}
+// /////////////////////////////////////////////////////
+
+// ///////////////////////企业信息数据//////////////////////////////
+export const initCompanyInfoData = (state, index, row) => {
+  axios({
+    method: 'get',
+    url: 'http://localhost:30000/cloud/window/v1/company/detail',
+    params: {
+      access_token: localStorage.getItem('positionAccessToken')
+    }
+  }).then(function (response) {
+    console.log(response.data)
+    if (response.data.code === '200') {
+      index.id = response.data.data.id
+      index.logo = response.data.data.logo
+      index.name = response.data.data.name
+      index.short_name = response.data.data.short_name
+      index.address = response.data.data.address
+      index.brief = response.data.data.brief
+      index.remark = response.data.data.remark
+    } else {
+
+    }
+  }).catch(function (error) {
+    console.log(error)
+  })
+}
+// /////////////////////////////////////////////////////
+
 // ///////////////////////应用管理数据//////////////////////////////
 export const initApplicationData = (state, index, row) => {
-  state.applicationListData.list = []
+  state.appCenterData.list = []
   axios({
-    method: 'POST',
-    url: 'http://localhost:9090/developer/app/getAppList',
-    params: {page: index.page, rows: index.rows, type: index.dataType}
+    method: 'GET',
+    url: 'http://localhost:30000/cloud/window/v1/application/list',
+    params: {
+      access_token: localStorage.getItem('positionAccessToken'),
+      page_size: index.pageSize,
+      current: index.current,
+      name: index.appSeek
+    }
   }).then(function (response) {
-    if (response.data) {
-      state.applicationListData.list = response.data
-      axios({
-        method: 'POST',
-        url: 'http://localhost:9090/developer/app/getAppCount',
-        params: {type: index.dataType}
-      }).then(function (response) {
-        if (response.data) {
-          state.applicationListData.total = response.data
-        }
-      }).catch(function (error) {
-        console.log(error)
-      })
+    console.log(response.data)
+    if (response.data.code === '200') {
+      index.pageSize = response.data.data.PageSize
+      index.current = response.data.data.Current
+      index.total = response.data.data.Total
+      state.appCenterData.list = response.data.data.List
+    }
+  }).catch(function (error) {
+    console.log(error)
+  })
+}
+// /////////////////////////////////////////////////////
+
+// ///////////////////////应用商店数据//////////////////////////////
+export const initApplicationTplData = (state, index, row) => {
+  state.appStoreData.appList = []
+  axios({
+    method: 'GET',
+    url: 'http://localhost:30000/cloud/window/v1/application_tpl/list',
+    params: {
+      access_token: localStorage.getItem('positionAccessToken')
+    }
+  }).then(function (response) {
+    console.log(response.data)
+    if (response.data.code === '200') {
+      state.appStoreData.appList = response.data.data.List
     }
   }).catch(function (error) {
     console.log(error)

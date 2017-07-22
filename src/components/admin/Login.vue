@@ -3,26 +3,25 @@
     <div class="layout-sidebar-header">
       <div class="layout-sidebar-header-left">
         <img src="../../assets/logo.png" height="60" width="60"/>
-        <label class="layout-sidebar-header-left-text">百鸽·<label style="font-size: 14px;">开放平台</label></label>
+        <label class="layout-sidebar-header-left-text">百鸽·<label style="font-size: 14px;">管理平台</label></label>
       </div>
       <div class="layout-sidebar-header-right">
         <el-menu class="el-menu-demo" router :default-active="activeIndex" mode="horizontal"
                  @select="handleSelect" theme="dark">
           <el-menu-item index="1"><i class="el-icon-message"></i>系统消息</el-menu-item>
-          <el-menu-item index="2">登陆信息</el-menu-item>
         </el-menu>
       </div>
     </div>
     <div class="layout-container">
       <div class="loginbox">
         <div class="loginbox-left">
-          <el-form :model="loginDataForm" :rules="loginDataRules" ref="ruleForm2" label-width="100px"
+          <el-form :model="loginDataForm" :rules="loginDataRules" ref="loginDataForm" label-width="100px"
                    class="demo-ruleForm">
             <el-form-item label="用户名" prop="username">
-              <el-input v-model="loginDataForm.username" auto-complete="off"></el-input>
+              <el-input v-model="loginDataForm.username"></el-input>
             </el-form-item>
             <el-form-item label="密码" prop="password">
-              <el-input type="password" v-model="loginDataForm.password" auto-complete="off"></el-input>
+              <el-input type="password" v-model="loginDataForm.password"></el-input>
             </el-form-item>
             <el-form-item>
               <el-button style="width: 210px;" type="success" @click="submitForm('loginDataForm')">登陆</el-button>
@@ -48,6 +47,7 @@
 </template>
 
 <script>
+  import axios from 'axios'
   import {mapGetters, mapActions} from 'vuex'
   import CommonHeader from '@/components/common/Header'
   import CommonSidebar from '@/components/common/Sidebar'
@@ -57,16 +57,6 @@
     },
     components: {CommonHeader, CommonSidebar},
     data () {
-      var validateUsername = (rule, value, callback) => {
-        if (!value) {
-          return callback(new Error('用户名不能为空'))
-        }
-      }
-      var validatePass = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请输入密码'))
-        }
-      }
       return {
         activeIndex: '1',
         loginDataForm: {
@@ -75,10 +65,12 @@
         },
         loginDataRules: {
           username: [
-            {validator: validateUsername, trigger: 'blur'}
+            {required: true, message: '请输入用户名', trigger: 'blur'},
+            {min: 3, max: 15, message: '长度在 3 到 15 个字符', trigger: 'blur'}
           ],
           password: [
-            {validator: validatePass, trigger: 'blur'}
+            {required: true, message: '请输入密码', trigger: 'blur'},
+            {min: 6, max: 12, message: '长度在 6 到 12 个字符', trigger: 'blur'}
           ]
         }
       }
@@ -99,10 +91,53 @@
 
       },
       submitForm (formName) {
-        console.log(formName)
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            var current = this
+            axios({
+              method: 'POST',
+              url: 'http://localhost:30000/cloud/window/v1/user/login',
+              params: {
+                username: this.loginDataForm.username,
+                password: this.loginDataForm.password
+              }
+            }).then(function (response) {
+              if (response.data.code === '200') {
+                localStorage.setItem('userId', response.data.data.id)
+                localStorage.setItem('username', response.data.data.username)
+                localStorage.setItem('loginAccessToken', response.data.data.access_ticket)
+                window.location.href = '#/'
+                axios({
+                  method: 'Get',
+                  url: 'http://localhost:30000/cloud/window/v1/userposition/positiontoken',
+                  params: {user_position_id: response.data.data.id}
+                }).then(function (response) {
+                  if (response.data.code === '200') {
+                    localStorage.setItem('positionAccessToken', response.data.data.access_token)
+                  } else {
+                    current.promptInfo('error', '角色切换失败！')
+                  }
+                }).catch(function (error) {
+                  console.log(error)
+                })
+              } else {
+                current.promptInfo('error', '用户名密码错误！')
+              }
+            }).catch(function (error) {
+              console.log(error)
+            })
+          } else {
+            console.log('error submit!!')
+            return false
+          }
+        })
       },
       resetForm (formName) {
         this.$refs[formName].resetFields()
+      },
+      promptInfo (type, info) { // type success成功   warning警告   error失败
+        this.$message({message: info, type: type})
+        return false
       }
     }
   }

@@ -75,37 +75,7 @@ const state = {
         label: '软件开发'
       }
     ], // 应用类型list
-    appList: [
-      {
-        img: '../../assets/logo.png',
-        name: '飞机大战',
-        describe: '特别NB的应用，你值得拥有！'
-      }, {
-        img: '../../assets/logo.png',
-        name: '校园新闻',
-        describe: '特别NB的应用，你值得拥有！'
-      }, {
-        img: '../../assets/logo.png',
-        name: '课外拓展',
-        describe: '特别NB的应用，你值得拥有！'
-      }, {
-        img: '../../assets/logo.png',
-        name: '有声读物',
-        describe: '特别NB的应用，你值得拥有！'
-      }, {
-        img: '../../assets/logo.png',
-        name: '有声读物',
-        describe: '特别NB的应用，你值得拥有！'
-      }, {
-        img: '../../assets/logo.png',
-        name: '有声读物',
-        describe: '特别NB的应用，你值得拥有！'
-      }, {
-        img: '../../assets/logo.png',
-        name: '有声读物',
-        describe: '特别NB的应用，你值得拥有！'
-      }
-    ]
+    appList: []
   },
   accountData: {
     list: [{
@@ -147,27 +117,7 @@ const state = {
     }]
   },
   appCenterData: {
-    list: [{
-      date: '2016-05-02',
-      img: '../../assets/logo.png',
-      name: '王小虎',
-      status: '启用'
-    }, {
-      date: '2016-05-04',
-      img: '../../assets/logo.png',
-      name: '王小虎',
-      status: '停用'
-    }, {
-      date: '2016-05-01',
-      img: '../../assets/logo.png',
-      name: '王小虎',
-      status: '启用'
-    }, {
-      date: '2016-05-03',
-      img: '../../assets/logo.png',
-      name: '王小虎',
-      status: '启用'
-    }]
+    list: []
   },
   loggerData: {
     list: [{
