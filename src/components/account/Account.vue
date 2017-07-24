@@ -1,15 +1,15 @@
 <template>
   <div class="index">
     <div class="content-head">
-      <el-row :gutter="20" style="padding-bottom: 20px;">
+      <el-row :gutter="24" style="padding-bottom: 20px;">
         <el-col :span="6">
-          <div class="bg-purple">账户余额(￥)：1160.00</div>
+          <div class="bg-purple">账户余额(￥)：{{ statistical.balance }}</div>
         </el-col>
         <el-col :span="6">
-          <div class="bg-purple">总入账(￥)：1260.00</div>
+          <div class="bg-purple">总入账(￥)：{{ statistical.TotalEntry }}</div>
         </el-col>
         <el-col :span="6">
-          <div class="bg-purple">总出账(￥)：100.00</div>
+          <div class="bg-purple">总出账(￥)：{{ statistical.TotalDischarge }}</div>
         </el-col>
         <el-col :span="6">
           <div class="bg-purple">
@@ -19,9 +19,12 @@
           </div>
         </el-col>
       </el-row>
-      <el-row :gutter="20">
-        <el-col :span="9">
-          <div class="bg-purple">&nbsp;&nbsp;&nbsp;本月账单：存入(￥)：634.00   支出(￥)：634.00 </div>
+      <el-row :gutter="11">
+        <el-col :span="7">
+          <div class="bg-purple">本月账单：存入(￥)：{{ statistical.MonthIncome}}</div>
+        </el-col>
+        <el-col :span="4">
+          <div class="bg-purple">支出(￥)：{{ statistical.MonthPay }}</div>
         </el-col>
       </el-row>
     </div>
@@ -43,7 +46,7 @@
             <span style="margin-left: 10px">{{ scope.row.dealType }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="金额" width="180">
+        <el-table-column label="金额" initApplicationTplDatawidth="180">
           <template scope="scope">
             <span style="margin-left: 10px">{{ scope.row.money }}</span>
           </template>
@@ -57,8 +60,9 @@
     </div>
     <div class="comtent-paging">
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                     :current-page.sync="currentPage" :page-sizes="[100, 200, 300, 400]"
-                     :page-size="100" layout="sizes, prev, pager, next" :total="1000">
+                     :current-page.sync="accountListData.current" :page-sizes="[50, 100, 200]"
+                     :page-size="accountListData.pageSize" layout="sizes, prev, pager, next"
+                     :total="accountListData.total">
       </el-pagination>
     </div>
   </div>
@@ -67,6 +71,10 @@
   //  import axios from 'axios'
   import {mapGetters, mapActions} from 'vuex'
   export default {
+    created () {
+      this.initAccountData(this.statistical)
+      this.initAccountListData(this.accountListData)
+    },
     computed: {
       ...mapGetters([
         'accountData'
@@ -74,21 +82,25 @@
     },
     data () {
       return {
-        appSeek: null,
-        currentPage: 2
+        statistical: {
+          balance: null,          // 余额
+          TotalEntry: null,       // 总入账
+          TotalDischarge: null,   // 总出账
+          MonthIncome: null,      // 月收入
+          MonthPay: null          // 月支出
+        },
+        accountListData: {
+          pageSize: 50,
+          current: 1,
+          total: 0
+        }
       }
     },
     methods: {
       ...mapActions([
-        'increment',
-        'decrement',
-        'handleClick',
-        'handleDetail',
-        'handleEdit',
-        'handleDelete',
-        'handleSelectionChange',
-        'handleSizeChange',
-        'handleCurrentChange'
+        'initAccountData',
+        'initAccountListData',
+        'handleClick'
       ]),
       handleEdit (index, row) {
         console.log(index, row)

@@ -11,6 +11,9 @@ const state = {
   appStoreData: {
     appTypeList: [
       {
+        value: '0',
+        label: '全部'
+      }, {
         value: '1',
         label: '天气'
       }, {
@@ -78,65 +81,16 @@ const state = {
     appList: []
   },
   accountData: {
-    list: [{
-      date: '2016-05-02',
-      type: '现金支出',
-      dealType: '支出',
-      money: '100.00'
-    }, {
-      date: '2016-05-04',
-      type: '现金支出',
-      dealType: '支出',
-      money: '100.00'
-    }, {
-      date: '2016-05-01',
-      type: '现金支出',
-      dealType: '支出',
-      money: '100.00'
-    }]
+    list: []
   },
   transactionDetailData: {
-    list: [{
-      date: '2016-05-02',
-      type: '现金支出',
-      dealType: '支出',
-      money: '100.00',
-      balance: '120.00'
-    }, {
-      date: '2016-05-04',
-      type: '现金支出',
-      dealType: '支出',
-      money: '100.00',
-      balance: '120.00'
-    }, {
-      date: '2016-05-01',
-      type: '现金支出',
-      dealType: '支出',
-      money: '100.00',
-      balance: '120.00'
-    }]
+    list: []
   },
   appCenterData: {
     list: []
   },
   loggerData: {
-    list: [{
-      date: '2016-05-02',
-      name: 'admin',
-      type: '修改',
-      describe: '修改用户密码'
-
-    }, {
-      date: '2016-05-04',
-      name: '王小虎',
-      type: '新增',
-      describe: '新增应用'
-    }, {
-      date: '2016-05-01',
-      name: '王小虎',
-      type: '修改',
-      describe: '修改应用权限'
-    }]
+    list: []
   },
   orderData: {
     list: [{

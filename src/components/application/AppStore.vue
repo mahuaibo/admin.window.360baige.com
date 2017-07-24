@@ -1,10 +1,10 @@
 <template>
   <div class="index">
     <div class="appStore-operatingArea">
-      <el-select v-model="appStore.appType" placeholder="请选择" class="appStore-choicebox">
+      <el-select v-model="appStore.appType" class="appStore-choicebox"> <!-- :visible-change="typeFilter()" -->
         <el-option v-for="item in appStoreData.appTypeList" :label="item.label" :value="item.value"></el-option>
       </el-select>
-      <el-input class="appStore-seek" placeholder="请选择名称" icon="search" v-model="appStore.appSeek"
+      <el-input class="appStore-seek" placeholder="请输入名称" icon="search" v-model="appStore.appSeek"
                 :on-icon-click="handleIconClick"></el-input>
     </div>
     <div class="appStore-list">
@@ -19,7 +19,8 @@
         </div>
         <div class="appStore-app-card-button">
         <span class="wrapper">
-          <el-button type="success" @click="appSubscribe(val.id)"> 订阅 </el-button>
+          <el-button v-if="val.status==0" type="success" @click="selectAppSubscribe(val.id)"> 订阅 </el-button>
+          <el-button v-else="" type="success" @click="enterApp(val.id)"> 进入 </el-button>
           <el-button type="warning" :plain="true" @click="appDetail(val.id)"> 详情 </el-button>
         </span>
         </div>
@@ -37,11 +38,11 @@
     </el-dialog>
     <el-dialog title="付费说明" :visible.sync="appStore.orderModal" size="tiny" :before-close="cancel">
       <el-form ref="form" :model="orderForm" label-width="90px">
-        <el-form-item label="付费说明：">{{ detailForm.date }}</el-form-item>
-        <el-form-item label="缴费选项：">{{ detailForm.type }}</el-form-item>
-        <el-form-item label="支付方式：">{{ detailForm.balance }}</el-form-item>
+        <el-form-item label="付费说明：">{{ orderForm.payType }}</el-form-item>
+        <el-form-item label="缴费选项：">{{ orderForm.payCycle }}</el-form-item>
+        <el-form-item label="支付方式：">{{ orderForm.payWay }}</el-form-item>
         <span class="wrapper">
-          <el-button type="success" @click="appStore.orderModal=true"> 确定订单 </el-button>
+          <el-button type="success" @click="appSubscribe('')"> 确定订单 </el-button>
         </span>
       </el-form>
     </el-dialog>
@@ -52,7 +53,7 @@
   import {mapGetters, mapActions} from 'vuex'
   export default {
     created () {
-      this.initApplicationTplData(this.appListData)
+      this.initApplicationTplData(this.appStore)
     },
     computed: {
       ...mapGetters([
@@ -63,7 +64,7 @@
       return {
         appStore: {
           appSeek: null,
-          appType: '1',
+          appType: '0',
           detailModal: false,
           orderModal: false
         },
@@ -76,38 +77,32 @@
           time: null
         },
         orderForm: {
-          date: null,
-          type: null,
-          balance: null
+          appId: null,
+          payType: null,
+          payCycle: null,
+          payWay: null
         }
       }
     },
     methods: {
       ...mapActions([
         'initApplicationTplData',
-        'increment',
-        'decrement',
         'handleClick',
-        'handleDetail',
-        'handleEdit',
-        'handleDelete',
-        'handleSelectionChange',
-        'handleSizeChange',
-        'handleCurrentChange'
+        'enterApp'
       ]),
-      handleIconClick (ev) {
-        console.log(ev)
+      handleIconClick (ev) {  // 搜索
+        this.initApplicationTplData(this.appStore)
       },
       cancel () { // 点击取消清空表单
         this.appStore.detailModal = false
         this.appStore.orderModal = false
       },
-      appSubscribe (val) {
-        this.appStore.orderModal = true
-        console.log(val)
+      typeFilter () { // 类型过滤
+        this.initApplicationTplData(this.appStore)
       },
-      appDetail (val) {
+      selectAppSubscribe (val) { // 订阅详情
         var current = this
+        current.orderForm.appId = val
         axios({
           method: 'GET',
           url: 'http://localhost:30000/cloud/window/v1/application_tpl/detail',
@@ -117,6 +112,45 @@
           }
         }).then(function (response) {
           console.log(response.data)
+          if (response.data.code === '200') {
+            current.orderForm.payType = response.data.data.pay_type
+            current.orderForm.payCycle = response.data.data.pay_cycle
+          }
+        }).catch(function (error) {
+          console.log(error)
+        })
+        this.appStore.orderModal = true
+      },
+      appSubscribe (val) { // 订阅
+        var current = this
+        axios({
+          method: 'GET',
+          url: 'http://localhost:30000/cloud/window/v1/application_tpl/subscription',
+          params: {
+            access_token: localStorage.getItem('positionAccessToken'),
+            id: current.orderForm.appId
+          }
+        }).then(function (response) {
+          console.log(response.data)
+          if (response.data.code === '200') {
+            current.messageRemind('success', '订阅成功！')
+            current.initApplicationTplData(current.appStore)
+          }
+        }).catch(function (error) {
+          console.log(error)
+        })
+        this.appStore.orderModal = false
+      },
+      appDetail (val) { // 应用详情
+        var current = this
+        axios({
+          method: 'GET',
+          url: 'http://localhost:30000/cloud/window/v1/application_tpl/detail',
+          params: {
+            access_token: localStorage.getItem('positionAccessToken'),
+            id: val
+          }
+        }).then(function (response) {
           if (response.data.code === '200') {
             current.detailForm.img = response.data.data.image
             current.detailForm.name = response.data.data.name
@@ -129,6 +163,13 @@
           console.log(error)
         })
         this.appStore.detailModal = true
+      },
+      enterApp (index) { // 进入应用
+        console.log(index)
+      },
+      messageRemind  (type, info) { // type success成功   warning警告   error失败
+        this.$message({message: info, type: type})
+        return false
       }
     }
   }

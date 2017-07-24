@@ -30,10 +30,10 @@
         </el-table-column>
         <el-table-column label="操作">
           <template scope="scope">
-            <el-button size="small" type="success" @click="handleEdit(scope.$index, scope.row)">进入</el-button>
-            <el-button size="small" type="danger" @click="handleDelete(scope.$index, scope.row)">退订</el-button>
-            <el-button size="small" type="success" @click="handleEdit(scope.$index, scope.row)">启用</el-button>
-            <el-button size="small" type="danger" @click="handleEdit(scope.$index, scope.row)">停用</el-button>
+            <el-button size="small" type="success" @click="enterApp(scope.$index, scope.row)">进入</el-button>
+            <el-button size="small" type="danger" @click="unsubscribeApp(scope.$index, scope.row)">退订</el-button>
+            <el-button size="small" type="success" @click="enableApp(scope.$index, scope.row)">启用</el-button>
+            <el-button size="small" type="danger" @click="disableApp(scope.$index, scope.row)">停用</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -47,7 +47,7 @@
   </div>
 </template>
 <script>
-  //  import axios from 'axios'
+  import axios from 'axios'
   import {mapGetters, mapActions} from 'vuex'
   export default {
     created () {
@@ -65,36 +65,78 @@
           current: 1,
           total: 0,
           appSeek: ''
+        },
+        submitData: {
+          accessPath: null, // 访问路径
+          appId: null, // 应用ID
+          status: null, // 应用状态
+          remindMessage: null // 提示消息
         }
       }
     },
     methods: {
       ...mapActions([
         'initApplicationData',
-        'increment',
-        'decrement',
-        'handleClick',
-        'handleDetail',
-        'handleEdit',
-        'handleDelete',
-        'handleSelectionChange',
-        'handleSizeChange',
-        'handleCurrentChange'
+        'handleClick'
+
       ]),
-      handleIconClick (ev) {
+      handleIconClick (ev) {  // 搜索
         this.initApplicationData(this.appListData)
       },
-      handleEdit (index, row) {
-        console.log(index, row)
-      },
-      handleDelete (index, row) {
-        console.log(index, row)
-      },
-      handleSizeChange (val) {
+      handleSizeChange (val) { // 切换显示条数
         this.initApplicationData(this.appListData)
       },
-      handleCurrentChange (val) {
+      handleCurrentChange (val) { // 翻页
         this.initApplicationData(this.appListData)
+      },
+      enterApp (state, index) { // 进入应用
+        this.submitData.accessPath = ''
+        this.submitData.appId = index.id
+        this.submit()
+      },
+      unsubscribeApp (state, index) { // 退订
+        this.submitData.accessPath = ''
+        this.submitData.appId = index.id
+        this.submit()
+      },
+      enableApp (state, index) { // 启用
+        this.submitData.accessPath = 'http://localhost:30000/cloud/window/v1/application/modifystatus'
+        this.submitData.appId = index.id
+        this.submitData.status = 1
+        this.submitData.remindMessage = '启用'
+        this.submit()
+      },
+      disableApp (state, index) { // 停用
+        this.submitData.accessPath = 'http://localhost:30000/cloud/window/v1/application/modifystatus'
+        this.submitData.appId = index.id
+        this.submitData.status = 0
+        this.submitData.remindMessage = '停用'
+        this.submit()
+      },
+      submit () {
+        var current = this
+        axios({
+          method: 'GET',
+          url: current.submitData.accessPath,
+          params: {
+            access_token: localStorage.getItem('positionAccessToken'),
+            id: current.submitData.appId,
+            status: current.submitData.status
+          }
+        }).then(function (response) {
+          if (response.data.code === '200') {
+            current.messageRemind('success', current.submitData.remindMessage + '成功！')
+            current.initApplicationData(current.appListData) // 更新数据
+          } else {
+            current.messageRemind('error', current.submitData.remindMessage + '失败！')
+          }
+        }).catch(function (error) {
+          console.log(error)
+        })
+      },
+      messageRemind  (type, info) { // type success成功   warning警告   error失败
+        this.$message({message: info, type: type})
+        return false
       }
     }
   }

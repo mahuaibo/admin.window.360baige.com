@@ -8,12 +8,7 @@
         <el-table-column label="日期" width="213">
           <template scope="scope">
             <el-icon name="time"></el-icon>
-            <span style="margin-left: 10px">{{ scope.row.date }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作人" width="213">
-          <template scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.name }}</span>
+            <span style="margin-left: 10px">{{ scope.row.create_time }}</span>
           </template>
         </el-table-column>
         <el-table-column label="操作类型" width="214">
@@ -23,15 +18,16 @@
         </el-table-column>
         <el-table-column label="操作描述">
           <template scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.describe }}</span>
+            <span style="margin-left: 10px">{{ scope.row.remark }}</span>
           </template>
         </el-table-column>
       </el-table>
     </div>
     <div class="comtent-paging">
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                     :current-page.sync="currentPage" :page-sizes="[100, 200, 300, 400]"
-                     :page-size="100" layout="sizes, prev, pager, next" :total="1000">
+                     :current-page.sync="loggerListData.current" :page-sizes="[50, 100, 200]"
+                     :page-size="loggerListData.pageSize" layout="sizes, prev, pager, next"
+                     :total="loggerListData.total">
       </el-pagination>
     </div>
   </div>
@@ -40,6 +36,9 @@
   //  import axios from 'axios'
   import {mapGetters, mapActions} from 'vuex'
   export default {
+    created () {
+      this.initLoggerListData(this.loggerListData)
+    },
     computed: {
       ...mapGetters([
         'loggerData'
@@ -47,36 +46,22 @@
     },
     data () {
       return {
-        appSeek: null,
-        currentPage: 2
+        loggerListData: {
+          pageSize: 50,
+          current: 1,
+          total: 0
+        }
       }
     },
     methods: {
       ...mapActions([
-        'increment',
-        'decrement',
-        'handleClick',
-        'handleDetail',
-        'handleEdit',
-        'handleDelete',
-        'handleSelectionChange',
-        'handleSizeChange',
-        'handleCurrentChange'
+        'initLoggerListData'
       ]),
-      handleIconClick (ev) {
-        console.log(ev)
-      },
-      handleEdit (index, row) {
-        console.log(index, row)
-      },
-      handleDelete (index, row) {
-        console.log(index, row)
-      },
       handleSizeChange (val) {
-        console.log(`每页 ${val} 条`)
+        this.initLoggerListData(this.loggerListData)
       },
       handleCurrentChange (val) {
-        console.log(`当前页: ${val}`)
+        this.initLoggerListData(this.loggerListData)
       }
     }
   }
@@ -84,17 +69,6 @@
 <style>
   .content-head {
     padding-bottom: 60px;
-  }
-
-  .content-head-seek {
-    width: 200px;
-    position: absolute;
-    left: 21px;
-  }
-
-  .content-head-shop {
-    position: absolute;
-    right: 21px;
   }
 
   .comtent-paging {

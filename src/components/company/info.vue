@@ -58,15 +58,7 @@
     methods: {
       ...mapActions([
         'initCompanyInfoData',
-        'increment',
-        'decrement',
-        'handleClick',
-        'handleDetail',
-        'handleEdit',
-        'handleDelete',
-        'handleSelectionChange',
-        'handleSizeChange',
-        'handleCurrentChange'
+        'handleClick'
       ]),
       submitForm (formName) {
         this.$refs[formName].validate((valid) => {
@@ -87,9 +79,9 @@
               }
             }).then(function (response) {
               if (response.data.code === '200') {
-                current.promptInfo('success', '用户信息修改成功！')
+                current.messageRemind('success', '用户信息修改成功！')
               } else {
-                current.promptInfo('error', '用户信息修改失败！')
+                current.messageRemind('error', '用户信息修改失败！')
               }
             }).catch(function (error) {
               console.log(error)
@@ -101,10 +93,11 @@
           }
         })
       },
-      promptInfo (type, info) { // type success成功   warning警告   error失败
+      messageRemind  (type, info) {
         this.$message({message: info, type: type})
         return false
       }
+
     }
   }
 </script>

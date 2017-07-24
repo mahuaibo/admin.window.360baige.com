@@ -2,10 +2,10 @@
   <div class="index">
     <div class="content-head">
       <div class="content-head-seek">
-        <el-date-picker v-model="startTime" align="right" type="date" placeholder="请选择开始日期"
+        <el-date-picker v-model="detailListData.startTime" align="right" type="date" placeholder="请选择开始日期"
                         :picker-options="pickerOptions">
         </el-date-picker>
-        <el-date-picker v-model="endTime" align="right" type="date" placeholder="请选择结束日期"
+        <el-date-picker v-model="detailListData.endTime" align="right" type="date" placeholder="请选择结束日期"
                         :picker-options="pickerOptions">
         </el-date-picker>
         <el-button type="primary">搜索</el-button>
@@ -48,8 +48,9 @@
     </div>
     <div class="comtent-paging">
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                     :current-page.sync="currentPage" :page-sizes="[100, 200, 300, 400]"
-                     :page-size="100" layout="sizes, prev, pager, next" :total="1000">
+                     :current-page.sync="detailListData.current" :page-sizes="[50, 100, 200]"
+                     :page-size="detailListData.pageSize" layout="sizes, prev, pager, next"
+                     :total="detailListData.total">
       </el-pagination>
     </div>
     <el-dialog title="详情" :visible.sync="transactionDetailModal" size="tiny" :before-close="cancel">
@@ -68,6 +69,9 @@
   //  import axios from 'axios'
   import {mapGetters, mapActions} from 'vuex'
   export default {
+    created () {
+      this.initTransactionDetailListData(this.detailListData)
+    },
     computed: {
       ...mapGetters([
         'transactionDetailData'
@@ -80,8 +84,13 @@
             return time.getTime() < Date.now() - 8.64e7
           }
         },
-        startTime: '',
-        endTime: '',
+        detailListData: {
+          startTime: '',
+          endTime: '',
+          pageSize: 50,
+          current: 1,
+          total: 0
+        },
         transactionDetailModal: false,
         transactionForm: {
           date: '2017.10.10',
@@ -92,23 +101,12 @@
           remark: '存入',
           page: 1,
           rows: 1
-        },
-        transactionRules: {},
-        appSeek: null,
-        currentPage: 2
+        }
       }
     },
     methods: {
       ...mapActions([
-        'increment',
-        'decrement',
-        'handleClick',
-        'handleDetail',
-        'handleEdit',
-        'handleDelete',
-        'handleSelectionChange',
-        'handleSizeChange',
-        'handleCurrentChange'
+        'initTransactionDetailListData'
       ]),
       handleDelete (index, row) {
         console.log(index, row)
