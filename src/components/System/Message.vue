@@ -20,7 +20,7 @@
     },
     methods: {
       ...mapActions([
-        'handleClick',
+        'handleClick'
       ])
     }
   }
