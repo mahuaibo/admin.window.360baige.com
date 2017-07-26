@@ -20,31 +20,8 @@
     },
     methods: {
       ...mapActions([
-        'increment',
-        'decrement',
         'handleClick',
-        'handleDetail',
-        'handleEdit',
-        'handleDelete',
-        'handleSelectionChange',
-        'handleSizeChange',
-        'handleCurrentChange'
-      ]),
-      handleIconClick (ev) {
-        console.log(ev)
-      },
-      handleEdit (index, row) {
-        console.log(index, row)
-      },
-      handleDelete (index, row) {
-        console.log(index, row)
-      },
-      handleSizeChange (val) {
-        console.log(`每页 ${val} 条`)
-      },
-      handleCurrentChange (val) {
-        console.log(`当前页: ${val}`)
-      }
+      ])
     }
   }
 </script>

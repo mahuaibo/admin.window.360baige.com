@@ -1,6 +1,6 @@
 <template>
   <div class="index">
-    <div class="content-head">
+    <div class="account-content-head">
       <el-row :gutter="24" style="padding-bottom: 20px;">
         <el-col :span="6">
           <div class="bg-purple">账户余额(￥)：{{ statistical.balance }}</div>
@@ -28,47 +28,51 @@
         </el-col>
       </el-row>
     </div>
-    <div class="comtent-list">
+    <div class="account-comtent-list">
       <el-table :data="accountData.list" border style="width: 100%">
         <el-table-column label="日期" width="180">
           <template scope="scope">
             <el-icon name="time"></el-icon>
-            <span style="margin-left: 10px">{{ scope.row.date }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="类型" width="180">
-          <template scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.type }}</span>
+            <span style="margin-left: 10px">{{ scope.row.create_time }}</span>
           </template>
         </el-table-column>
         <el-table-column label="交易类型" width="180">
           <template scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.dealType }}</span>
+            <span style="margin-left: 10px">{{ scope.row.amount_type }}</span>
           </template>
         </el-table-column>
         <el-table-column label="金额" initApplicationTplDatawidth="180">
           <template scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.money }}</span>
+            <span style="margin-left: 10px">{{ scope.row.amount }}</span>
           </template>
         </el-table-column>
         <el-table-column label="操作">
           <template scope="scope">
-            <el-button size="small" @click="handleEdit(scope.$index, scope.row)">详情</el-button>
+            <el-button size="small" @click="handleDetail(scope.row)">详情</el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
-    <div class="comtent-paging">
+    <div class="account-comtent-paging">
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
                      :current-page.sync="accountListData.current" :page-sizes="[50, 100, 200]"
                      :page-size="accountListData.pageSize" layout="sizes, prev, pager, next"
                      :total="accountListData.total">
       </el-pagination>
     </div>
+    <el-dialog title="详情" :visible.sync="accountDetailModal" size="tiny" :before-close="cancel">
+      <el-form ref="form" :model="accountFrom" label-width="90px">
+        <el-form-item label="交易时间：">{{ accountFrom.createTime }}</el-form-item>
+        <el-form-item label="订单号：">{{ accountFrom.orderCode }}</el-form-item>
+        <el-form-item label="交易类型：">{{ accountFrom.amountType }}</el-form-item>
+        <el-form-item label="交易金额：">{{ accountFrom.amount }}</el-form-item>
+        <el-form-item label="备注：">{{ accountFrom.remark }}</el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 <script>
-  //  import axios from 'axios'
+  import axios from 'axios'
   import {mapGetters, mapActions} from 'vuex'
   export default {
     created () {
@@ -92,7 +96,17 @@
         accountListData: {
           pageSize: 50,
           current: 1,
-          total: 0
+          total: 1
+        },
+        accountDetailModal: false,
+        accountFrom: {
+          createTime: null, // 创建时间
+          orderCode: null,  // 订单编码
+          amountType: null, // 交易金额类型
+          amount: null,      // 交易金额
+          remark: null,      // 备注
+          balance: null,     // 平账
+          to_account: null   // 收款人公司
         }
       }
     },
@@ -102,28 +116,54 @@
         'initAccountListData',
         'handleClick'
       ]),
-      handleEdit (index, row) {
-        console.log(index, row)
+      handleDetail (row) {
+        var current = this
+        axios({
+          method: 'GET',
+          url: 'http://localhost:30000/cloud/window/v1/account_item/detail',
+          params: {
+            access_token: localStorage.getItem('positionAccessToken'),
+            id: row.id
+          }
+        }).then(function (response) {
+          console.log(response.data)
+          if (response.data.code === '200') {
+            current.accountFrom.createTime = response.data.data.create_time
+            current.accountFrom.orderCode = response.data.data.order_code
+            current.accountFrom.amountType = response.data.data.amount_type
+            current.accountFrom.amount = response.data.data.amount
+            current.accountFrom.remark = response.data.data.remark
+          } else {
+            current.messageRemind('error', '失败！')
+          }
+        }).catch(function (error) {
+          console.log(error)
+        })
+        this.accountDetailModal = true
       },
-      handleDelete (index, row) {
-        console.log(index, row)
+      handleSizeChange () {
+        this.initAccountListData(this.accountListData)
       },
-      handleSizeChange (val) {
-        console.log(`每页 ${val} 条`)
+      handleCurrentChange () {
+        this.initAccountListData(this.accountListData)
       },
-      handleCurrentChange (val) {
-        console.log(`当前页: ${val}`)
+      messageRemind  (type, info) { // type success成功   warning警告   error失败
+        this.$message({message: info, type: type})
+        return false
+      },
+      cancel () { // 点击取消清空表单
+        this.accountDetailModal = false
       }
     }
   }
 </script>
 <style>
 
-  .comtent-paging {
+  .account-comtent-paging {
     padding-top: 20px;
   }
 
-  .content-head {
+  .account-content-head {
     padding-bottom: 20px;
   }
 

@@ -1,77 +1,72 @@
 <template>
   <div class="index">
     <div class="content-head">
-      <el-tabs v-model="activeName" @tab-click="handleClick">
-        <el-tab-pane label="全部" name="first"></el-tab-pane>
-        <el-tab-pane label="待付款" name="second"></el-tab-pane>
-        <el-tab-pane label="待发货" name="third"></el-tab-pane>
-        <el-tab-pane label="待收货" name="fourth"></el-tab-pane>
-        <el-tab-pane label="待评价" name="fourth"></el-tab-pane>
-        <el-tab-pane label="退货/售后" name="fourth"></el-tab-pane>
+      <!--0:撤回 1：待审核  2：已通过 3：未通过 4：发货中 5：完成-->
+      <el-tabs v-model="orderListData.status" @tab-click="filterList">
+        <el-tab-pane label="全部" name="-1"></el-tab-pane>
+        <el-tab-pane label="撤回" name="0"></el-tab-pane>
+        <el-tab-pane label="待审核" name="1"></el-tab-pane>
+        <el-tab-pane label="已通过" name="2"></el-tab-pane>
+        <el-tab-pane label="未通过" name="3"></el-tab-pane>
+        <el-tab-pane label="发货中" name="4"></el-tab-pane>
+        <el-tab-pane label="交易完成" name="5"></el-tab-pane>
       </el-tabs>
     </div>
     <div class="comtent-list">
       <el-table :data="orderData.list" border style="width: 100%">
         <el-table-column label="订单号" width="180">
           <template scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.orderNum }}</span>
+            <span style="margin-left: 10px">{{ scope.row.code }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="商品名称" width="200">
-          <template scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.name }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="价格" width="140">
+        <el-table-column label="价格" width="180">
           <template scope="scope">
             <span style="margin-left: 10px">{{ scope.row.price }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="数量" width="100">
+        <el-table-column label="支付方式" width="180">
           <template scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.number }}</span>
+            <span style="margin-left: 10px">{{ scope.row.pay_type }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="状态" width="180">
+          <template scope="scope">
+            <span style="margin-left: 10px">{{ scope.row.status }}</span>
           </template>
         </el-table-column>
         <el-table-column label="操作">
           <template scope="scope">
-            <el-button size="small" @click="orderDetailModel=true">详情</el-button>
-            <el-button size="small" @click="handleEdit(scope.$index, scope.row)">联系客服</el-button>
-            <el-button size="small" @click="handleDelete(scope.$index, scope.row)">取消订单</el-button>
-            <el-button size="small" type="warning" @click="handleDelete(scope.$index, scope.row)">付款</el-button>
+            <el-button size="small" @click="orderDetail(scope.row)">详情</el-button>
+            <el-button size="small" type="danger" @click="cancelOrder(scope.row)">取消订单</el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
     <div class="comtent-paging">
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                     :current-page.sync="currentPage" :page-sizes="[100, 200, 300, 400]"
-                     :page-size="100" layout="sizes, prev, pager, next" :total="1000">
+                     :current-page.sync="orderListData.current" :page-sizes="[50, 100, 200]"
+                     :page-size="orderListData.pageSize" layout="sizes, prev, pager, next" :total="orderListData.total">
       </el-pagination>
       <el-dialog title="订单详情" :visible.sync="orderDetailModel" size="tiny" :before-close="cancel">
-        <el-form ref="form" :model="orderDetail" label-width="90px">
-          <el-form-item label="收货人：">{{ orderDetail.name }}</el-form-item>
-          <el-form-item label="电话号码：">{{ orderDetail.phone }}</el-form-item>
-          <el-form-item label="收货地址：">{{ orderDetail.address }}</el-form-item>
-          <el-form-item label="订单号：">{{ orderDetail.orderNum }}</el-form-item>
-          <el-form-item label="商品名称：">{{ orderDetail.goodsName }}</el-form-item>
-          <el-form-item label="单价：">{{ orderDetail.price }}</el-form-item>
-          <el-form-item label="数量：">{{ orderDetail.number }}</el-form-item>
-          <el-form-item label="商品总价：">{{ orderDetail.totalPrice }}</el-form-item>
-          <el-form-item label="实付款：">{{ orderDetail.payment }}</el-form-item>
+        <el-form ref="form" :model="orderDetailData" label-width="90px">
+          <el-form-item label="交易时间：">{{ orderDetailData.createTime }}</el-form-item>
+          <el-form-item label="订单号码：">{{ orderDetailData.code }}</el-form-item>
+          <el-form-item label="价格：">{{ orderDetailData.price }}</el-form-item>
+          <el-form-item label="支付方式：">{{ orderDetailData.payType }}</el-form-item>
+          <el-form-item label="详情：">{{ orderDetailData.brief }}</el-form-item>
+          <el-form-item label="状态：">{{ orderDetailData.status }}</el-form-item>
         </el-form>
-      </el-dialog>
-      <el-dialog title="物流信息" :visible.sync="logisticsModel" size="tiny" :before-close="cancel">
-        <el-steps :space="100" direction="vertical" :active="1">
-          <el-step title="快件到达：北京市海淀区分拣中心"></el-step>
-        </el-steps>
       </el-dialog>
     </div>
   </div>
 </template>
 <script>
-  //  import axios from 'axios'
+  import axios from 'axios'
   import {mapGetters, mapActions} from 'vuex'
   export default {
+    created () {
+      this.initOrderListData(this.orderListData)
+    },
     computed: {
       ...mapGetters([
         'orderData'
@@ -80,42 +75,71 @@
     data () {
       return {
         orderDetailModel: false,
-        logisticsModel: false,
-        orderDetail: {},
-        currentPage: 2,
-        activeName: 'first'
+        orderDetailData: {
+          createTime: null,
+          code: null,
+          price: null,
+          payType: null,
+          brief: null,
+          status: null
+        },
+        orderListData: {
+          status: '-1',
+          pageSize: 50,
+          current: 1,
+          total: 1
+        }
       }
     },
     methods: {
       ...mapActions([
-        'increment',
-        'decrement',
         'handleClick',
-        'handleDetail',
-        'handleEdit',
-        'handleDelete',
-        'handleSelectionChange',
-        'handleSizeChange',
-        'handleCurrentChange'
+        'initOrderListData'
       ]),
-      handleIconClick (ev) {
-        console.log(ev)
+      filterList (val) {
+        this.initOrderListData(this.orderListData)
       },
-      handleEdit (index, row) {
-        console.log(index, row)
+      orderDetail (val) { // 订单详情
+        var current = this
+        axios({
+          method: 'GET',
+          url: 'http://localhost:30000/cloud/window/v1/order/detail',
+          params: {
+            access_token: localStorage.getItem('positionAccessToken'),
+            id: val.id
+          }
+        }).then(function (response) {
+          console.log(response.data)
+          if (response.data.code === '200') {
+            current.orderDetailData.createTime = response.data.data.create_time
+            current.orderDetailData.code = response.data.data.code
+            current.orderDetailData.price = response.data.data.price
+            current.orderDetailData.payType = response.data.data.pay_type
+            current.orderDetailData.brief = response.data.data.brief
+            current.orderDetailData.status = response.data.data.status
+          } else {
+            current.messageRemind('error', '失败！')
+          }
+        }).catch(function (error) {
+          console.log(error)
+        })
+        this.orderDetailModel = true
       },
-      handleDelete (index, row) {
-        console.log(index, row)
+      cancelOrder (val) { // 取消订单
+        console.log(val.id)
       },
       handleSizeChange (val) {
-        console.log(`每页 ${val} 条`)
+        this.initOrderListData(this.orderListData)
       },
       handleCurrentChange (val) {
-        console.log(`当前页: ${val}`)
+        this.initOrderListData(this.orderListData)
       },
       cancel () {
         this.orderDetailModel = false
-        this.logisticsModel = false
+      },
+      messageRemind  (type, info) { // type success成功   warning警告   error失败
+        this.$message({message: info, type: type})
+        return false
       }
     }
   }

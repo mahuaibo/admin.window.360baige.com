@@ -16,3 +16,6 @@ export const initAccountListData = ({commit}, index, row) => commit('initAccount
 export const initLoggerListData = ({commit}, index, row) => commit('initLoggerListData', index, row)
 // 操作记录列表数据
 export const initTransactionDetailListData = ({commit}, index, row) => commit('initTransactionDetailListData', index, row)
+
+// 操作记录列表数据
+export const initOrderListData = ({commit}, index, row) => commit('initOrderListData', index, row)

@@ -9,7 +9,6 @@
         <el-menu class="el-menu-demo" router :default-active="activeIndex" mode="horizontal"
                  @select="handleSelect" theme="dark">
           <el-menu-item index="1"><i class="el-icon-message"></i>系统消息</el-menu-item>
-          <el-menu-item index="2">登陆信息</el-menu-item>
         </el-menu>
       </div>
     </div>
@@ -25,7 +24,7 @@
               <el-input type="password" v-model="registerDataForm.password"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button style="width: 210px;" type="success" @click="submitForm('loginDataForm')">注册</el-button>
+              <el-button style="width: 200px;" type="success" @click="submitForm('loginDataForm')">注册</el-button>
             </el-form-item>
           </el-form>
         </div>

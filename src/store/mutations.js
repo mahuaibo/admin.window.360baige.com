@@ -130,7 +130,7 @@ export const initAccountData = (state, index, row) => {
 
 // ///////////////////////账户列表数据//////////////////////////////
 export const initAccountListData = (state, index, row) => {
-  state.appStoreData.appList = []
+  state.accountData.appList = []
   axios({
     method: 'GET',
     url: 'http://localhost:30000/cloud/window/v1/account_item/list',
@@ -146,7 +146,7 @@ export const initAccountListData = (state, index, row) => {
       index.pageSize = response.data.data.PageSize
       index.current = response.data.data.Current
       index.total = response.data.data.Total
-      state.appStoreData.appList = response.data.data.List
+      state.accountData.list = response.data.data.List
     }
   }).catch(function (error) {
     console.log(error)
@@ -155,7 +155,7 @@ export const initAccountListData = (state, index, row) => {
 
 // ///////////////////////交易明细列表数据//////////////////////////////
 export const initTransactionDetailListData = (state, index, row) => {
-  state.loggerData.list = []
+  state.transactionDetailData.list = []
   axios({
     method: 'GET',
     url: 'http://localhost:30000/cloud/window/v1/account_item/tradinglist',
@@ -172,7 +172,32 @@ export const initTransactionDetailListData = (state, index, row) => {
       index.pageSize = response.data.data.PageSize
       index.current = response.data.data.Current
       index.total = response.data.data.Total
-      state.loggerData.list = response.data.data.List
+      state.transactionDetailData.list = response.data.data.List
+    }
+  }).catch(function (error) {
+    console.log(error)
+  })
+}
+
+// ///////////////////////订单列表数据//////////////////////////////
+export const initOrderListData = (state, index, row) => {
+  state.orderData.list = []
+  axios({
+    method: 'GET',
+    url: 'http://localhost:30000/cloud/window/v1/order/list',
+    params: {
+      access_token: localStorage.getItem('positionAccessToken'),
+      page_size: index.pageSize,
+      current: index.current,
+      status: index.status
+    }
+  }).then(function (response) {
+    console.log(response.data)
+    if (response.data.code === '200') {
+      index.pageSize = response.data.data.PageSize
+      index.current = response.data.data.Current
+      index.total = response.data.data.Total
+      state.orderData.list = response.data.data.List
     }
   }).catch(function (error) {
     console.log(error)

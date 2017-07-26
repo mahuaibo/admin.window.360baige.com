@@ -49,7 +49,7 @@
         loggerListData: {
           pageSize: 50,
           current: 1,
-          total: 0
+          total: 1
         }
       }
     },

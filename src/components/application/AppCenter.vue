@@ -30,7 +30,7 @@
         </el-table-column>
         <el-table-column label="操作">
           <template scope="scope">
-            <el-button size="small" type="success" @click="enterApp(scope.$index, scope.row)">进入</el-button>
+            <el-button size="small"  @click="enterApp(scope.$index, scope.row)">进入</el-button>
             <el-button size="small" type="danger" @click="unsubscribeApp(scope.$index, scope.row)">退订</el-button>
             <el-button size="small" type="success" @click="enableApp(scope.$index, scope.row)">启用</el-button>
             <el-button size="small" type="danger" @click="disableApp(scope.$index, scope.row)">停用</el-button>
@@ -63,7 +63,7 @@
         appListData: {
           pageSize: 50,
           current: 1,
-          total: 0,
+          total: 1,
           appSeek: ''
         },
         submitData: {
