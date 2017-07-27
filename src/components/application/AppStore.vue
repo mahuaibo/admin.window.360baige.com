@@ -54,10 +54,12 @@
   export default {
     created () {
       this.initApplicationTplData(this.appStore)
+      this.defaultActive.index = '/application/center'
     },
     computed: {
       ...mapGetters([
-        'appStoreData'
+        'appStoreData',
+        'defaultActive'
       ])
     },
     data () {
@@ -86,9 +88,7 @@
     },
     methods: {
       ...mapActions([
-        'initApplicationTplData',
-        'handleClick',
-        'enterApp'
+        'initApplicationTplData'
       ]),
       handleIconClick (ev) {  // 搜索
         this.initApplicationTplData(this.appStore)

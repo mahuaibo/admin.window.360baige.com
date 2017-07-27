@@ -38,10 +38,12 @@
   export default {
     created () {
       this.initLoggerListData(this.loggerListData)
+      this.defaultActive.index = '/logger/list'
     },
     computed: {
       ...mapGetters([
-        'loggerData'
+        'loggerData',
+        'defaultActive'
       ])
     },
     data () {

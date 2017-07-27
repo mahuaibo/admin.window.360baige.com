@@ -114,7 +114,7 @@ const state = {
     }]
   },
   defaultActive: {
-    data: ''
+    index: ''
   }
 }
 

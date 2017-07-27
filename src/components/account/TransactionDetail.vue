@@ -71,10 +71,12 @@
   export default {
     created () {
       this.initTransactionDetailListData(this.detailListData)
+      this.defaultActive.index = '/account/list'
     },
     computed: {
       ...mapGetters([
-        'transactionDetailData'
+        'transactionDetailData',
+        'defaultActive'
       ])
     },
     data () {

@@ -8,7 +8,7 @@
       <div class="layout-sidebar-header-right">
         <el-menu class="el-menu-demo" router :default-active="activeIndex" mode="horizontal"
                  @select="handleSelect" theme="dark">
-          <el-menu-item index="1"><i class="el-icon-message"></i>系统消息</el-menu-item>
+          <el-menu-item index="/system/message"><i class="el-icon-message"></i>系统消息</el-menu-item>
         </el-menu>
       </div>
     </div>
@@ -24,13 +24,13 @@
               <el-input type="password" v-model="loginDataForm.password"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button style="width: 210px;" type="success" @click="submitForm('loginDataForm')">登陆</el-button>
+              <el-button style="width: 210px;float: right;" type="success" @click="submitForm('loginDataForm')">登陆</el-button>
             </el-form-item>
           </el-form>
         </div>
         <div class="loginbox-right">
           <div class="loginbox-right-register">
-            <el-button type="text" @click="handleClick('/register')">免费注册</el-button>
+            <el-button type="text" @click="handleClick('admin/register')">免费注册</el-button>
           </div>
           <div class="loginbox-right-prompt" style="color: #FF0000;">第三方登陆</div>
           <div class="loginbox-right-icon">
@@ -77,15 +77,7 @@
     },
     methods: {
       ...mapActions([
-        'increment',
-        'decrement',
-        'handleClick',
-        'handleDetail',
-        'handleEdit',
-        'handleDelete',
-        'handleSelectionChange',
-        'handleSizeChange',
-        'handleCurrentChange'
+        'handleClick'
       ]),
       handleSelect () {
 
@@ -106,7 +98,7 @@
                 localStorage.setItem('userId', response.data.data.id)
                 localStorage.setItem('username', response.data.data.username)
                 localStorage.setItem('loginAccessToken', response.data.data.access_ticket)
-                window.location.href = '#/'
+                window.location.href = '#/home'
                 axios({
                   method: 'Get',
                   url: 'http://localhost:30000/cloud/window/v1/userposition/positiontoken',
@@ -150,8 +142,6 @@
   .layout {
     position: relative;
     background: #ffffff;
-    height: 100vh;
-    overflow: hidden;
     .layout-sidebar-header {
       height: 100vh;
       .layout-sidebar-header-left {
@@ -220,6 +210,8 @@
           }
         }
       }
+      height: calc(100vh - 150px);
+      overflow: scroll;
     }
     .layout-container-tail {
       background: $color;

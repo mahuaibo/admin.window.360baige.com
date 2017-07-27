@@ -26,9 +26,17 @@
 <script>
   import CommonHeader from '@/components/common/Header'
   import CommonSidebar from '@/components/common/Sidebar'
-
+  import {mapActions} from 'vuex'
   export default {
-    components: {CommonHeader, CommonSidebar}
+    components: {CommonHeader, CommonSidebar},
+    created () {
+      this.initMyInfoData()
+    },
+    methods: {
+      ...mapActions([
+        'initMyInfoData'
+      ])
+    }
   }
 
 </script>

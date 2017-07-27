@@ -1,6 +1,16 @@
 import axios from 'axios'
 import router from '.././router'
 
+// /////////////////////////////loginAccessToken验证/////////////////////////////
+function verifyLoginAccessToken () {
+  console.log('accessToken:开始')
+  if (localStorage.getItem('loginAccessToken') === null) {
+    router.push('/admin/login')
+  }
+  console.log('accessToken:结束')
+  return
+}
+
 // /////////////////////////////跳转页面/////////////////////////////
 export const handleClick = (state, index, row) => {
   console.log('handleClick')
@@ -13,6 +23,7 @@ export const handleClick = (state, index, row) => {
 
 // ///////////////////////我的信息数据//////////////////////////////
 export const initMyInfoData = (state, index, row) => {
+  verifyLoginAccessToken()
   axios({
     method: 'get',
     url: 'http://localhost:30000/cloud/window/v1/user/detail',
@@ -36,6 +47,7 @@ export const initMyInfoData = (state, index, row) => {
 
 // ///////////////////////企业信息数据//////////////////////////////
 export const initCompanyInfoData = (state, index, row) => {
+  verifyLoginAccessToken()
   axios({
     method: 'get',
     url: 'http://localhost:30000/cloud/window/v1/company/detail',
@@ -62,6 +74,7 @@ export const initCompanyInfoData = (state, index, row) => {
 
 // ///////////////////////应用管理数据//////////////////////////////
 export const initApplicationData = (state, index, row) => {
+  verifyLoginAccessToken()
   state.appCenterData.list = []
   axios({
     method: 'GET',
@@ -87,6 +100,7 @@ export const initApplicationData = (state, index, row) => {
 
 // ///////////////////////应用商店数据//////////////////////////////
 export const initApplicationTplData = (state, index, row) => {
+  verifyLoginAccessToken()
   state.appStoreData.appList = []
   axios({
     method: 'GET',
@@ -108,6 +122,7 @@ export const initApplicationTplData = (state, index, row) => {
 
 // ///////////////////////账户统计数据//////////////////////////////
 export const initAccountData = (state, index, row) => {
+  verifyLoginAccessToken()
   axios({
     method: 'GET',
     url: 'http://localhost:30000/cloud/window/v1/account/accountstatistics',
@@ -130,6 +145,7 @@ export const initAccountData = (state, index, row) => {
 
 // ///////////////////////账户列表数据//////////////////////////////
 export const initAccountListData = (state, index, row) => {
+  verifyLoginAccessToken()
   state.accountData.appList = []
   axios({
     method: 'GET',
@@ -155,6 +171,7 @@ export const initAccountListData = (state, index, row) => {
 
 // ///////////////////////交易明细列表数据//////////////////////////////
 export const initTransactionDetailListData = (state, index, row) => {
+  verifyLoginAccessToken()
   state.transactionDetailData.list = []
   axios({
     method: 'GET',
@@ -181,6 +198,7 @@ export const initTransactionDetailListData = (state, index, row) => {
 
 // ///////////////////////订单列表数据//////////////////////////////
 export const initOrderListData = (state, index, row) => {
+  verifyLoginAccessToken()
   state.orderData.list = []
   axios({
     method: 'GET',
@@ -206,6 +224,7 @@ export const initOrderListData = (state, index, row) => {
 
 // ///////////////////////操作记录数据//////////////////////////////
 export const initLoggerListData = (state, index, row) => {
+  verifyLoginAccessToken()
   state.loggerData.list = []
   axios({
     method: 'GET',

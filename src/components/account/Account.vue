@@ -14,7 +14,7 @@
         <el-col :span="6">
           <div class="bg-purple">
             <el-button type="text">
-              <el-button type="text" @click="handleClick('/transactionDetail')">查看交易明细>></el-button>
+              <el-button type="text" @click="handleClick('/account/transactionDetail')">查看交易明细>></el-button>
             </el-button>
           </div>
         </el-col>
@@ -78,10 +78,12 @@
     created () {
       this.initAccountData(this.statistical)
       this.initAccountListData(this.accountListData)
+      this.defaultActive.index = '/account/list'
     },
     computed: {
       ...mapGetters([
-        'accountData'
+        'accountData',
+        'defaultActive'
       ])
     },
     data () {

@@ -1,20 +1,22 @@
 <template>
-  <div class="index" style="width: 500px; position:absolute; left:50%; top:40%; transform:translate(-50%,-40%)">
-    <el-form :model="myData" :rules="userInfoRules" ref="myData" label-width="75px" class="demo-ruleForm">
-      <!--<el-form-item label="LOGO:" prop="logo"></el-form-item>-->
-      <el-form-item label="用户名:" prop="username">
-        <el-input type="username" v-model="myData.username" placeholder="请输入" :disabled="true"></el-input>
-      </el-form-item>
-      <el-form-item label="手机号码:" prop="phone">
-        <el-input type="string" v-model="myData.phone" placeholder="请输入"></el-input>
-      </el-form-item>
-      <el-form-item label="邮箱:" prop="email">
-        <el-input type="string" v-model="myData.email" placeholder="请输入"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button style="width: 425px;" type="success" @click="submitForm('myData')">修改</el-button>
-      </el-form-item>
-    </el-form>
+  <div class="index">
+    <div style="width: 550px; margin: 0 auto; padding-top: 50px;">
+      <el-form :model="myData" :rules="userInfoRules" ref="myData" label-width="75px" class="demo-ruleForm">
+        <!--<el-form-item label="LOGO:" prop="logo"></el-form-item>-->
+        <el-form-item label="用户名:" prop="username">
+          <el-input type="username" v-model="myData.username" placeholder="请输入" :disabled="true"></el-input>
+        </el-form-item>
+        <el-form-item label="手机号码:" prop="phone">
+          <el-input type="string" v-model="myData.phone" placeholder="请输入"></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱:" prop="email">
+          <el-input type="string" v-model="myData.email" placeholder="请输入"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button style="width: 475px;float: right" type="success" @click="submitForm('myData')">修改</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
   </div>
 </template>
 <script>
@@ -23,9 +25,12 @@
   export default {
     created () {
       this.initMyInfoData(this.myData)
+      this.defaultActive.index = '/admin/info'
     },
     computed: {
-      ...mapGetters([])
+      ...mapGetters([
+        'defaultActive'
+      ])
     },
     data () {
       var phone = (rule, value, callback) => {
@@ -54,16 +59,7 @@
     },
     methods: {
       ...mapActions([
-        'initMyInfoData',
-        'increment',
-        'decrement',
-        'handleClick',
-        'handleDetail',
-        'handleEdit',
-        'handleDelete',
-        'handleSelectionChange',
-        'handleSizeChange',
-        'handleCurrentChange'
+        'initMyInfoData'
       ]),
       submitForm (formName) {
         this.$refs[formName].validate((valid) => {

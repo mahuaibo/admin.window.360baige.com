@@ -3,19 +3,13 @@
     <el-menu class="el-menu-demo el-menu-demo-right" router :default-active="activeIndex" mode="horizontal"
              @select="handleSelect" theme="dark">
       <el-menu-item index="1"><i class="el-icon-message"></i>系统消息</el-menu-item>
-      <!--<el-submenu index="2">-->
-      <!--<template slot="title">{{ name }}</template>-->
-      <!--<el-menu-item index="/myinfo">我的信息</el-menu-item>-->
-      <!--<el-menu-item index="/modifyPassword">修改密码</el-menu-item>-->
-      <!--<el-menu-item @click="logout()" index="/login">退出</el-menu-item>-->
-      <!--</el-submenu>-->
       <el-dropdown style="padding-top: 20px;" @command="handleCommand" menu-align="start">
-        <span class="el-dropdown-link">
+        <span class="el-dropdown-link" style="color:#ffffff;">
           {{ name }}<i class="el-icon-caret-bottom el-icon--right"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item command="/myinfo">我的信息</el-dropdown-item>
-          <el-dropdown-item command="/modifyPassword">修改密码</el-dropdown-item>
+          <el-dropdown-item command="/admin/info">我的信息</el-dropdown-item>
+          <el-dropdown-item command="/admin/modifyPassword">修改密码</el-dropdown-item>
           <el-dropdown-item command="logout">退出</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -53,7 +47,7 @@
               localStorage.removeItem('username')
               localStorage.removeItem('loginAccessToken')
               localStorage.removeItem('positionAccessToken')
-              window.location.href = '#/login'
+              window.location.href = '#/admin/login'
             } else {
               window.location.href = '#/'
             }

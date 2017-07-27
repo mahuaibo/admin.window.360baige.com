@@ -3,7 +3,7 @@
     <div class="appCenter-operatingArea">
       <el-input class="appCenter-seek" placeholder="请输入名称..." icon="search" v-model="appListData.appSeek"
                 :on-icon-click="handleIconClick"></el-input>
-      <el-button class="appCenter-shop" type="success" @click="handleClick('/appStore')">应用商店</el-button>
+      <el-button class="appCenter-shop" type="success" @click="handleClick('/application/store')">应用商店</el-button>
     </div>
     <div class="appCenter-list">
       <el-table :data="appCenterData.list" border style="width: 100%">
@@ -30,7 +30,7 @@
         </el-table-column>
         <el-table-column label="操作">
           <template scope="scope">
-            <el-button size="small"  @click="enterApp(scope.$index, scope.row)">进入</el-button>
+            <el-button size="small" @click="enterApp(scope.$index, scope.row)">进入</el-button>
             <el-button size="small" type="danger" @click="unsubscribeApp(scope.$index, scope.row)">退订</el-button>
             <el-button size="small" type="success" @click="enableApp(scope.$index, scope.row)">启用</el-button>
             <el-button size="small" type="danger" @click="disableApp(scope.$index, scope.row)">停用</el-button>
@@ -52,10 +52,12 @@
   export default {
     created () {
       this.initApplicationData(this.appListData)
+      this.defaultActive.index = '/application/center'
     },
     computed: {
       ...mapGetters([
-        'appCenterData'
+        'appCenterData',
+        'defaultActive'
       ])
     },
     data () {
@@ -141,20 +143,16 @@
     }
   }
 </script>
-<style>
+<style lang="scss" scoped>
   .appCenter-operatingArea {
     padding-bottom: 50px;
-  }
-
-  .appCenter-seek {
-    width: 200px;
-    position: absolute;
-    left: 21px;
-  }
-
-  .appCenter-shop {
-    position: absolute;
-    right: 21px;
+    .appCenter-seek {
+      width: 200px;
+      float: left;
+    }
+    .appCenter-shop {
+      float: right;
+    }
   }
 
   .cappCenter-paging {

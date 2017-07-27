@@ -19,9 +19,7 @@
       return {}
     },
     methods: {
-      ...mapActions([
-        'handleClick'
-      ])
+      ...mapActions([])
     }
   }
 </script>

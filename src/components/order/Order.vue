@@ -66,10 +66,12 @@
   export default {
     created () {
       this.initOrderListData(this.orderListData)
+      this.defaultActive.index = '/order/list'
     },
     computed: {
       ...mapGetters([
-        'orderData'
+        'orderData',
+        'defaultActive'
       ])
     },
     data () {
@@ -93,7 +95,6 @@
     },
     methods: {
       ...mapActions([
-        'handleClick',
         'initOrderListData'
       ]),
       filterList (val) {
