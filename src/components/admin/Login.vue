@@ -24,13 +24,14 @@
               <el-input type="password" v-model="loginDataForm.password"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button style="width: 210px;float: right;" type="success" @click="submitForm('loginDataForm')">登陆</el-button>
+              <el-button style="width: 210px;float: right;" type="success" @click="submitForm('loginDataForm')">登陆
+              </el-button>
             </el-form-item>
           </el-form>
         </div>
         <div class="loginbox-right">
           <div class="loginbox-right-register">
-            <el-button type="text" @click="handleClick('admin/register')">免费注册</el-button>
+            <el-button type="text" @click="handleClick('/register')">免费注册</el-button>
           </div>
           <div class="loginbox-right-prompt" style="color: #FF0000;">第三方登陆</div>
           <div class="loginbox-right-icon">
@@ -94,11 +95,12 @@
                 password: this.loginDataForm.password
               }
             }).then(function (response) {
+              console.log(response.data)
               if (response.data.code === '200') {
                 localStorage.setItem('userId', response.data.data.id)
                 localStorage.setItem('username', response.data.data.username)
                 localStorage.setItem('loginAccessToken', response.data.data.access_ticket)
-                window.location.href = '#/home'
+                window.location.href = '#/'
                 axios({
                   method: 'Get',
                   url: 'http://localhost:30000/cloud/window/v1/userposition/positiontoken',

@@ -1,5 +1,7 @@
 // 跳转页面
 export const handleClick = ({commit}, index, row) => commit('handleClick', index, row)
+// 首页数据
+export const initHomeData = ({commit}, index, row) => commit('initHomeData', index, row)
 // 我的信息数据
 export const initMyInfoData = ({commit}, index, row) => commit('initMyInfoData', index, row)
 // 企业信息数据

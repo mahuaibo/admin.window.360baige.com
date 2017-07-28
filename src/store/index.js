@@ -77,7 +77,7 @@ const state = {
         value: '21',
         label: '软件开发'
       }
-    ], // 应用类型list
+    ],
     appList: []
   },
   accountData: {
@@ -93,25 +93,10 @@ const state = {
     list: []
   },
   orderData: {
-    list: [{
-      date: '2016-05-02',
-      orderNum: '2345678903232',
-      name: 'Apple/苹果 iPhone7',
-      price: '5288.00',
-      number: '1'
-    }, {
-      date: '2016-05-04',
-      orderNum: '2345678903232',
-      name: 'Apple/苹果 iPhone7',
-      price: '5288.00',
-      number: '1'
-    }, {
-      date: '2016-05-01',
-      orderNum: '2345678903232',
-      name: 'Apple/苹果 iPhone7',
-      price: '5288.00',
-      number: '1'
-    }]
+    list: []
+  },
+  personnelData: {
+    list: []
   },
   defaultActive: {
     index: ''

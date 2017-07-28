@@ -30,11 +30,11 @@
   export default {
     components: {CommonHeader, CommonSidebar},
     created () {
-      this.initMyInfoData()
+      this.initHomeData()
     },
     methods: {
       ...mapActions([
-        'initMyInfoData'
+        'initHomeData'
       ])
     }
   }

@@ -10,7 +10,7 @@
         <el-table-column label="日期" width="180">
           <template scope="scope">
             <el-icon name="time"></el-icon>
-            <span style="margin-left: 10px">{{ scope.row.date }}</span>
+            <span style="margin-left: 10px">{{ scope.row.create_time }}</span>
           </template>
         </el-table-column>
         <el-table-column label="应用图标" width="120">
@@ -25,15 +25,14 @@
         </el-table-column>
         <el-table-column label="状态" width="120">
           <template scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.status }}</span>
+            <el-button size="small" type="text" @click="disableApp(scope.row)" v-if="scope.row.status==1">启用</el-button>
+            <el-button size="small" type="text" @click="enableApp(scope.row)" v-else>停用</el-button>
           </template>
         </el-table-column>
         <el-table-column label="操作">
           <template scope="scope">
-            <el-button size="small" @click="enterApp(scope.$index, scope.row)">进入</el-button>
-            <el-button size="small" type="danger" @click="unsubscribeApp(scope.$index, scope.row)">退订</el-button>
-            <el-button size="small" type="success" @click="enableApp(scope.$index, scope.row)">启用</el-button>
-            <el-button size="small" type="danger" @click="disableApp(scope.$index, scope.row)">停用</el-button>
+            <el-button size="small" @click="enterApp(scope.row)">进入</el-button>
+            <el-button size="small" type="danger" @click="unsubscribeApp(scope.row)">退订</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -91,24 +90,24 @@
       handleCurrentChange (val) { // 翻页
         this.initApplicationData(this.appListData)
       },
-      enterApp (state, index) { // 进入应用
+      enterApp (index) { // 进入应用
         this.submitData.accessPath = ''
         this.submitData.appId = index.id
         this.submit()
       },
-      unsubscribeApp (state, index) { // 退订
+      unsubscribeApp (index) { // 退订
         this.submitData.accessPath = ''
         this.submitData.appId = index.id
         this.submit()
       },
-      enableApp (state, index) { // 启用
+      enableApp (index) { // 启用
         this.submitData.accessPath = 'http://localhost:30000/cloud/window/v1/application/modifystatus'
         this.submitData.appId = index.id
         this.submitData.status = 1
         this.submitData.remindMessage = '启用'
         this.submit()
       },
-      disableApp (state, index) { // 停用
+      disableApp (index) { // 停用
         this.submitData.accessPath = 'http://localhost:30000/cloud/window/v1/application/modifystatus'
         this.submitData.appId = index.id
         this.submitData.status = 0
@@ -126,9 +125,10 @@
             status: current.submitData.status
           }
         }).then(function (response) {
+          console.log(response.data)
           if (response.data.code === '200') {
             current.messageRemind('success', current.submitData.remindMessage + '成功！')
-            current.initApplicationData(current.appListData) // 更新数据
+            current.handleIconClick() // 更新数据
           } else {
             current.messageRemind('error', current.submitData.remindMessage + '失败！')
           }

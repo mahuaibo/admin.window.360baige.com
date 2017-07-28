@@ -1,13 +1,11 @@
 import axios from 'axios'
 import router from '.././router'
 
-// /////////////////////////////loginAccessToken验证/////////////////////////////
+// /////////////////////////////loginAccessToken验证////////////////
 function verifyLoginAccessToken () {
-  console.log('accessToken:开始')
   if (localStorage.getItem('loginAccessToken') === null) {
     router.push('/admin/login')
   }
-  console.log('accessToken:结束')
   return
 }
 
@@ -19,6 +17,11 @@ export const handleClick = (state, index, row) => {
   } else {
     router.push(index.name)
   }
+}
+
+// ///////////////////////我的信息数据//////////////////////////////
+export const initHomeData = (state, index, row) => {
+  verifyLoginAccessToken()
 }
 
 // ///////////////////////我的信息数据//////////////////////////////
@@ -75,7 +78,6 @@ export const initCompanyInfoData = (state, index, row) => {
 // ///////////////////////应用管理数据//////////////////////////////
 export const initApplicationData = (state, index, row) => {
   verifyLoginAccessToken()
-  state.appCenterData.list = []
   axios({
     method: 'GET',
     url: 'http://localhost:30000/cloud/window/v1/application/list',
@@ -91,6 +93,7 @@ export const initApplicationData = (state, index, row) => {
       index.pageSize = response.data.data.PageSize
       index.current = response.data.data.Current
       index.total = response.data.data.Total
+      state.appCenterData.list = []
       state.appCenterData.list = response.data.data.List
     }
   }).catch(function (error) {
@@ -101,7 +104,6 @@ export const initApplicationData = (state, index, row) => {
 // ///////////////////////应用商店数据//////////////////////////////
 export const initApplicationTplData = (state, index, row) => {
   verifyLoginAccessToken()
-  state.appStoreData.appList = []
   axios({
     method: 'GET',
     url: 'http://localhost:30000/cloud/window/v1/application_tpl/list',
@@ -113,6 +115,7 @@ export const initApplicationTplData = (state, index, row) => {
   }).then(function (response) {
     console.log(response.data)
     if (response.data.code === '200') {
+      state.appStoreData.appList = []
       state.appStoreData.appList = response.data.data.List
     }
   }).catch(function (error) {
@@ -146,7 +149,6 @@ export const initAccountData = (state, index, row) => {
 // ///////////////////////账户列表数据//////////////////////////////
 export const initAccountListData = (state, index, row) => {
   verifyLoginAccessToken()
-  state.accountData.appList = []
   axios({
     method: 'GET',
     url: 'http://localhost:30000/cloud/window/v1/account_item/list',
@@ -162,6 +164,7 @@ export const initAccountListData = (state, index, row) => {
       index.pageSize = response.data.data.PageSize
       index.current = response.data.data.Current
       index.total = response.data.data.Total
+      state.accountData.appList = []
       state.accountData.list = response.data.data.List
     }
   }).catch(function (error) {
@@ -172,7 +175,6 @@ export const initAccountListData = (state, index, row) => {
 // ///////////////////////交易明细列表数据//////////////////////////////
 export const initTransactionDetailListData = (state, index, row) => {
   verifyLoginAccessToken()
-  state.transactionDetailData.list = []
   axios({
     method: 'GET',
     url: 'http://localhost:30000/cloud/window/v1/account_item/tradinglist',
@@ -189,6 +191,7 @@ export const initTransactionDetailListData = (state, index, row) => {
       index.pageSize = response.data.data.PageSize
       index.current = response.data.data.Current
       index.total = response.data.data.Total
+      state.transactionDetailData.list = []
       state.transactionDetailData.list = response.data.data.List
     }
   }).catch(function (error) {
@@ -199,7 +202,6 @@ export const initTransactionDetailListData = (state, index, row) => {
 // ///////////////////////订单列表数据//////////////////////////////
 export const initOrderListData = (state, index, row) => {
   verifyLoginAccessToken()
-  state.orderData.list = []
   axios({
     method: 'GET',
     url: 'http://localhost:30000/cloud/window/v1/order/list',
@@ -215,6 +217,7 @@ export const initOrderListData = (state, index, row) => {
       index.pageSize = response.data.data.PageSize
       index.current = response.data.data.Current
       index.total = response.data.data.Total
+      state.orderData.list = []
       state.orderData.list = response.data.data.List
     }
   }).catch(function (error) {
@@ -225,7 +228,6 @@ export const initOrderListData = (state, index, row) => {
 // ///////////////////////操作记录数据//////////////////////////////
 export const initLoggerListData = (state, index, row) => {
   verifyLoginAccessToken()
-  state.loggerData.list = []
   axios({
     method: 'GET',
     url: 'http://localhost:30000/cloud/window/v1/logger/list',
@@ -241,6 +243,7 @@ export const initLoggerListData = (state, index, row) => {
       index.pageSize = response.data.data.PageSize
       index.current = response.data.data.Current
       index.total = response.data.data.Total
+      state.loggerData.list = []
       state.loggerData.list = response.data.data.List
     }
   }).catch(function (error) {
