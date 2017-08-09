@@ -18,13 +18,13 @@
           <el-form :model="registerDataForm" :rules="registerDataRules" ref="ruleForm2" label-width="100px"
                    class="demo-ruleForm">
             <el-form-item label="用户名" prop="username">
-              <el-input v-model="registerDataForm.username"></el-input>
+              <el-input v-model="registerDataForm.username" @keyup.enter.native="submitForm('registerDataForm')"></el-input>
             </el-form-item>
             <el-form-item label="密码" prop="password">
-              <el-input type="password" v-model="registerDataForm.password"></el-input>
+              <el-input type="password" v-model="registerDataForm.password" @keyup.enter.native="submitForm('registerDataForm')"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button style="width: 210px;float: right;" type="success" @click="submitForm('loginDataForm')">注册
+              <el-button style="width: 210px;float: right;" type="success" @click="submitForm('registerDataForm')">注册
 
               </el-button>
             </el-form-item>

@@ -91,14 +91,13 @@
         this.initApplicationData(this.appListData)
       },
       enterApp (index) { // 进入应用
-        this.submitData.accessPath = ''
-        this.submitData.appId = index.id
-        this.submit()
+        window.location.href = index.site + '?a=' + localStorage.getItem('positionAccessToken')
       },
       unsubscribeApp (index) { // 退订
         this.submitData.accessPath = ''
         this.submitData.appId = index.id
-        this.submit()
+        console.log('1')
+//        this.submit()
       },
       enableApp (index) { // 启用
         this.submitData.accessPath = 'http://localhost:30000/cloud/window/v1/application/modifystatus'

@@ -151,6 +151,7 @@
             id: val
           }
         }).then(function (response) {
+          console.log(response.data)
           if (response.data.code === '200') {
             current.detailForm.img = response.data.data.image
             current.detailForm.name = response.data.data.name

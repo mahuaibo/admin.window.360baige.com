@@ -13,7 +13,7 @@
       </el-tabs>
     </div>
     <div class="comtent-list">
-      <el-table :data="orderData.list" border style="width: 100%">
+      <el-table :data="orderData.list" border>
         <el-table-column label="订单号" width="180">
           <template scope="scope">
             <span style="margin-left: 10px">{{ scope.row.code }}</span>

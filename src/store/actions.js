@@ -18,6 +18,11 @@ export const initAccountListData = ({commit}, index, row) => commit('initAccount
 export const initLoggerListData = ({commit}, index, row) => commit('initLoggerListData', index, row)
 // 操作记录列表数据
 export const initTransactionDetailListData = ({commit}, index, row) => commit('initTransactionDetailListData', index, row)
-
 // 操作记录列表数据
 export const initOrderListData = ({commit}, index, row) => commit('initOrderListData', index, row)
+// 人员列表数据
+export const initPersonnelListData = ({commit}, index, row) => commit('initPersonnelListData', index, row)
+// 组织结构数据
+export const initStructureListData = ({commit}, index, row) => commit('initStructureListData', index, row)
+// 职位数据
+export const initPositionsData = ({commit}, index, row) => commit('initPositionsData', index, row)

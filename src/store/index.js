@@ -96,6 +96,8 @@ const state = {
     list: []
   },
   personnelData: {
+    structureList: [], // 组织结构list
+    positions: [], // 职位data
     list: []
   },
   defaultActive: {

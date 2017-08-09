@@ -18,14 +18,16 @@
           <el-form :model="loginDataForm" :rules="loginDataRules" ref="loginDataForm" label-width="100px"
                    class="demo-ruleForm">
             <el-form-item label="用户名" prop="username">
-              <el-input v-model="loginDataForm.username"></el-input>
+              <el-input v-model="loginDataForm.username" @keyup.enter.native="submitForm('loginDataForm')"
+                        @blur="focusPositioning"></el-input>
             </el-form-item>
             <el-form-item label="密码" prop="password">
-              <el-input type="password" v-model="loginDataForm.password"></el-input>
+              <el-input type="password" v-model="loginDataForm.password"
+                        @keyup.enter.native="submitForm('loginDataForm')" @blur="focusPositioning"></el-input>
             </el-form-item>
-            <el-form-item>
-              <el-button style="width: 210px;float: right;" type="success" @click="submitForm('loginDataForm')">登陆
-              </el-button>
+            <el-form-item id="box">
+              <el-button style="width: 210px;float: right;" id="defaultFocus" type="success"
+                         @click="submitForm('loginDataForm')">登陆</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -46,7 +48,6 @@
     </div>
   </div>
 </template>
-
 <script>
   import axios from 'axios'
   import {mapGetters, mapActions} from 'vuex'
@@ -81,7 +82,7 @@
         'handleClick'
       ]),
       handleSelect () {
-
+        console.log('1111')
       },
       submitForm (formName) {
         this.$refs[formName].validate((valid) => {
@@ -132,6 +133,9 @@
       promptInfo (type, info) { // type success成功   warning警告   error失败
         this.$message({message: info, type: type})
         return false
+      },
+      focusPositioning () {
+//        document.getElementById('defaultFocus').focus()
       }
     }
   }
