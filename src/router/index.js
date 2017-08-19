@@ -14,8 +14,6 @@ import TransactionDetail from '@/components/account/TransactionDetail'
 import Order from '@/components/order/Order'
 import Logger from '@/components/logger/Logger'
 import SystemMessage from '@/components/system/Message'
-// 应用路由
-import PersonnelList from '@/components/personnel/List'
 
 Vue.use(Router)
 
@@ -88,11 +86,6 @@ export default new Router({
       component: SystemMessage,
       path: '/system/message',
       alias: 'systemMessage'
-    }, {
-      name: 'personnelList',
-      component: PersonnelList,
-      path: '/personnel/List',
-      alias: 'personnelList'
     }]
   }]
 })
