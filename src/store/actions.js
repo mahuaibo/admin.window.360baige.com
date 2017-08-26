@@ -1,4 +1,6 @@
 // 跳转页面
+export const getUserPositionList = ({commit}, index, row) => commit('getUserPositionList', index, row)
+// 跳转页面
 export const handleClick = ({commit}, index, row) => commit('handleClick', index, row)
 // 首页数据
 export const initHomeData = ({commit}, index, row) => commit('initHomeData', index, row)
@@ -20,9 +22,3 @@ export const initLoggerListData = ({commit}, index, row) => commit('initLoggerLi
 export const initTransactionDetailListData = ({commit}, index, row) => commit('initTransactionDetailListData', index, row)
 // 操作记录列表数据
 export const initOrderListData = ({commit}, index, row) => commit('initOrderListData', index, row)
-// 人员列表数据
-export const initPersonnelListData = ({commit}, index, row) => commit('initPersonnelListData', index, row)
-// 组织结构数据
-export const initStructureListData = ({commit}, index, row) => commit('initStructureListData', index, row)
-// 职位数据
-export const initPositionsData = ({commit}, index, row) => commit('initPositionsData', index, row)

@@ -10,7 +10,7 @@ import store from './store'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-default/index.css' // import '../theme/index.css'
 import locale from 'element-ui/lib/locale/lang/zh-CN'
-Vue.use(ElementUI, { locale })
+Vue.use(ElementUI, {locale})
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
@@ -19,5 +19,5 @@ new Vue({
   router,
   store,
   template: '<App/>',
-  components: { App }
+  components: {App}
 })

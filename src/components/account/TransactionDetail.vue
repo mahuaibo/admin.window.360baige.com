@@ -3,16 +3,17 @@
     <div class="transaction-content-head">
       <div class="transaction-content-head-seek">
         <el-date-picker v-model="detailListData.startTime" :editable="false" placeholder="请选择开始日期"
-                        :picker-options="pickerOptions">
+                        :picker-options="pickerOptions" style="margin-right: 10px;width: 252px;">
         </el-date-picker>
+        <label style="color:#cadced;">—</label>
         <el-date-picker v-model="detailListData.endTime" :editable="false" placeholder="请选择结束日期"
-                        :picker-options="pickerOptions">
+                        :picker-options="pickerOptions" style="margin-left: 10px;margin-right:50px;width: 252px;">
         </el-date-picker>
-        <el-button type="primary" @click="search">搜索</el-button>
+        <el-button type="primary" @click="search" style="width: 100px;">搜索</el-button>
       </div>
     </div>
     <div class="transaction-comtent-list">
-      <el-table :data="transactionDetailData.list" border style="width: 100%">
+      <el-table :data="transactionDetailData.list" style="width: 100%">
         <el-table-column label="日期" width="160">
           <template scope="scope">
             <el-icon name="time"></el-icon>
@@ -45,11 +46,9 @@
           </template>
         </el-table-column>
       </el-table>
-    </div>
-    <div class="transaction-comtent-paging">
-      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+      <el-pagination class="transaction-comtent-paging" @size-change="handleSizeChange" @current-change="handleCurrentChange"
                      :current-page.sync="detailListData.current" :page-sizes="[50, 100, 200]"
-                     :page-size="detailListData.pageSize" layout="sizes, prev, pager, next"
+                     :page-size="detailListData.pageSize" layout="total, sizes, prev, pager, next, jumper"
                      :total="detailListData.total">
       </el-pagination>
     </div>
@@ -70,13 +69,14 @@
   import {mapGetters, mapActions} from 'vuex'
   export default {
     created () {
+      this.publicParameters.returnButtom = true
+      this.publicParameters.path = '/account/list'
       this.initTransactionDetailListData(this.detailListData)
-      this.defaultActive.index = '/account/list'
     },
     computed: {
       ...mapGetters([
         'transactionDetailData',
-        'defaultActive'
+        'publicParameters'
       ])
     },
     data () {
@@ -129,9 +129,9 @@
         var current = this
         axios({
           method: 'GET',
-          url: 'http://localhost:30000/cloud/window/v1/account_item/detail',
+          url: this.publicParameters.domain + '/account_item/detail',
           params: {
-            access_token: localStorage.getItem('positionAccessToken'),
+            access_token: localStorage.getItem('accessToken'),
             id: row.id
           }
         }).then(function (response) {
@@ -165,18 +165,27 @@
     }
   }
 </script>
-<style>
+<style lang="scss" scoped>
 
   .transaction-content-head {
-    padding-bottom: 50px;
+    margin-top: 12px;
+    padding: 0px 20px 32px 20px;
+    height: 36px;
+    .transaction-content-head-seek {
+      position: absolute;
+    }
   }
 
-  .transaction-content-head-seek {
-    position: absolute;
-    left: 21px;
+  .transaction-comtent-list {
+    padding-left: 20px;
+    padding-right: 20px;
+    height: calc(100vh - 180px);
+    overflow: scroll;
   }
 
   .transaction-comtent-paging {
-    padding-top: 20px;
+    float: right;
+    right: 40px;
+    padding: 30px 0px 0px 0px;
   }
 </style>

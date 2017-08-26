@@ -25,17 +25,16 @@
   export default {
     created () {
       this.initMyInfoData(this.myData)
-      this.defaultActive.index = '/admin/info'
     },
     computed: {
       ...mapGetters([
-        'defaultActive'
+        'publicParameters'
       ])
     },
     data () {
       var phone = (rule, value, callback) => {
         if (!/^1[34578]\d{9}$/.test(value)) {
-          callback(new Error('请输入密码'))
+          callback(new Error('请输入手机号码'))
         }
         callback()
       }
@@ -67,9 +66,9 @@
             var current = this
             axios({
               method: 'GET',
-              url: 'http://localhost:30000/cloud/window/v1/user/modify',
+              url: this.publicParameters.domain + '/user/modify',
               params: {
-                access_token: localStorage.getItem('positionAccessToken'),
+                access_token: localStorage.getItem('accessToken'),
                 id: this.myData.id,
                 phone: this.myData.phone,
                 email: this.myData.email

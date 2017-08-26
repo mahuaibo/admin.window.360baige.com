@@ -1,29 +1,33 @@
 <template>
   <div class="index">
     <div class="appCenter-operatingArea">
-      <el-input class="appCenter-seek" placeholder="请输入名称..." icon="search" v-model="appListData.appSeek"
-                :on-icon-click="handleIconClick"></el-input>
-      <el-button class="appCenter-shop" type="success" @click="handleClick('/application/store')">应用商店</el-button>
+      <div class="appCenter-seek">
+        <el-input placeholder="请输入名称..." icon="search" v-model="appListData.appSeek"
+                  :on-icon-click="handleIconClick" style="width: 298px;height: 38px;"></el-input>
+      </div>
+      <div class="appCenter-shop">
+        <el-button type="success" @click="handleClick('/application/store')" style="width: 108px;height: 34px;">应用商店
+        </el-button>
+      </div>
     </div>
     <div class="appCenter-list">
-      <el-table :data="appCenterData.list" border style="width: 100%">
-        <el-table-column label="日期" width="180">
+      <el-table :data="appCenterData.list" style="width: 100%">
+        <el-table-column label="日期" width="220">
           <template scope="scope">
-            <el-icon name="time"></el-icon>
-            <span style="margin-left: 10px">{{ scope.row.create_time }}</span>
+            <span style="margin-left: 10px">{{ scope.row.createTime }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="应用图标" width="120">
+        <el-table-column label="应用图标" width="180">
           <template scope="scope">
             <span style="margin-left: 10px"><img :src="scope.row.img"/></span>
           </template>
         </el-table-column>
-        <el-table-column label="应用名称" width="140">
+        <el-table-column label="应用名称" width="180">
           <template scope="scope">
             <span style="margin-left: 10px">{{ scope.row.name }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="状态" width="120">
+        <el-table-column label="状态" width="180">
           <template scope="scope">
             <el-button size="small" type="text" @click="disableApp(scope.row)" v-if="scope.row.status==1">启用</el-button>
             <el-button size="small" type="text" @click="enableApp(scope.row)" v-else>停用</el-button>
@@ -31,16 +35,15 @@
         </el-table-column>
         <el-table-column label="操作">
           <template scope="scope">
-            <el-button size="small" @click="enterApp(scope.row)">进入</el-button>
-            <el-button size="small" type="danger" @click="unsubscribeApp(scope.row)">退订</el-button>
+            <el-button size="small" type="text" @click="enterApp(scope.row)">进入</el-button>
+            <el-button size="small" type="text" @click="unsubscribeApp(scope.row)">退订</el-button>
           </template>
         </el-table-column>
       </el-table>
-    </div>
-    <div class="cappCenter-paging">
-      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+      <el-pagination class="cappCenter-paging" @size-change="handleSizeChange" @current-change="handleCurrentChange"
                      :current-page.sync="appListData.current" :page-sizes="[50, 100, 200]"
-                     :page-size="appListData.pageSize" layout="sizes, prev, pager, next" :total="appListData.total">
+                     :page-size="appListData.pageSize" layout="total, sizes, prev, pager, next, jumper"
+                     :total="appListData.total">
       </el-pagination>
     </div>
   </div>
@@ -50,13 +53,13 @@
   import {mapGetters, mapActions} from 'vuex'
   export default {
     created () {
+      this.publicParameters.returnButtom = false
       this.initApplicationData(this.appListData)
-      this.defaultActive.index = '/application/center'
     },
     computed: {
       ...mapGetters([
         'appCenterData',
-        'defaultActive'
+        'publicParameters'
       ])
     },
     data () {
@@ -68,7 +71,7 @@
           appSeek: ''
         },
         submitData: {
-          accessPath: null, // 访问路径
+          url: null, // 访问路径
           appId: null, // 应用ID
           status: null, // 应用状态
           remindMessage: null // 提示消息
@@ -79,7 +82,6 @@
       ...mapActions([
         'initApplicationData',
         'handleClick'
-
       ]),
       handleIconClick (ev) {  // 搜索
         this.initApplicationData(this.appListData)
@@ -91,23 +93,24 @@
         this.initApplicationData(this.appListData)
       },
       enterApp (index) { // 进入应用
-        window.location.href = index.site + '?a=' + localStorage.getItem('positionAccessToken')
+        console.log(index)
+        window.open(index.site + '?a=' + localStorage.getItem('accessToken'))
       },
       unsubscribeApp (index) { // 退订
-        this.submitData.accessPath = ''
+        this.submitData.url = ''
         this.submitData.appId = index.id
         console.log('1')
 //        this.submit()
       },
       enableApp (index) { // 启用
-        this.submitData.accessPath = 'http://localhost:30000/cloud/window/v1/application/modifystatus'
+        this.submitData.url = this.publicParameters.domain + '/application/modifyStatus'
         this.submitData.appId = index.id
         this.submitData.status = 1
         this.submitData.remindMessage = '启用'
         this.submit()
       },
       disableApp (index) { // 停用
-        this.submitData.accessPath = 'http://localhost:30000/cloud/window/v1/application/modifystatus'
+        this.submitData.url = this.publicParameters.domain + 'application/modifyStatus'
         this.submitData.appId = index.id
         this.submitData.status = 0
         this.submitData.remindMessage = '停用'
@@ -117,9 +120,9 @@
         var current = this
         axios({
           method: 'GET',
-          url: current.submitData.accessPath,
+          url: current.submitData.url,
           params: {
-            access_token: localStorage.getItem('positionAccessToken'),
+            access_token: localStorage.getItem('accessToken'),
             id: current.submitData.appId,
             status: current.submitData.status
           }
@@ -144,17 +147,30 @@
 </script>
 <style lang="scss" scoped>
   .appCenter-operatingArea {
-    padding-bottom: 50px;
+    height: 38px;
+    padding-top: 12px;
+    padding-bottom: 30px;
     .appCenter-seek {
-      width: 200px;
-      float: left;
+      position: absolute;
+      left: 40px;
     }
     .appCenter-shop {
-      float: right;
+      position: absolute;
+      right: 40px;
     }
   }
 
+  .appCenter-list {
+    padding-left: 20px;
+    padding-right: 20px;
+    text-align: left;
+    height: calc(100vh - 180px);
+    overflow: scroll;
+  }
+
   .cappCenter-paging {
-    padding-top: 20px;
+    float: right;
+    right: 40px;
+    padding: 30px 0px 0px 0px;
   }
 </style>

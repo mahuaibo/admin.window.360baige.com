@@ -19,9 +19,6 @@ Vue.use(Router)
 
 export default new Router({
   routes: [{
-    path: '*',
-    redirect: '/home'
-  }, {
     name: 'register',
     component: Register,
     path: '/admin/register',

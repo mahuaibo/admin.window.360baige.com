@@ -1,8 +1,5 @@
 <template>
   <div class="index">
-    <div class="content-head">
-
-    </div>
     <div class="comtent-list">
       <el-table :data="loggerData.list" border style="width: 100%">
         <el-table-column label="日期" width="213">
@@ -22,11 +19,9 @@
           </template>
         </el-table-column>
       </el-table>
-    </div>
-    <div class="comtent-paging">
-      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+      <el-pagination class="comtent-paging" @size-change="handleSizeChange" @current-change="handleCurrentChange"
                      :current-page.sync="loggerListData.current" :page-sizes="[50, 100, 200]"
-                     :page-size="loggerListData.pageSize" layout="sizes, prev, pager, next"
+                     :page-size="loggerListData.pageSize" layout="total, sizes, prev, pager, next, jumper"
                      :total="loggerListData.total">
       </el-pagination>
     </div>
@@ -37,13 +32,13 @@
   import {mapGetters, mapActions} from 'vuex'
   export default {
     created () {
+      this.publicParameters.returnButtom = false
       this.initLoggerListData(this.loggerListData)
-      this.defaultActive.index = '/logger/list'
     },
     computed: {
       ...mapGetters([
         'loggerData',
-        'defaultActive'
+        'publicParameters'
       ])
     },
     data () {
@@ -69,11 +64,14 @@
   }
 </script>
 <style>
-  .content-head {
-    padding-bottom: 60px;
+  .comtent-list {
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-top: 12px;
   }
 
   .comtent-paging {
-    padding-top: 20px;
+    float: right;
+    padding: 30px 0px 0px 0px;
   }
 </style>

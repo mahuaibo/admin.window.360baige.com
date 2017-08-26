@@ -1,70 +1,71 @@
 <template>
   <div class="layout">
     <div class="layout-sidebar-header">
-      <div class="layout-sidebar-header-left">
-        <img src="../../assets/logo.png" height="60" width="60"/>
-        <label class="layout-sidebar-header-left-text">百鸽·<label style="font-size: 14px;">管理平台</label></label>
-      </div>
-      <div class="layout-sidebar-header-right">
-        <el-menu class="el-menu-demo" router :default-active="activeIndex" mode="horizontal"
-                 @select="handleSelect" theme="dark">
-          <el-menu-item index="/system/message"><i class="el-icon-message"></i>系统消息</el-menu-item>
-        </el-menu>
+      <div class="layout-sidebar-header-content">
+        <img class="logo" src="../../assets/logo.png" height="78" width="78"/>
+        <div class="action-buttons">
+          <label @click="handleClick('/admin/register')">注册</label> | <label
+          @click="handleClick('/admin/login')">登陆</label>
+        </div>
       </div>
     </div>
     <div class="layout-container">
-      <div class="loginbox">
-        <div class="loginbox-left">
-          <el-form :model="registerDataForm" :rules="registerDataRules" ref="ruleForm2" label-width="100px"
-                   class="demo-ruleForm">
-            <el-form-item label="用户名" prop="username">
-              <el-input v-model="registerDataForm.username" @keyup.enter.native="submitForm('registerDataForm')"></el-input>
-            </el-form-item>
-            <el-form-item label="密码" prop="password">
-              <el-input type="password" v-model="registerDataForm.password" @keyup.enter.native="submitForm('registerDataForm')"></el-input>
-            </el-form-item>
-            <el-form-item>
-              <el-button style="width: 210px;float: right;" type="success" @click="submitForm('registerDataForm')">注册
-
-              </el-button>
-            </el-form-item>
-          </el-form>
-        </div>
-        <div class="loginbox-right">
-          <div class="loginbox-right-register">
-            <el-button type="text" @click="handleClick('/admin/login')">立即登陆</el-button>
-          </div>
-          <div class="loginbox-right-prompt" style="color: #FF0000;">第三方登陆</div>
-          <div class="loginbox-right-icon">
-            <img src="../../assets/qq.png" height="35" width="35"/>
-            <img src="../../assets/wechat.png" height="35" width="35"/>
-          </div>
-        </div>
-      </div>
+      <div class="layout-container-slogan">欢迎注册 百鸽用户</div>
+      <el-form :model="registerForm" :rules="registerRules" ref="registerForm" label-width="100px"
+               class="demo-ruleForm">
+        <el-input placeholder="请输入用户名" v-model="registerForm.username">
+          <template slot="prepend">用 &nbsp;&nbsp;&nbsp;户&nbsp;&nbsp; 名</template>
+        </el-input>
+        <el-input placeholder="建议至少使用两种字符组合" v-model="registerForm.password" class="registerForm-input">
+          <template slot="prepend">设 置 密 码</template>
+        </el-input>
+        <el-input placeholder="请再次输入密码" v-model="registerForm.confPassword" class="registerForm-input">
+          <template slot="prepend">确 认 密 码</template>
+        </el-input>
+        <!--<el-input placeholder="建议使用常用手机" v-model="registerForm.captcha" class="registerForm-input">-->
+        <!--<template slot="prepend">验 &nbsp;&nbsp;&nbsp;证&nbsp;&nbsp; 码</template>-->
+        <!--</el-input>-->
+        <el-input placeholder="请输入验证码" v-model="registerForm.phone" class="registerForm-input">
+          <template slot="prepend">手 &nbsp;&nbsp;&nbsp;机&nbsp;&nbsp; 号</template>
+        </el-input>
+        <el-input placeholder="请输入短信验证码" v-model="registerForm.pCaptcha" class="registerForm-input">
+          <template slot="prepend">短信验证码</template>
+          <el-button slot="append" style="font-size: 12px;background-color: #e2effd;color: #5c6873;">获取验证码</el-button>
+        </el-input>
+        <el-form-item>
+          <el-button class="login-button" style="margin-top: 26px;width: 388px;color:#ffffff;background-color: #31a7ff;" @click="submitForm()">立即注册</el-button>
+        </el-form-item>
+      </el-form>
     </div>
     <div class="layout-container-tail">
       <label class="layout-container-tail-text">Copyright © 2015 粤ICP备15062920号</label>
     </div>
   </div>
 </template>
-
 <script>
+  import axios from 'axios'
   import {mapGetters, mapActions} from 'vuex'
   import CommonHeader from '@/components/common/Header'
   import CommonSidebar from '@/components/common/Sidebar'
   export default {
     computed: {
-      ...mapGetters([])
+      ...mapGetters([
+        'publicParameters'
+      ])
     },
     components: {CommonHeader, CommonSidebar},
     data () {
       return {
         activeIndex: '1',
-        registerDataForm: {
+        registerForm: {
           username: null,
-          password: null
+          password: null,
+          confPassword: null,
+          // captcha: null,
+          phone: null,
+          pCaptcha: null
         },
-        registerDataRules: {
+        registerRules: {
           username: [
             {required: true, message: '请输入用户名', trigger: 'blur'},
             {min: 3, max: 15, message: '长度在 3 到 15 个字符', trigger: 'blur'}
@@ -80,14 +81,37 @@
       ...mapActions([
         'handleClick'
       ]),
-      handleSelect () {
-
-      },
       submitForm (formName) {
-        console.log(formName)
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+//            var current = this
+            axios({
+              method: 'POST',
+              url: this.publicParameters.domain + '/user/login',
+              params: {
+                username: this.registerForm.username,
+                password: this.registerForm.password
+              }
+            }).then(function (response) {
+              console.log(response.data)
+              if (response.data.code === '200') {
+
+              }
+            }).catch(function (error) {
+              console.log(error)
+            })
+          } else {
+            console.log('error submit!!')
+            return false
+          }
+        })
       },
       resetForm (formName) {
         this.$refs[formName].resetFields()
+      },
+      promptInfo (type, info) { // type success成功   warning警告   error失败
+        this.$message({message: info, type: type})
+        return false
       }
     }
   }
@@ -96,93 +120,56 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-  $color: #324157 !default;
+  $color: #002f5c !default;
   .layout {
-    position: relative;
-    background: #ffffff;
+    height: 100vh;
     .layout-sidebar-header {
-      height: 100vh;
-      .layout-sidebar-header-left {
+      .layout-sidebar-header-content {
         background: $color;
-        height: 60px;
-        width: 20%;
-        position: absolute;
-        left: 0;
-        img {
-          margin-left: 20px;
+        height: 78px;
+        width: 100%;
+        .logo {
+          position: absolute;
+          left: 192px;
         }
-        .layout-sidebar-header-left-text {
+        .action-buttons {
           color: #ffffff;
-          font-weight: bold;
-          position: relative;
-          left: 0px;
-          top: -20px;
-        }
-      }
-      .layout-sidebar-header-right {
-        background: $color;
-        height: 60px;
-        width: 80%;
-        position: absolute;
-        right: 0;
-        .el-menu-demo {
           position: absolute;
-          right: 0;
-        }
-      }
-    }
-    .layout-container {
-      box-sizing: border-box;
-      position: absolute;
-      top: 60px;
-      bottom: 60px;
-      width: 100%;
-      .loginbox {
-        width: 460px;
-        height: 240px;
-        border: 1px solid #cccccc;
-        border-radius: 8px;
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        margin-left: -200px;
-        margin-top: -100px;
-        .loginbox-left {
-          width: 310px;
-          height: 70%;
-          border-right: 1px solid #cccccc;
-          margin: 3% 0;
-          padding: 20px;
-        }
-        .loginbox-right {
-          display: inline;
-          width: 110px;
-          height: 88%;
-          margin-left: 120px;
-          position: absolute;
-          margin-top: -222px;
-          .loginbox-right-register, .loginbox-right-prompt, .loginbox-right-icon {
-            padding-top: 35px;
-            font-size: 14px;
+          right: 192px;
+          height: 78px;
+          line-height: 78px;
+          label {
             cursor: pointer;
           }
         }
       }
-      height: calc(100vh - 150px);
-      overflow: scroll;
+    }
+    .layout-container {
+      width: 388px;
+      position: relative;
+      top: 70px;
+      margin: 0 auto;
+      .layout-container-slogan {
+        font-size: 30px;
+        color: #373d41;
+        margin-bottom: 40px;
+      }
+      .registerForm-input {
+        margin-top: 30px;
+      }
     }
     .layout-container-tail {
       background: $color;
-      height: 60px;
+      height: 46px;
       position: absolute;
-      bottom: 0px;
+      bottom: 0;
       width: 100%;
       .layout-container-tail-text {
         color: #ffffff;
         font-weight: bold;
         position: relative;
-        font-size: 14px;
-        top: 20px;
+        font-size: 12px;
+        top: 12px;
       }
     }
   }

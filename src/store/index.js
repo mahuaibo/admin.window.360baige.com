@@ -8,6 +8,28 @@ import * as mutations from './mutations'
 Vue.use(Vuex)
 
 const state = {
+  publicParameters: {
+    returnButtom: false,
+    path: '',
+    domain: 'http://192.168.0.125:30000/cloud/window/v1'
+  },
+  userPositionList: {
+    list: {}
+  },
+  messageList: {
+    list: [
+      {
+        id: 1,
+        title: '[更新] 校园卫士更新了,有需要的学校请自行更新!'
+      }, {
+        id: 2,
+        title: '[更新] 校园卫士更新了,有需要的学校请自行更新！'
+      }, {
+        id: 3,
+        title: '[更新] 校园卫士更新了,有需要的学校请自行更新！'
+      }
+    ]
+  },
   appStoreData: {
     appTypeList: [
       {
@@ -94,14 +116,6 @@ const state = {
   },
   orderData: {
     list: []
-  },
-  personnelData: {
-    structureList: [], // 组织结构list
-    positions: [], // 职位data
-    list: []
-  },
-  defaultActive: {
-    index: ''
   }
 }
 

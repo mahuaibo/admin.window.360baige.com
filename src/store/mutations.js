@@ -1,9 +1,9 @@
 import axios from 'axios'
 import router from '.././router'
 
-// /////////////////////////////loginAccessToken验证////////////////
+// /////////////////////////////accessToken验证////////////////
 function verifyLoginAccessToken() {
-  if (localStorage.getItem('loginAccessToken') === null) {
+  if (localStorage.getItem('accessToken') === null) {
     router.push('/admin/login')
   }
   return
@@ -24,14 +24,33 @@ export const initHomeData = (state, index, row) => {
   verifyLoginAccessToken()
 }
 
+// ///////////////////////用户角色//////////////////////////////
+export const getUserPositionList = (state, index, row) => {
+  axios({
+    method: 'POST',
+    url: state.publicParameters.domain + '/userPosition/list',
+    params: {
+      accessTicket: localStorage.getItem('accessTicket')
+    }
+  }).then(function (response) {
+    console.log(response.data.data)
+    if (response.data.code === '200') {
+      state.userPositionList.list = []
+      state.userPositionList.list = response.data.data
+    }
+  }).catch(function (error) {
+    console.log(error)
+  })
+}
+
 // ///////////////////////我的信息数据//////////////////////////////
 export const initMyInfoData = (state, index, row) => {
   verifyLoginAccessToken()
   axios({
-    method: 'get',
-    url: 'http://localhost:30000/cloud/window/v1/user/detail',
+    method: 'POST',
+    url: state.publicParameters.domain + '/user/detail',
     params: {
-      access_token: localStorage.getItem('positionAccessToken')
+      accessToken: localStorage.getItem('accessToken')
     }
   }).then(function (response) {
     console.log(response.data)
@@ -52,10 +71,10 @@ export const initMyInfoData = (state, index, row) => {
 export const initCompanyInfoData = (state, index, row) => {
   verifyLoginAccessToken()
   axios({
-    method: 'get',
-    url: 'http://localhost:30000/cloud/window/v1/company/detail',
+    method: 'POST',
+    url: state.publicParameters.domain + '/company/detail',
     params: {
-      access_token: localStorage.getItem('positionAccessToken')
+      accessToken: localStorage.getItem('accessToken')
     }
   }).then(function (response) {
     console.log(response.data)
@@ -63,7 +82,7 @@ export const initCompanyInfoData = (state, index, row) => {
       index.id = response.data.data.id
       index.logo = response.data.data.logo
       index.name = response.data.data.name
-      index.short_name = response.data.data.short_name
+      index.short_name = response.data.data.shortName
       index.address = response.data.data.address
       index.brief = response.data.data.brief
       index.remark = response.data.data.remark
@@ -79,22 +98,22 @@ export const initCompanyInfoData = (state, index, row) => {
 export const initApplicationData = (state, index, row) => {
   verifyLoginAccessToken()
   axios({
-    method: 'GET',
-    url: 'http://localhost:30000/cloud/window/v1/application/list',
+    method: 'POST',
+    url: state.publicParameters.domain + '/application/list',
     params: {
-      access_token: localStorage.getItem('positionAccessToken'),
-      page_size: index.pageSize,
+      accessToken: localStorage.getItem('accessToken'),
+      pageSize: index.pageSize,
       current: index.current,
       name: index.appSeek
     }
   }).then(function (response) {
     console.log(response.data)
     if (response.data.code === '200') {
-      index.pageSize = response.data.data.PageSize
-      index.current = response.data.data.Current
-      index.total = response.data.data.Total
       state.appCenterData.list = []
-      state.appCenterData.list = response.data.data.List
+      state.appCenterData.list = response.data.data.list
+      index.pageSize = response.data.data.pageSize
+      index.current = response.data.data.current
+      index.total = response.data.data.total
     }
   }).catch(function (error) {
     console.log(error)
@@ -105,10 +124,10 @@ export const initApplicationData = (state, index, row) => {
 export const initApplicationTplData = (state, index, row) => {
   verifyLoginAccessToken()
   axios({
-    method: 'GET',
-    url: 'http://localhost:30000/cloud/window/v1/application_tpl/list',
+    method: 'POST',
+    url: state.publicParameters.domain + '/applicationTpl/list',
     params: {
-      access_token: localStorage.getItem('positionAccessToken'),
+      accessToken: localStorage.getItem('accessToken'),
       name: index.appSeek,
       type: index.appType
     }
@@ -116,7 +135,7 @@ export const initApplicationTplData = (state, index, row) => {
     console.log(response.data)
     if (response.data.code === '200') {
       state.appStoreData.appList = []
-      state.appStoreData.appList = response.data.data.List
+      state.appStoreData.appList = response.data.data.list
     }
   }).catch(function (error) {
     console.log(error)
@@ -127,10 +146,10 @@ export const initApplicationTplData = (state, index, row) => {
 export const initAccountData = (state, index, row) => {
   verifyLoginAccessToken()
   axios({
-    method: 'GET',
-    url: 'http://localhost:30000/cloud/window/v1/account/accountstatistics',
+    method: 'POST',
+    url: state.publicParameters.domain + '/account/accountStatistics',
     params: {
-      access_token: localStorage.getItem('positionAccessToken')
+      accessToken: localStorage.getItem('accessToken')
     }
   }).then(function (response) {
     console.log(response.data)
@@ -150,22 +169,22 @@ export const initAccountData = (state, index, row) => {
 export const initAccountListData = (state, index, row) => {
   verifyLoginAccessToken()
   axios({
-    method: 'GET',
-    url: 'http://localhost:30000/cloud/window/v1/account_item/list',
+    method: 'POST',
+    url: state.publicParameters.domain + '/accountItem/list',
     params: {
-      access_token: localStorage.getItem('positionAccessToken'),
-      page_size: index.pageSize,
+      accessToken: localStorage.getItem('accessToken'),
+      pageSize: index.pageSize,
       current: index.current,
       date: ''
     }
   }).then(function (response) {
     console.log(response.data)
     if (response.data.code === '200') {
-      index.pageSize = response.data.data.PageSize
-      index.current = response.data.data.Current
-      index.total = response.data.data.Total
+      index.pageSize = response.data.data.pageSize
+      index.current = response.data.data.current
+      index.total = response.data.data.total
       state.accountData.appList = []
-      state.accountData.list = response.data.data.List
+      state.accountData.list = response.data.data.list
     }
   }).catch(function (error) {
     console.log(error)
@@ -176,14 +195,14 @@ export const initAccountListData = (state, index, row) => {
 export const initTransactionDetailListData = (state, index, row) => {
   verifyLoginAccessToken()
   axios({
-    method: 'GET',
-    url: 'http://localhost:30000/cloud/window/v1/account_item/tradinglist',
+    method: 'POST',
+    url: state.publicParameters.domain + '/accountItem/tradinglist',
     params: {
-      access_token: localStorage.getItem('positionAccessToken'),
-      page_size: index.pageSize,
+      accessToken: localStorage.getItem('accessToken'),
+      pageSize: index.pageSize,
       current: index.current,
-      start_date: index.startTime,
-      end_date: index.endTime
+      startDate: index.startTime,
+      endDate: index.endTime
     }
   }).then(function (response) {
     console.log(response.data)
@@ -192,7 +211,7 @@ export const initTransactionDetailListData = (state, index, row) => {
       index.current = response.data.data.Current
       index.total = response.data.data.Total
       state.transactionDetailData.list = []
-      state.transactionDetailData.list = response.data.data.List
+      state.transactionDetailData.list = response.data.data.list
     }
   }).catch(function (error) {
     console.log(error)
@@ -203,22 +222,22 @@ export const initTransactionDetailListData = (state, index, row) => {
 export const initOrderListData = (state, index, row) => {
   verifyLoginAccessToken()
   axios({
-    method: 'GET',
-    url: 'http://localhost:30000/cloud/window/v1/order/list',
+    method: 'POST',
+    url: state.publicParameters.domain + '/order/list',
     params: {
-      access_token: localStorage.getItem('positionAccessToken'),
-      page_size: index.pageSize,
+      accessToken: localStorage.getItem('accessToken'),
+      pageSize: index.pageSize,
       current: index.current,
       status: index.status
     }
   }).then(function (response) {
     console.log(response.data)
     if (response.data.code === '200') {
-      index.pageSize = response.data.data.PageSize
-      index.current = response.data.data.Current
-      index.total = response.data.data.Total
+      index.pageSize = response.data.data.pageSize
+      index.current = response.data.data.current
+      index.total = response.data.data.total
       state.orderData.list = []
-      state.orderData.list = response.data.data.List
+      state.orderData.list = response.data.data.list
     }
   }).catch(function (error) {
     console.log(error)
@@ -229,82 +248,24 @@ export const initOrderListData = (state, index, row) => {
 export const initLoggerListData = (state, index, row) => {
   verifyLoginAccessToken()
   axios({
-    method: 'GET',
-    url: 'http://localhost:30000/cloud/window/v1/logger/list',
+    method: 'POST',
+    url: state.publicParameters.domain + '/logger/list',
     params: {
-      access_token: localStorage.getItem('positionAccessToken'),
-      page_size: index.pageSize,
+      accessToken: localStorage.getItem('accessToken'),
+      pageSize: index.pageSize,
       current: index.current,
       date: ''
     }
   }).then(function (response) {
     console.log(response.data)
     if (response.data.code === '200') {
-      index.pageSize = response.data.data.PageSize
-      index.current = response.data.data.Current
-      index.total = response.data.data.Total
+      index.pageSize = response.data.data.pageSize
+      index.current = response.data.data.current
+      index.total = response.data.data.total
       state.loggerData.list = []
-      state.loggerData.list = response.data.data.List
+      state.loggerData.list = response.data.data.list
     }
   }).catch(function (error) {
     console.log(error)
   })
-}
-
-// ///////////////////////人事管理.组织结构数据//////////////////////////////
-export const initPersonnelListData = (state, index, row) => {
-  state.personnelData.list = [{
-    id: 1,
-    code: 'BG20001893',
-    sex: '男',
-    name: '麻麻',
-    birthday: '1990-01-01',
-    position: '学生',
-    contacts: '粑粑',
-    phone: '18911545460',
-    structure: 1
-  }]
-}
-
-// ///////////////////////人事管理.组织结构数据//////////////////////////////
-export const initStructureListData = (state, index, row) => {
-  state.personnelData.structureList = [{
-    id: 1,
-    label: 'xxx学校班级',
-    children: [{
-      id: 4,
-      label: '一年一班',
-      children: [{
-        id: 9,
-        label: '一年一班小'
-      }, {
-        id: 10,
-        label: '一年一班大'
-      }]
-    }]
-  }, {
-    id: 2,
-    label: 'xxx学校部门  ',
-    children: [{
-      id: 5,
-      label: '教学部'
-    }, {
-      id: 6,
-      label: '领导班子'
-    }]
-  }]
-}
-
-// ///////////////////////人事管理.组织结构数据//////////////////////////////
-export const initPositionsData = (state, index, row) => {
-  state.personnelData.positions = [{
-    value: 1,
-    label: '教师'
-  }, {
-    value: 2,
-    label: '家长'
-  }, {
-    value: 3,
-    label: '学生'
-  }]
 }

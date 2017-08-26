@@ -24,6 +24,7 @@
         </el-form-item>
         <el-form-item>
           <el-button style="width: 465px; float: right;" type="success" @click="submitForm('companyData')">修改
+
           </el-button>
         </el-form-item>
       </el-form>
@@ -36,11 +37,10 @@
   export default {
     created () {
       this.initCompanyInfoData(this.companyData)
-      this.defaultActive.index = '/company/info'
     },
     computed: {
       ...mapGetters([
-        'defaultActive'
+        'publicParameters'
       ])
     },
     data () {
@@ -71,9 +71,9 @@
             var current = this
             axios({
               method: 'POST',
-              url: 'http://localhost:30000/cloud/window/v1/company/modify',
+              url: this.publicParameters.domain + '/company/modify',
               params: {
-                access_token: localStorage.getItem('positionAccessToken'),
+                access_token: localStorage.getItem('accessToken'),
                 id: this.companyData.id,
                 logo: this.companyData.logo,
                 name: this.companyData.name,

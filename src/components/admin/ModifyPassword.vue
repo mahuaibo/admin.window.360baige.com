@@ -16,7 +16,13 @@
 </template>
 <script>
   import axios from 'axios'
+  import {mapGetters} from 'vuex'
   export default {
+    computed: {
+      ...mapGetters([
+        'publicParameters'
+      ])
+    },
     data () {
       return {
         modifyPwd: {
@@ -42,9 +48,9 @@
             var current = this
             axios({
               method: 'POST',
-              url: 'http://localhost:30000/cloud/window/v1/user/modifypassword',
+              url: this.publicParameters.domain + '/user/modifypassword',
               params: {
-                access_token: localStorage.getItem('positionAccessToken'),
+                access_token: localStorage.getItem('accessToken'),
                 password: this.modifyPwd.pass,
                 newPassword: this.modifyPwd.checkPass
               }

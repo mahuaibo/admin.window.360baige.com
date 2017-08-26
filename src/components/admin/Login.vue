@@ -1,51 +1,76 @@
+<style lang="scss">
+  .el-dialog__header {
+    background-color: #31a7ff;
+    padding: 0px;
+    margin: 0px;
+    height: 55px;
+    line-height: 60px;
+    border-radius: 2px;
+    text-align: center;
+    .el-dialog__title {
+      color: #ffffff;
+      font-size: 18px;
+      font-weight: normal;
+    }
+    .el-dialog__headerbtn {
+      padding-top: 20px;
+      padding-right: 20px;
+    }
+  }
+</style>
 <template>
   <div class="layout">
     <div class="layout-sidebar-header">
-      <div class="layout-sidebar-header-left">
-        <img src="../../assets/logo.png" height="60" width="60"/>
-        <label class="layout-sidebar-header-left-text">百鸽·<label style="font-size: 14px;">管理平台</label></label>
-      </div>
-      <div class="layout-sidebar-header-right">
-        <el-menu class="el-menu-demo" router :default-active="activeIndex" mode="horizontal"
-                 @select="handleSelect" theme="dark">
-          <el-menu-item index="/system/message"><i class="el-icon-message"></i>系统消息</el-menu-item>
-        </el-menu>
+      <div class="layout-sidebar-header-content">
+        <img class="logo" src="../../assets/logo.png" height="78" width="78"/>
+        <div class="action-buttons">
+          <label @click="handleClick('/admin/register')">注册</label> | <label
+          @click="handleClick('/admin/login')">登陆</label>
+        </div>
       </div>
     </div>
     <div class="layout-container">
-      <div class="loginbox">
-        <div class="loginbox-left">
-          <el-form :model="loginDataForm" :rules="loginDataRules" ref="loginDataForm" label-width="100px"
-                   class="demo-ruleForm">
-            <el-form-item label="用户名" prop="username">
-              <el-input v-model="loginDataForm.username" @keyup.enter.native="submitForm('loginDataForm')"
-                        @blur="focusPositioning"></el-input>
-            </el-form-item>
-            <el-form-item label="密码" prop="password">
-              <el-input type="password" v-model="loginDataForm.password"
-                        @keyup.enter.native="submitForm('loginDataForm')" @blur="focusPositioning"></el-input>
-            </el-form-item>
-            <el-form-item id="box">
-              <el-button style="width: 210px;float: right;" id="defaultFocus" type="success"
-                         @click="submitForm('loginDataForm')">登陆</el-button>
-            </el-form-item>
-          </el-form>
+      <div class="layout-container-left">
+        <el-form :model="loginDataForm" :rules="loginDataRules" ref="loginDataForm" label-width="100px"
+                 class="demo-ruleForm">
+          <el-form-item label="" prop="username" style="width: 288px;">
+            <el-input v-model="loginDataForm.username" placeholder="请输入用户名"
+                      @keyup.enter.native="submitForm('loginDataForm')"></el-input>
+          </el-form-item>
+          <el-form-item label="" prop="password" style="width: 288px;">
+            <el-input type="password" v-model="loginDataForm.password" placeholder="请输入密码"
+                      @keyup.enter.native="submitForm('loginDataForm')"></el-input>
+          </el-form-item>
+          <el-form-item id="box" style="width: 288px;">
+            <el-button class="login-button" @click="submitForm('loginDataForm')">登陆</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+      <div class="layout-container-right">
+        <div class="loginbox-right-register">
+          <div type="text" @click="handleClick('/admin/register')" style="color: #31a7ff;padding: 0;">免费注册</div>
         </div>
-        <div class="loginbox-right">
-          <div class="loginbox-right-register">
-            <el-button type="text" @click="handleClick('/register')">免费注册</el-button>
-          </div>
-          <div class="loginbox-right-prompt" style="color: #FF0000;">第三方登陆</div>
-          <div class="loginbox-right-icon">
-            <img src="../../assets/qq.png" height="35" width="35"/>
-            <img src="../../assets/wechat.png" height="35" width="35"/>
-          </div>
+        <div class="loginbox-right-prompt" style="color: #fe5b5a;">— 快速登陆 —</div>
+        <div class="loginbox-right-icon">
+          <img src="../../assets/qq.png" height="35" width="35"/>
+          <img src="../../assets/wechat.png" height="35" width="35"/>
         </div>
       </div>
     </div>
     <div class="layout-container-tail">
       <label class="layout-container-tail-text">Copyright © 2015 粤ICP备15062920号</label>
     </div>
+    <el-dialog title="切换身份" :visible.sync="identityListDialog" style="width: 992px;margin: 0 auto">
+      <div v-for="val in userPositionList.list" class="identityTab" @click="identitySwitch(val)">
+        <label class="identityImg" style="float:left;margin-right: 17px;margin-left: 10px;margin-top: 10px; ">
+          <img class="logo" :src="val.companyLogo" height="52" width="52"/>
+        </label>
+        <div style="width:140px;float:right;margin-top: 18px;text-align: left;color:#505050;">{{ val.companyName }}
+
+        </div>
+        <div style="width:140px;margin-top: 14px;text-align: left;color:#31a7ff;">{{ val.userPositionName }}</div>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -55,12 +80,15 @@
   import CommonSidebar from '@/components/common/Sidebar'
   export default {
     computed: {
-      ...mapGetters([])
+      ...mapGetters([
+        'publicParameters',
+        'userPositionList'
+      ])
     },
     components: {CommonHeader, CommonSidebar},
     data () {
       return {
-        activeIndex: '1',
+        identityListDialog: false,
         loginDataForm: {
           username: null,
           password: null
@@ -79,18 +107,16 @@
     },
     methods: {
       ...mapActions([
-        'handleClick'
+        'handleClick',
+        'getUserPositionList'
       ]),
-      handleSelect () {
-        console.log('1111')
-      },
       submitForm (formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
             var current = this
             axios({
               method: 'POST',
-              url: 'http://localhost:30000/cloud/window/v1/user/login',
+              url: this.publicParameters.domain + '/user/login',
               params: {
                 username: this.loginDataForm.username,
                 password: this.loginDataForm.password
@@ -98,23 +124,9 @@
             }).then(function (response) {
               console.log(response.data)
               if (response.data.code === '200') {
-                localStorage.setItem('userId', response.data.data.id)
-                localStorage.setItem('username', response.data.data.username)
-                localStorage.setItem('loginAccessToken', response.data.data.access_ticket)
-                window.location.href = '#/'
-                axios({
-                  method: 'Get',
-                  url: 'http://localhost:30000/cloud/window/v1/userposition/positiontoken',
-                  params: {user_position_id: response.data.data.id}
-                }).then(function (response) {
-                  if (response.data.code === '200') {
-                    localStorage.setItem('positionAccessToken', response.data.data.access_token)
-                  } else {
-                    current.promptInfo('error', '角色切换失败！')
-                  }
-                }).catch(function (error) {
-                  console.log(error)
-                })
+                localStorage.setItem('accessTicket', response.data.data.accessTicket)
+                current.getUserPositionList()
+                current.identityListDialog = true
               } else {
                 current.promptInfo('error', '用户名密码错误！')
               }
@@ -127,6 +139,29 @@
           }
         })
       },
+      identitySwitch (data) {
+        var current = this
+        axios({
+          method: 'POST',
+          url: this.publicParameters.domain + '/userPosition/getAccessToken',
+          params: {
+            accessValue: localStorage.getItem('accessTicket'),
+            userPositionId: data.userPositionId
+          }
+        }).then(function (response) {
+          console.log(response.data)
+          if (response.data.code === '200') {
+            localStorage.setItem('username', current.loginDataForm.username + '(' + data.userPositionName + ')')
+            localStorage.setItem('userPositionId', data.userPositionId)
+            localStorage.setItem('accessToken', response.data.data.accessToken)
+            window.location.href = '#/application/center'
+          } else {
+            current.promptInfo('error', '角色切换失败！')
+          }
+        }).catch(function (error) {
+          console.log(error)
+        })
+      },
       resetForm (formName) {
         this.$refs[formName].resetFields()
       },
@@ -134,8 +169,13 @@
         this.$message({message: info, type: type})
         return false
       },
-      focusPositioning () {
-//        document.getElementById('defaultFocus').focus()
+      handleClose (done) {
+        this.$confirm('确认关闭？')
+          .then(_ => {
+            done()
+          })
+          .catch(_ => {
+          })
       }
     }
   }
@@ -144,94 +184,104 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-  $color: #324157 !default;
+  $color: #002f5c !default;
   .layout {
-    position: relative;
-    background: #ffffff;
+    height: 100vh;
     .layout-sidebar-header {
-      height: 100vh;
-      .layout-sidebar-header-left {
+      .layout-sidebar-header-content {
         background: $color;
-        height: 60px;
-        width: 20%;
-        position: absolute;
-        left: 0;
-        img {
-          margin-left: 20px;
+        height: 78px;
+        width: 100%;
+        .logo {
+          position: absolute;
+          left: 192px;
         }
-        .layout-sidebar-header-left-text {
+        .action-buttons {
           color: #ffffff;
-          font-weight: bold;
-          position: relative;
-          left: 0px;
-          top: -20px;
-        }
-      }
-      .layout-sidebar-header-right {
-        background: $color;
-        height: 60px;
-        width: 80%;
-        position: absolute;
-        right: 0;
-        .el-menu-demo {
           position: absolute;
-          right: 0;
-        }
-      }
-    }
-    .layout-container {
-      box-sizing: border-box;
-      position: absolute;
-      top: 60px;
-      bottom: 60px;
-      width: 100%;
-      .loginbox {
-        width: 460px;
-        height: 240px;
-        border: 1px solid #cccccc;
-        border-radius: 8px;
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        margin-left: -200px;
-        margin-top: -100px;
-        .loginbox-left {
-          width: 310px;
-          height: 70%;
-          border-right: 1px solid #cccccc;
-          margin: 3% 0;
-          padding: 20px;
-        }
-        .loginbox-right {
-          display: inline;
-          width: 110px;
-          height: 88%;
-          margin-left: 120px;
-          position: absolute;
-          margin-top: -222px;
-          .loginbox-right-register, .loginbox-right-prompt, .loginbox-right-icon {
-            padding-top: 35px;
-            font-size: 14px;
+          right: 192px;
+          height: 78px;
+          line-height: 78px;
+          label {
             cursor: pointer;
           }
         }
       }
-      height: calc(100vh - 150px);
-      overflow: scroll;
+    }
+    .layout-container {
+      width: 516px;
+      height: 238px;
+      border: 1px solid #cadced;
+      border-radius: 3px;
+      position: absolute;
+      right: 192px;
+      top: 240px;
+      .layout-container-left {
+        width: 318px;
+        margin-top: 42px;
+        margin-left: 30px;
+        border-right: 1px solid #cadced;
+        .login-button {
+          width: 288px;
+          height: 38px;
+          float: right;
+          background: #31a7ff;
+          color: #ffffff;
+        }
+      }
+      .layout-container-right {
+        width: 170px;
+        height: 88%;
+        margin-left: 348px;
+        position: absolute;
+        margin-top: -222px;
+        .loginbox-right-register {
+          padding-top: 48px;
+          font-size: 14px;
+        }
+        .loginbox-right-prompt {
+          padding-top: 16px;
+          font-size: 14px;
+        }
+        .loginbox-right-icon {
+          width: 35px;
+          padding-top: 18px;
+          font-size: 14px;
+          margin-left: 68px;
+        }
+      }
     }
     .layout-container-tail {
       background: $color;
-      height: 60px;
+      height: 46px;
       position: absolute;
-      bottom: 0px;
+      bottom: 0;
       width: 100%;
       .layout-container-tail-text {
         color: #ffffff;
         font-weight: bold;
         position: relative;
-        font-size: 14px;
-        top: 20px;
+        font-size: 12px;
+        top: 12px;
       }
     }
+  }
+
+  .dialog-title {
+    color: #ffffff;
+    background-color: #31a7ff;
+  }
+
+  .identityTab {
+    float: left;
+    margin-bottom: 16px;
+    width: 220px;
+    height: 72px;
+    border: 1px solid #ffffff;
+  }
+
+  .identityTab:hover {
+    border: 1px solid #31a7ff;
+    border-radius: 2px;
   }
 </style>
