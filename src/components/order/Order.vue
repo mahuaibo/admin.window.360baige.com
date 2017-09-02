@@ -14,15 +14,13 @@
     </div>
     <div class="content-list">
       <div class="content-list-headings">
-        <div style="background-color: #F5F5F5;coloe:#505050;border: 1px solid #E6E6E6;">
-          <div class="headings-item" style="padding-left:65px;">商品</div>
-          <div class="headings-item" style="padding-left:210px;">单价</div>
-          <div class="headings-item" style="padding-left:96px;">数量</div>
-          <div class="headings-item" style="padding-left:82px;">商品操作</div>
-          <div class="headings-item" style="padding-left:75px;">实付款</div>
-          <div class="headings-item" style="padding-left:76px;">交易状态</div>
-          <div class="headings-item" style="padding-left:118px;">交易操作</div>
-        </div>
+        <div class="headings-item" style="padding-left:65px;">商品</div>
+        <div class="headings-item" style="padding-left:210px;">单价</div>
+        <div class="headings-item" style="padding-left:96px;">数量</div>
+        <div class="headings-item" style="padding-left:82px;">商品操作</div>
+        <div class="headings-item" style="padding-left:75px;">实付款</div>
+        <div class="headings-item" style="padding-left:76px;">交易状态</div>
+        <div class="headings-item" style="padding-left:118px;">交易操作</div>
       </div>
       <div class="content-list-data">
         <div style="height:164px;border: 1px solid #dae8f6;margin-bottom: 20px;" v-for="val in orderData.list">
@@ -32,62 +30,24 @@
           <div class="content-list-datas" style="height: 109px;">
             <div class="data-item content-list-data-merchandise">
               <img src="../../assets/logo.png" style="height:70px;width:70px;padding-left: 20px;"/>
-              <label style="position:relative;bottom: 54px;left: 18px;color:#505050;">安全中心</label>
+              <label class="commodity-name">安全中心</label>
               <label style="position:relative;left: -42px;bottom: 26px;color:#808080;">分类：10000$/天</label>
             </div>
-            <div class="data-item content-list-data-price">
-              <div>72.00 元</div>
-            </div>
-            <div class="data-item content-list-data-number">
-              <div>2 个</div>
-            </div>
-            <div class="data-item content-list-data-mOperation">
-              <div>申请售后</div>
-            </div>
-            <div class="data-item content-list-data-realPay">
-              <div>72.00 元</div>
-            </div>
+            <div class="data-item content-list-data-price">72.00 元</div>
+            <div class="data-item content-list-data-number">2 个</div>
+            <div class="data-item content-list-data-mOperation">申请售后</div>
+            <div class="data-item content-list-data-realPay">72.00 元</div>
             <div class="data-item content-list-data-status">
               <div>交易成功</div>
-              <el-button type="text" style="padding-top: 12px;color: #505050;">订单详情</el-button>
+              <el-button type="text" class="order-desc">订单详情</el-button>
             </div>
             <div class="data-item content-list-data-tOperation">
-              <button style="width:68px;height:30px;background-color:#ffffff;border-radius:3px;border:1px solid #cadced;">
-                <b>评价</b>
-              </button>
-              <el-button type="text" style="margin:14px 0px 0px 8px;color: #505050;padding: 0px;">再次购买</el-button>
+              <button class="appraise-button">评价</button>
+              <el-button type="text" class="again-buy">再次购买</el-button>
             </div>
           </div>
         </div>
       </div>
-      <!--<el-table :data="orderData.list">-->
-      <!--<el-table-column label="订单号" width="180">-->
-      <!--<template scope="scope">-->
-      <!--<span style="margin-left: 10px">{{ scope.row.code }}</span>-->
-      <!--</template>-->
-      <!--</el-table-column>-->
-      <!--<el-table-column label="价格" width="180">-->
-      <!--<template scope="scope">-->
-      <!--<span style="margin-left: 10px">{{ scope.row.price }}</span>-->
-      <!--</template>-->
-      <!--</el-table-column>-->
-      <!--<el-table-column label="支付方式" width="180">-->
-      <!--<template scope="scope">-->
-      <!--<span style="margin-left: 10px">{{ scope.row.pay_type }}</span>-->
-      <!--</template>-->
-      <!--</el-table-column>-->
-      <!--<el-table-column label="状态" width="180">-->
-      <!--<template scope="scope">-->
-      <!--<span style="margin-left: 10px">{{ scope.row.status }}</span>-->
-      <!--</template>-->
-      <!--</el-table-column>-->
-      <!--<el-table-column label="操作">-->
-      <!--<template scope="scope">-->
-      <!--<el-button size="small" @click="orderDetail(scope.row)">详情</el-button>-->
-      <!--<el-button size="small" type="danger" @click="cancelOrder(scope.row)">取消订单</el-button>-->
-      <!--</template>-->
-      <!--</el-table-column>-->
-      <!--</el-table>-->
     </div>
     <div class="comtent-paging">
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
@@ -200,12 +160,12 @@
 
   .content-list {
     text-align: left;
-    height: calc(100vh - 262px);
-    overflow: scroll;
     .content-list-headings {
-      padding: 0px 20px 18px 20px;
+      background-color: #F5F5F5;
+      border: 1px solid #E6E6E6;
       font-size: 14px;
       color: #505050;
+      margin: 0px 20px 32px 20px;
       .headings-item {
         display: inline;
         height: 53px;
@@ -213,6 +173,8 @@
       }
     }
     .content-list-data {
+      height: calc(100vh - 336px);
+      overflow: scroll;
       padding-left: 20px;
       padding-right: 20px;
       .content-list-data-orderCode {
@@ -231,6 +193,12 @@
         }
         .content-list-data-merchandise {
           width: 295px;
+          .commodity-name {
+            position: relative;
+            bottom: 54px;
+            left: 18px;
+            color: #505050;
+          }
         }
         .content-list-data-price {
           width: 140px;
@@ -246,9 +214,37 @@
         }
         .content-list-data-status {
           width: 158px;
+          .order-desc {
+            padding-top: 12px;
+            color: #505050;
+          }
+          .order-desc:hover {
+            color: #20a0ff;
+          }
         }
         .content-list-data-tOperation {
           width: 85px;
+          .appraise-button {
+            outline: none;
+            cursor: pointer;
+            width: 68px;
+            height: 30px;
+            background-color: #ffffff;
+            border-radius: 3px;
+            border: 1px solid #cadced;
+          }
+          .appraise-button:hover {
+            color: #20a0ff;
+            border: 1px solid #20a0ff;
+          }
+          .again-buy {
+            margin: 14px 0px 0px 8px;
+            color: #505050;
+            padding: 0px;
+          }
+          .again-buy:hover {
+            color: #20a0ff;
+          }
         }
       }
     }

@@ -9,9 +9,13 @@ Vue.use(Vuex)
 
 const state = {
   publicParameters: {
+    identityListDialog: false,
+    companyInfoDialog: false,
+    adminInfoDialog: false,
+    modifyPwdDialog: false,
     returnButtom: false,
     path: '',
-    domain: 'http://192.168.0.125:30000/cloud/window/v1'
+    domain: 'http://192.168.0.125:30000/cloud/window/v1' // 192.168.0.127
   },
   userPositionList: {
     list: {}

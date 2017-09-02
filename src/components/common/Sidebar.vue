@@ -36,11 +36,11 @@
       setStyle () {
         var setStyleObject = this.$refs
         var href = window.location.href
-        if (href.indexOf('/application/center') >= 0) {
+        if (href.indexOf('/application/center') >= 0 || href.indexOf('/application/store') >= 0 || href.indexOf('/application/appTplDetail') >= 0) {
           setStyleObject = this.$refs.center
           this.$refs.orderList.style.backgroundColor = this.$refs.loggerList.style.backgroundColor = this.$refs.accountList.style.backgroundColor = ''
           this.$refs.orderList.style.borderRight = this.$refs.loggerList.style.borderRight = this.$refs.accountList.style.borderRight = ''
-        } else if (href.indexOf('/account/list') >= 0) {
+        } else if (href.indexOf('/account/list') >= 0 || href.indexOf('/account/transactionDetail') >= 0) {
           setStyleObject = this.$refs.accountList
           this.$refs.orderList.style.backgroundColor = this.$refs.loggerList.style.backgroundColor = this.$refs.center.style.backgroundColor = ''
           this.$refs.orderList.style.borderRight = this.$refs.loggerList.style.borderRight = this.$refs.center.style.borderRight = ''

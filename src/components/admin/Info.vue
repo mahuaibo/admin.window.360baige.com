@@ -1,22 +1,20 @@
 <template>
-  <div class="index">
-    <div style="width: 550px; margin: 0 auto; padding-top: 50px;">
-      <el-form :model="myData" :rules="userInfoRules" ref="myData" label-width="75px" class="demo-ruleForm">
-        <!--<el-form-item label="LOGO:" prop="logo"></el-form-item>-->
-        <el-form-item label="用户名:" prop="username">
-          <el-input type="username" v-model="myData.username" placeholder="请输入" :disabled="true"></el-input>
-        </el-form-item>
-        <el-form-item label="手机号码:" prop="phone">
-          <el-input type="string" v-model="myData.phone" placeholder="请输入"></el-input>
-        </el-form-item>
-        <el-form-item label="邮箱:" prop="email">
-          <el-input type="string" v-model="myData.email" placeholder="请输入"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button style="width: 475px;float: right" type="success" @click="submitForm('myData')">修改</el-button>
-        </el-form-item>
-      </el-form>
-    </div>
+  <div class="admin-info">
+    <el-form :model="myData" :rules="userInfoRules" ref="myData" label-width="100px" style="padding:0px 10px 0px 0px;">
+      <!--<el-form-item label="LOGO:" prop="logo"></el-form-item>-->
+      <el-form-item label="用户名:" prop="username">
+        <el-input type="username" v-model="myData.username" placeholder="请输入" :disabled="true"></el-input>
+      </el-form-item>
+      <el-form-item label="手机号码:" prop="phone">
+        <el-input type="string" v-model="myData.phone" placeholder="请输入"></el-input>
+      </el-form-item>
+      <el-form-item label="邮箱:" prop="email">
+        <el-input type="string" v-model="myData.email" placeholder="请输入"></el-input>
+      </el-form-item>
+      <el-form-item label=" ">
+        <el-button class="modify-button" @click="submitForm('myData')">修改</el-button>
+      </el-form-item>
+    </el-form>
   </div>
 </template>
 <script>
@@ -24,7 +22,7 @@
   import {mapGetters, mapActions} from 'vuex'
   export default {
     created () {
-      this.initMyInfoData(this.myData)
+      this.initInfoData(this.myData)
     },
     computed: {
       ...mapGetters([
@@ -58,7 +56,7 @@
     },
     methods: {
       ...mapActions([
-        'initMyInfoData'
+        'initInfoData'
       ]),
       submitForm (formName) {
         this.$refs[formName].validate((valid) => {
@@ -68,14 +66,16 @@
               method: 'GET',
               url: this.publicParameters.domain + '/user/modify',
               params: {
-                access_token: localStorage.getItem('accessToken'),
+                accessToken: localStorage.getItem('accessToken'),
                 id: this.myData.id,
                 phone: this.myData.phone,
                 email: this.myData.email
               }
             }).then(function (response) {
+              console.log(response.data)
               if (response.data.code === '200') {
                 current.promptInfo('success', '用户信息修改成功！')
+                current.publicParameters.adminInfoDialog = false
               } else {
                 current.promptInfo('error', '用户信息修改失败！')
               }
@@ -95,3 +95,16 @@
     }
   }
 </script>
+<style lang="scss" scoped>
+  .modify-button {
+    color: #ffffff;
+    width: 100%;
+    float: right;
+    background-color: #31a7ff;
+    border: 0px solid #ffffff;
+  }
+
+  .modify-button:hover {
+    color: #ffffff;
+  }
+</style>

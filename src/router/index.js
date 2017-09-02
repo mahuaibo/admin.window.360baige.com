@@ -4,11 +4,12 @@ import Home from '@/components/Home'
 
 import Login from '@/components/admin/Login'
 import Register from '@/components/admin/Register'
-import MyInfo from '@/components/admin/MyInfo'
-import ModifyPassword from '@/components/admin/ModifyPassword'
+import Info from '@/components/admin/Info'
+import ModifyPwd from '@/components/admin/ModifyPwd'
 import CompanyInfo from '@/components/company/Info'
 import AppCenter from '@/components/application/AppCenter'
 import AppStore from '@/components/application/AppStore'
+import AppTplDetail from '@/components/application/AppTplDetail'
 import Account from '@/components/account/Account'
 import TransactionDetail from '@/components/account/TransactionDetail'
 import Order from '@/components/order/Order'
@@ -35,12 +36,12 @@ export default new Router({
     alias: '',
     children: [{
       name: 'myInfo',
-      component: MyInfo,
+      component: Info,
       path: '/admin/info',
       alias: 'myInfo'
     }, {
       name: 'modifyPassword',
-      component: ModifyPassword,
+      component: ModifyPwd,
       path: '/admin/modifyPassword',
       alias: 'modifyPassword'
     }, {
@@ -58,6 +59,11 @@ export default new Router({
       component: AppStore,
       path: '/application/store',
       alias: 'appStore'
+    }, {
+      name: 'appTplDetail',
+      component: AppTplDetail,
+      path: '/application/appTplDetail',
+      alias: 'appTplDetail'
     }, {
       name: 'account',
       component: Account,

@@ -1,11 +1,10 @@
 <template>
   <div class="index">
     <div class="comtent-list">
-      <el-table :data="loggerData.list" border style="width: 100%">
+      <el-table :data="loggerData.list" style="width: 100%" max-height="810">
         <el-table-column label="日期" width="213">
           <template scope="scope">
-            <el-icon name="time"></el-icon>
-            <span style="margin-left: 10px">{{ scope.row.create_time }}</span>
+            <span style="margin-left: 10px">{{ scope.row.createTime }}</span>
           </template>
         </el-table-column>
         <el-table-column label="操作类型" width="214">

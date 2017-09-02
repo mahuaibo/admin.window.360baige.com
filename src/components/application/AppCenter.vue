@@ -4,27 +4,24 @@
       <div class="appCenter-seek">
         <el-input placeholder="请输入名称..." icon="search" v-model="appListData.appSeek"
                   :on-icon-click="handleIconClick" style="width: 298px;height: 38px;"></el-input>
-      </div>
-      <div class="appCenter-shop">
-        <el-button type="success" @click="handleClick('/application/store')" style="width: 108px;height: 34px;">应用商店
-        </el-button>
+        <el-button type="success" @click="handleClick('/application/store')" style="float:right;width: 108px;height: 34px;">应用商店</el-button>
       </div>
     </div>
     <div class="appCenter-list">
-      <el-table :data="appCenterData.list" style="width: 100%">
+      <el-table :data="appCenterData.list" style="width: 100%" max-height="510">
         <el-table-column label="日期" width="220">
           <template scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.createTime }}</span>
+            <span>{{ scope.row.createTime }}</span>
           </template>
         </el-table-column>
         <el-table-column label="应用图标" width="180">
           <template scope="scope">
-            <span style="margin-left: 10px"><img :src="scope.row.img"/></span>
+            <span><img :src="scope.row.image" width="30" height="30" style="padding-top: 8px;"/></span>
           </template>
         </el-table-column>
         <el-table-column label="应用名称" width="180">
           <template scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.name }}</span>
+            <span>{{ scope.row.name }}</span>
           </template>
         </el-table-column>
         <el-table-column label="状态" width="180">
@@ -36,11 +33,13 @@
         <el-table-column label="操作">
           <template scope="scope">
             <el-button size="small" type="text" @click="enterApp(scope.row)">进入</el-button>
-            <el-button size="small" type="text" @click="unsubscribeApp(scope.row)">退订</el-button>
+            <!--<el-button size="small" type="text" @click="unsubscribeApp(scope.row)">退订</el-button>-->
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination class="cappCenter-paging" @size-change="handleSizeChange" @current-change="handleCurrentChange"
+    </div>
+    <div class="cappCenter-paging">
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
                      :current-page.sync="appListData.current" :page-sizes="[50, 100, 200]"
                      :page-size="appListData.pageSize" layout="total, sizes, prev, pager, next, jumper"
                      :total="appListData.total">
@@ -99,7 +98,7 @@
       unsubscribeApp (index) { // 退订
         this.submitData.url = ''
         this.submitData.appId = index.id
-        console.log('1')
+        console.log('待定...')
 //        this.submit()
       },
       enableApp (index) { // 启用
@@ -110,7 +109,7 @@
         this.submit()
       },
       disableApp (index) { // 停用
-        this.submitData.url = this.publicParameters.domain + 'application/modifyStatus'
+        this.submitData.url = this.publicParameters.domain + '/application/modifyStatus'
         this.submitData.appId = index.id
         this.submitData.status = 0
         this.submitData.remindMessage = '停用'
@@ -119,10 +118,10 @@
       submit () {
         var current = this
         axios({
-          method: 'GET',
+          method: 'post',
           url: current.submitData.url,
           params: {
-            access_token: localStorage.getItem('accessToken'),
+            accessToken: localStorage.getItem('accessToken'),
             id: current.submitData.appId,
             status: current.submitData.status
           }
@@ -130,7 +129,7 @@
           console.log(response.data)
           if (response.data.code === '200') {
             current.messageRemind('success', current.submitData.remindMessage + '成功！')
-            current.handleIconClick() // 更新数据
+            current.initApplicationData(current.appListData) // 更新数据
           } else {
             current.messageRemind('error', current.submitData.remindMessage + '失败！')
           }
@@ -147,30 +146,26 @@
 </script>
 <style lang="scss" scoped>
   .appCenter-operatingArea {
-    height: 38px;
-    padding-top: 12px;
-    padding-bottom: 30px;
+    margin-top: 12px;
+    padding-left: 20px;
+    padding-right: 20px;
+    text-align: left;
     .appCenter-seek {
-      position: absolute;
-      left: 40px;
-    }
-    .appCenter-shop {
-      position: absolute;
-      right: 40px;
+      margin-bottom: 32px;
     }
   }
 
   .appCenter-list {
     padding-left: 20px;
     padding-right: 20px;
-    text-align: left;
-    height: calc(100vh - 180px);
-    overflow: scroll;
+    /*text-align: left;*/
+    /*min-height: calc(100vh - 180px);*/
+    /*overflow: scroll;*/
   }
 
   .cappCenter-paging {
     float: right;
-    right: 40px;
-    padding: 30px 0px 0px 0px;
+    margin-top: 30px;
+    margin-right: 20px;
   }
 </style>

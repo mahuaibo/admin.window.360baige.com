@@ -1,4 +1,14 @@
 <style lang="scss">
+  .el-dialog {
+    width: 456px;
+    .el-dialog__body {
+      padding: 12px 8px 6px 0px;
+    }
+    .el-form-item {
+      margin: 14px 14px 20px 14px;
+    }
+  }
+
   .el-dialog__header {
     background-color: #31a7ff;
     padding: 0px;
@@ -30,46 +40,39 @@
       </div>
     </div>
     <div class="layout-container">
-      <div class="layout-container-left">
-        <el-form :model="loginDataForm" :rules="loginDataRules" ref="loginDataForm" label-width="100px"
-                 class="demo-ruleForm">
-          <el-form-item label="" prop="username" style="width: 288px;">
-            <el-input v-model="loginDataForm.username" placeholder="请输入用户名"
-                      @keyup.enter.native="submitForm('loginDataForm')"></el-input>
-          </el-form-item>
-          <el-form-item label="" prop="password" style="width: 288px;">
-            <el-input type="password" v-model="loginDataForm.password" placeholder="请输入密码"
-                      @keyup.enter.native="submitForm('loginDataForm')"></el-input>
-          </el-form-item>
-          <el-form-item id="box" style="width: 288px;">
-            <el-button class="login-button" @click="submitForm('loginDataForm')">登陆</el-button>
-          </el-form-item>
-        </el-form>
-      </div>
-      <div class="layout-container-right">
-        <div class="loginbox-right-register">
-          <div type="text" @click="handleClick('/admin/register')" style="color: #31a7ff;padding: 0;">免费注册</div>
+      <div class="login-box">
+        <div class="layout-container-left">
+          <el-form :model="loginDataForm" :rules="loginDataRules" ref="loginDataForm" label-width="100px">
+            <el-form-item label="" prop="username" style="width: 288px;">
+              <el-input v-model="loginDataForm.username" placeholder="请输入用户名"
+                        @keyup.enter.native="submitForm('loginDataForm')"></el-input>
+            </el-form-item>
+            <el-form-item label="" prop="password" style="width: 288px;">
+              <el-input type="password" v-model="loginDataForm.password" placeholder="请输入密码"
+                        @keyup.enter.native="submitForm('loginDataForm')"></el-input>
+            </el-form-item>
+            <el-form-item id="box" style="width: 288px;">
+              <el-button class="login-button" @click="submitForm('loginDataForm')">登陆</el-button>
+            </el-form-item>
+          </el-form>
         </div>
-        <div class="loginbox-right-prompt" style="color: #fe5b5a;">— 快速登陆 —</div>
-        <div class="loginbox-right-icon">
-          <img src="../../assets/qq.png" height="35" width="35"/>
-          <img src="../../assets/wechat.png" height="35" width="35"/>
+        <div class="layout-container-right">
+          <div class="loginbox-right-register">
+            <div type="text" @click="handleClick('/admin/register')" style="color: #31a7ff;padding: 0;">免费注册</div>
+          </div>
+          <div class="loginbox-right-prompt" style="color: #fe5b5a;">— 快速登陆 —</div>
+          <div class="loginbox-right-icon">
+            <img src="../../assets/qq.png" height="35" width="35"/>
+            <img src="../../assets/wechat.png" height="35" width="35"/>
+          </div>
         </div>
       </div>
     </div>
     <div class="layout-container-tail">
       <label class="layout-container-tail-text">Copyright © 2015 粤ICP备15062920号</label>
     </div>
-    <el-dialog title="切换身份" :visible.sync="identityListDialog" style="width: 992px;margin: 0 auto">
-      <div v-for="val in userPositionList.list" class="identityTab" @click="identitySwitch(val)">
-        <label class="identityImg" style="float:left;margin-right: 17px;margin-left: 10px;margin-top: 10px; ">
-          <img class="logo" :src="val.companyLogo" height="52" width="52"/>
-        </label>
-        <div style="width:140px;float:right;margin-top: 18px;text-align: left;color:#505050;">{{ val.companyName }}
-
-        </div>
-        <div style="width:140px;margin-top: 14px;text-align: left;color:#31a7ff;">{{ val.userPositionName }}</div>
-      </div>
+    <el-dialog title="切换身份" :visible.sync="identityListDialog">
+      <admin-user-position></admin-user-position>
     </el-dialog>
   </div>
 </template>
@@ -78,14 +81,14 @@
   import {mapGetters, mapActions} from 'vuex'
   import CommonHeader from '@/components/common/Header'
   import CommonSidebar from '@/components/common/Sidebar'
+  import AdminUserPosition from '@/components/admin/UserPosition'
   export default {
     computed: {
       ...mapGetters([
-        'publicParameters',
-        'userPositionList'
+        'publicParameters'
       ])
     },
-    components: {CommonHeader, CommonSidebar},
+    components: {CommonHeader, CommonSidebar, AdminUserPosition},
     data () {
       return {
         identityListDialog: false,
@@ -124,6 +127,7 @@
             }).then(function (response) {
               console.log(response.data)
               if (response.data.code === '200') {
+                localStorage.setItem('username', current.loginDataForm.username)
                 localStorage.setItem('accessTicket', response.data.data.accessTicket)
                 current.getUserPositionList()
                 current.identityListDialog = true
@@ -137,29 +141,6 @@
             console.log('error submit!!')
             return false
           }
-        })
-      },
-      identitySwitch (data) {
-        var current = this
-        axios({
-          method: 'POST',
-          url: this.publicParameters.domain + '/userPosition/getAccessToken',
-          params: {
-            accessValue: localStorage.getItem('accessTicket'),
-            userPositionId: data.userPositionId
-          }
-        }).then(function (response) {
-          console.log(response.data)
-          if (response.data.code === '200') {
-            localStorage.setItem('username', current.loginDataForm.username + '(' + data.userPositionName + ')')
-            localStorage.setItem('userPositionId', data.userPositionId)
-            localStorage.setItem('accessToken', response.data.data.accessToken)
-            window.location.href = '#/application/center'
-          } else {
-            current.promptInfo('error', '角色切换失败！')
-          }
-        }).catch(function (error) {
-          console.log(error)
         })
       },
       resetForm (formName) {
@@ -209,6 +190,11 @@
       }
     }
     .layout-container {
+      min-height: 518px;
+      width: 100%;
+      overflow: hidden;
+    }
+    .login-box {
       width: 516px;
       height: 238px;
       border: 1px solid #cadced;
@@ -227,6 +213,7 @@
           float: right;
           background: #31a7ff;
           color: #ffffff;
+          border: 0px solid #ffffff;
         }
       }
       .layout-container-right {
@@ -255,7 +242,7 @@
       background: $color;
       height: 46px;
       position: absolute;
-      bottom: 0;
+      bottom: 0px;
       width: 100%;
       .layout-container-tail-text {
         color: #ffffff;
@@ -265,23 +252,5 @@
         top: 12px;
       }
     }
-  }
-
-  .dialog-title {
-    color: #ffffff;
-    background-color: #31a7ff;
-  }
-
-  .identityTab {
-    float: left;
-    margin-bottom: 16px;
-    width: 220px;
-    height: 72px;
-    border: 1px solid #ffffff;
-  }
-
-  .identityTab:hover {
-    border: 1px solid #31a7ff;
-    border-radius: 2px;
   }
 </style>

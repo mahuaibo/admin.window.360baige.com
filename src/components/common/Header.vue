@@ -1,7 +1,47 @@
+<style lang="scss">
+  .el-dialog {
+    width: 456px;
+    .el-dialog__body {
+      padding: 12px 8px 6px 0px;
+    }
+    .el-form-item {
+      margin: 14px 14px 20px 14px;
+    }
+  }
+
+  .el-dialog__header {
+    background-color: #31a7ff;
+    padding: 0px;
+    margin: 0px;
+    height: 55px;
+    line-height: 60px;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    text-align: left;
+    padding-left: 20px;
+    .el-dialog__title {
+      color: #ffffff;
+      font-size: 18px;
+      font-weight: normal;
+    }
+    .el-dialog__headerbtn {
+      padding-top: 20px;
+      padding-right: 20px;
+      .el-icon-close {
+        color: #ffffff;
+      }
+    }
+  }
+
+  .el-table th {
+    text-align: center;
+  }
+</style>
 <template>
   <div class="common-header">
     <div class="common-header-return" v-if="publicParameters.returnButtom">
-      <el-button style="font-size: 14px;color: #505050;" type="text" @click="handleClick(publicParameters.path)">＜返回</el-button>
+      <el-button style="font-size: 14px;color: #505050;" type="text" @click="handleClick(publicParameters.path)">＜返回
+      </el-button>
     </div>
     <div class="common-header-right">
       <img class="roleLogo" src="../../assets/qq.png" height="30" width="30"/>
@@ -39,52 +79,24 @@
             <label style="position:absolute;left: 25px;color:#505050;font-size: 14px;">消息</label>
             <label style="position:absolute;right:25px;font-size: 12px;color: #808080;">清空</label>
           </div>
-          <div class="message-item" v-for="val in messageList.list">
-{{ val.title }}</div>
-          <div class="message-item-bottom">查看全部</div>
+          <div class="message-item" v-for="val in messageList.list">{{ val.title }} </div>
+          <div class="message-item-bottom" @click="viewAll">查看全部</div>
         </div>
         <s><i></i></s>
       </div>
     </div>
     <div class="dialog">
-      <el-dialog title="切换身份" :visible.sync="identityListDialog" style="width: 992px;margin: 0 auto">
-        <div v-for="val in userPositionList.list" class="identityTab" @click="identitySwitch(val)"
-             v-if="val.userPositionId==userPositionId" style="border: 1px solid #31a7ff;border-radius: 2px;">
-          <label class="identityTab-identityImg">
-            <img class="logo" :src="val.companyLogo" height="52" width="52"/>
-          </label>
-          <div class="identityTab-companyName">{{ val.companyName }}</div>
-          <div class="identityTab-userPositionName">{{ val.userPositionName }}</div>
-        </div>
-        <div v-for="val in userPositionList.list" class="identityTab" @click="identitySwitch(val)" v-else="">
-          <label class="identityTab-identityImg">
-            <img class="logo" :src="val.companyLogo" height="52" width="52"/>
-          </label>
-          <div class="identityTab-companyName">{{ val.companyName }}</div>
-          <div class="identityTab-userPositionName">{{ val.userPositionName }}</div>
-        </div>
+      <el-dialog title="切换身份" :visible.sync="publicParameters.identityListDialog" style="width: 992px;margin: 0 auto">
+        <admin-user-position></admin-user-position>
       </el-dialog>
-      <el-dialog title="用户信息" :visible.sync="adminInfoDialog" style="width: 992px;margin: 0 auto">
-        <el-form :model="myData" :rules="userInfoRules" ref="myData" label-width="75px" class="demo-ruleForm">
-          <el-form-item prop="username">
-            <el-input placeholder="请输入用户名" v-model="myData.username" class="registerForm-input">
-              <template slot="prepend">用 &nbsp;户&nbsp; 名</template>
-            </el-input>
-          </el-form-item>
-          <el-form-item prop="phone">
-            <el-input placeholder="请输入用户名" v-model="myData.phone" class="registerForm-input">
-              <template slot="prepend">手机号码</template>
-            </el-input>
-          </el-form-item>
-          <el-form-item prop="phone">
-            <el-input placeholder="请输入用户名" v-model="myData.email" class="registerForm-input">
-              <template slot="prepend">邮 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 箱</template>
-            </el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button style="width: 456px;float: right" type="success" @click="submitForm('myData')">修改</el-button>
-          </el-form-item>
-        </el-form>
+      <el-dialog title="企业信息" :visible.sync="publicParameters.companyInfoDialog">
+        <company-info></company-info>
+      </el-dialog>
+      <el-dialog title="用户信息" :visible.sync="publicParameters.adminInfoDialog">
+        <admin-info></admin-info>
+      </el-dialog>
+      <el-dialog title="密码修改" :visible.sync="publicParameters.modifyPwdDialog">
+        <modify-pwd></modify-pwd>
       </el-dialog>
     </div>
   </div>
@@ -92,9 +104,13 @@
 
 <script>
   import axios from 'axios'
-  //  import router from '../.././router'
+  import AdminUserPosition from '@/components/admin/UserPosition'
+  import CompanyInfo from '@/components/company/Info'
+  import AdminInfo from '@/components/admin/Info'
+  import ModifyPwd from '@/components/admin/ModifyPwd'
   import {mapGetters, mapActions} from 'vuex'
   export default {
+    components: {AdminUserPosition, CompanyInfo, AdminInfo, ModifyPwd},
     computed: {
       ...mapGetters([
         'publicParameters',
@@ -110,10 +126,7 @@
         callback()
       }
       return {
-        identityListDialog: false,
-        adminInfoDialog: false,
         name: localStorage.getItem('username'),
-        userPositionId: localStorage.getItem('userPositionId'),
         myData: {
           id: null,
           username: null,
@@ -134,16 +147,18 @@
     methods: {
       ...mapActions([
         'handleClick',
-        'getUserPositionList',
-        'initMyInfoData'
+        'getUserPositionList'
       ]),
       openBox (key) {
         if (key === 'identity') {
+          this.publicParameters.identityListDialog = true
           this.getUserPositionList()
-          this.identityListDialog = true
+        } else if (key === 'company') {
+          this.publicParameters.companyInfoDialog = true
         } else if (key === 'admin') {
-          this.initMyInfoData(this.myData)
-          this.adminInfoDialog = true
+          this.publicParameters.adminInfoDialog = true
+        } else if (key === 'password') {
+          this.publicParameters.modifyPwdDialog = true
         }
       },
       logout () {
@@ -175,33 +190,6 @@
           console.log('取消操作！')
         })
       },
-      identitySwitch (data) {
-        console.log(data.userPositionId)
-        console.log(this.userPositionId)
-        if (data.userPositionId + '' === this.userPositionId + '') {
-          this.messageRemind('warning', '傻B别瞎切换...')
-          return
-        }
-        var current = this
-        axios({
-          method: 'POST',
-          url: this.publicParameters.domain + '/userPosition/getAccessToken',
-          params: {
-            accessTicket: localStorage.getItem('accessTicket'),
-            userPositionId: data.userPositionId
-          }
-        }).then(function (response) {
-          console.log(response.data)
-          if (response.data.code === '200') {
-            localStorage.setItem('accessToken', response.data.data.accessToken)
-            window.location.href = '#/application/center'
-          } else {
-            current.promptInfo('error', '角色切换失败！')
-          }
-        }).catch(function (error) {
-          console.log(error)
-        })
-      },
       submitForm (formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
@@ -229,6 +217,9 @@
             return false
           }
         })
+      },
+      viewAll () {
+        console.log('查看全部。。。')
       },
       messageRemind  (type, info) { // type success成功   warning警告   error失败
         this.$message({message: info, type: type})
@@ -397,35 +388,4 @@
     }
   }
 
-  .identityTab {
-    float: left;
-    margin-bottom: 16px;
-    width: 220px;
-    height: 72px;
-    border: 1px solid #ffffff;
-    .identityTab-identityImg {
-      float: left;
-      margin-left: 10px;
-      margin-top: 10px;
-      margin-right: 17px;
-    }
-    .identityTab-companyName {
-      width: 140px;
-      float: right;
-      margin-top: 18px;
-      text-align: left;
-      color: #505050;
-    }
-    .identityTab-userPositionName {
-      width: 140px;
-      margin-top: 14px;
-      text-align: left;
-      color: #31a7ff;
-    }
-  }
-
-  .identityTab:hover {
-    border: 1px solid #31a7ff;
-    border-radius: 2px;
-  }
 </style>

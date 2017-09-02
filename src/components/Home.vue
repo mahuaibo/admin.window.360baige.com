@@ -70,7 +70,6 @@
       .layout-sidebar-wrapper {
         background: #002f5c;
         height: calc(100vh - 110px);
-        overflow: scroll;
       }
     }
     .layout-container {

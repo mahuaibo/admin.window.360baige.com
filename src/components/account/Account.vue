@@ -7,38 +7,37 @@
             <div class="bg-purple" style="font-size: 14px;">账户余额(￥)：{{ statistical.balance }}</div>
           </el-col>
           <el-col :span="6">
-            <div class="bg-purple" style="font-size: 14px;">总入账(￥)：{{ statistical.TotalEntry }}</div>
+            <div class="bg-purple" style="font-size: 14px;">总入账(￥)：{{ statistical.inAccount }}</div>
           </el-col>
           <el-col :span="6">
-            <div class="bg-purple" style="font-size: 14px;">总出账(￥)：{{ statistical.TotalDischarge }}</div>
+            <div class="bg-purple" style="font-size: 14px;">总出账(￥)：{{ statistical.outAccount }}</div>
           </el-col>
           <el-col :span="6" style="line-height: 55px;">
-            <el-button type="text"  style="font-size: 12px;" @click="handleClick('/account/transactionDetail')">
+            <el-button type="text" style="font-size: 12px;" @click="handleClick('/account/transactionDetail')">
               查看交易明细>>
-
             </el-button>
           </el-col>
         </el-row>
       </div>
       <div class="account-content-head-overview">
         <el-tabs v-model="activeName" @tab-click="getAccountData">
-          <el-tab-pane label="当月" name="first"></el-tab-pane>
-          <el-tab-pane label="季度" name="second"></el-tab-pane>
-          <el-tab-pane label="半年" name="third"></el-tab-pane>
-          <el-tab-pane label="本年" name="fourth"></el-tab-pane>
+          <el-tab-pane label="当月" name="1"></el-tab-pane>
+          <el-tab-pane label="季度" name="2"></el-tab-pane>
+          <el-tab-pane label="半年" name="3"></el-tab-pane>
+          <el-tab-pane label="本年" name="4"></el-tab-pane>
         </el-tabs>
         <el-row :gutter="12">
           <el-col :span="6">
-            <div class="bg-purple">存入(￥)：{{ statistical.MonthIncome}}</div>
+            <div class="bg-purple">存入(￥)：{{ accountListData.inAccount}}</div>
           </el-col>
           <el-col :span="6">
-            <div class="bg-purple">支出(￥)：{{ statistical.MonthPay }}</div>
+            <div class="bg-purple">支出(￥)：{{ accountListData.outAccount }}</div>
           </el-col>
         </el-row>
       </div>
     </div>
-    <div class="account-comtent-list" style="text-align: left;">
-      <el-table :data="accountData.list" style="width: 100%">
+    <div class="account-comtent-list">
+      <el-table :data="accountData.list" style="width: 100%" max-height="380">
         <el-table-column label="日期" width="180">
           <template scope="scope">
             <span style="margin-left: 10px">{{ scope.row.createTime }}</span>
@@ -60,7 +59,10 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination class="account-comtent-paging" @size-change="handleSizeChange" @current-change="handleCurrentChange"
+    </div>
+    <div class="account-comtent-paging">
+      <el-pagination @size-change="handleSizeChange"
+                     @current-change="handleCurrentChange"
                      :current-page.sync="accountListData.current" :page-sizes="[50, 100, 200]"
                      :page-size="accountListData.pageSize" layout="total, sizes, prev, pager, next, jumper"
                      :total="accountListData.total">
@@ -68,7 +70,7 @@
     </div>
 
     <el-dialog title="详情" :visible.sync="accountDetailModal" size="tiny" :before-close="cancel">
-      <el-form ref="form" :model="accountFrom" label-width="90px">
+      <el-form ref="form" :model="accountFrom" label-width="100px" style="text-align:left;padding:0px 10px 0px 0px;">
         <el-form-item label="交易时间：">{{ accountFrom.createTime }}</el-form-item>
         <el-form-item label="订单号：">{{ accountFrom.orderCode }}</el-form-item>
         <el-form-item label="交易类型：">{{ accountFrom.amountType }}</el-form-item>
@@ -95,15 +97,16 @@
     },
     data () {
       return {
-        activeName: 'first',
+        activeName: '1',
         statistical: {
           balance: null,          // 余额
-          TotalEntry: null,       // 总入账
-          TotalDischarge: null,   // 总出账
-          MonthIncome: null,      // 月收入
-          MonthPay: null          // 月支出
+          inAccount: null,       // 总入账
+          outAccount: null   // 总出账
         },
         accountListData: {
+          inAccount: 0, // 进账
+          outAccount: 0, // 出账
+          cycleType: '1',
           pageSize: 50,
           current: 1,
           total: 1
@@ -127,32 +130,35 @@
         'handleClick'
       ]),
       handleDetail (row) {
+        var modalData = true
         var current = this
         axios({
-          method: 'GET',
-          url: this.publicParameters.domain + '/account_item/detail',
+          method: 'POST',
+          url: this.publicParameters.domain + '/accountItem/detail',
           params: {
-            access_token: localStorage.getItem('accessToken'),
+            accessToken: localStorage.getItem('accessToken'),
             id: row.id
           }
         }).then(function (response) {
           console.log(response.data)
           if (response.data.code === '200') {
-            current.accountFrom.createTime = response.data.data.create_time
-            current.accountFrom.orderCode = response.data.data.order_code
-            current.accountFrom.amountType = response.data.data.amount_type
+            current.accountFrom.createTime = response.data.data.createTime
+            current.accountFrom.orderCode = response.data.data.orderCode
+            current.accountFrom.amountType = response.data.data.amountType
             current.accountFrom.amount = response.data.data.amount
             current.accountFrom.remark = response.data.data.remark
           } else {
-            current.messageRemind('error', '失败！')
+            current.messageRemind('error', '获取信息失败！')
+            modalData = false
           }
         }).catch(function (error) {
           console.log(error)
         })
-        this.accountDetailModal = true
+        this.accountDetailModal = modalData
       },
       getAccountData (index) {
-        console.log(index)
+        this.accountListData.cycleType = index.name
+        this.initAccountListData(this.accountListData)
       },
       handleSizeChange () {
         this.initAccountListData(this.accountListData)
@@ -189,14 +195,14 @@
   .account-comtent-list {
     padding-left: 20px;
     padding-right: 20px;
-    height: calc(100vh - 360px);
-    overflow: scroll;
+    /*height: calc(100vh - 360px);*/
+    /*overflow: scroll;*/
   }
 
   .account-comtent-paging {
     float: right;
-    right: 40px;
-    padding: 30px 0px 0px 0px;
+    margin-top: 30px;
+    margin-right: 20px;
   }
 
   .bg-purple {

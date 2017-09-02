@@ -11,7 +11,6 @@ function verifyLoginAccessToken() {
 
 // /////////////////////////////跳转页面/////////////////////////////
 export const handleClick = (state, index, row) => {
-  console.log('handleClick')
   if (typeof index === 'string') {
     router.push(index)
   } else {
@@ -26,6 +25,7 @@ export const initHomeData = (state, index, row) => {
 
 // ///////////////////////用户角色//////////////////////////////
 export const getUserPositionList = (state, index, row) => {
+  state.userPositionList.list = []
   axios({
     method: 'POST',
     url: state.publicParameters.domain + '/userPosition/list',
@@ -33,9 +33,8 @@ export const getUserPositionList = (state, index, row) => {
       accessTicket: localStorage.getItem('accessTicket')
     }
   }).then(function (response) {
-    console.log(response.data.data)
+    console.log(response.data)
     if (response.data.code === '200') {
-      state.userPositionList.list = []
       state.userPositionList.list = response.data.data
     }
   }).catch(function (error) {
@@ -44,7 +43,7 @@ export const getUserPositionList = (state, index, row) => {
 }
 
 // ///////////////////////我的信息数据//////////////////////////////
-export const initMyInfoData = (state, index, row) => {
+export const initInfoData = (state, index, row) => {
   verifyLoginAccessToken()
   axios({
     method: 'POST',
@@ -97,6 +96,7 @@ export const initCompanyInfoData = (state, index, row) => {
 // ///////////////////////应用管理数据//////////////////////////////
 export const initApplicationData = (state, index, row) => {
   verifyLoginAccessToken()
+  state.appCenterData.list = []
   axios({
     method: 'POST',
     url: state.publicParameters.domain + '/application/list',
@@ -109,7 +109,6 @@ export const initApplicationData = (state, index, row) => {
   }).then(function (response) {
     console.log(response.data)
     if (response.data.code === '200') {
-      state.appCenterData.list = []
       state.appCenterData.list = response.data.data.list
       index.pageSize = response.data.data.pageSize
       index.current = response.data.data.current
@@ -123,6 +122,7 @@ export const initApplicationData = (state, index, row) => {
 // ///////////////////////应用商店数据//////////////////////////////
 export const initApplicationTplData = (state, index, row) => {
   verifyLoginAccessToken()
+  state.appStoreData.appList = []
   axios({
     method: 'POST',
     url: state.publicParameters.domain + '/applicationTpl/list',
@@ -134,7 +134,6 @@ export const initApplicationTplData = (state, index, row) => {
   }).then(function (response) {
     console.log(response.data)
     if (response.data.code === '200') {
-      state.appStoreData.appList = []
       state.appStoreData.appList = response.data.data.list
     }
   }).catch(function (error) {
@@ -147,7 +146,7 @@ export const initAccountData = (state, index, row) => {
   verifyLoginAccessToken()
   axios({
     method: 'POST',
-    url: state.publicParameters.domain + '/account/accountStatistics',
+    url: state.publicParameters.domain + '/account/statistics',
     params: {
       accessToken: localStorage.getItem('accessToken')
     }
@@ -155,10 +154,8 @@ export const initAccountData = (state, index, row) => {
     console.log(response.data)
     if (response.data.code === '200') {
       index.balance = response.data.data.balance
-      index.TotalEntry = response.data.data.total_entry
-      index.TotalDischarge = response.data.data.total_discharge
-      index.MonthIncome = response.data.data.month_income
-      index.MonthPay = response.data.data.month_pay
+      index.inAccount = response.data.data.inAccount
+      index.outAccount = response.data.data.outAccount
     }
   }).catch(function (error) {
     console.log(error)
@@ -168,22 +165,24 @@ export const initAccountData = (state, index, row) => {
 // ///////////////////////账户列表数据//////////////////////////////
 export const initAccountListData = (state, index, row) => {
   verifyLoginAccessToken()
+  state.accountData.appList = []
   axios({
     method: 'POST',
     url: state.publicParameters.domain + '/accountItem/list',
     params: {
       accessToken: localStorage.getItem('accessToken'),
+      cycleType: index.cycleType,
       pageSize: index.pageSize,
-      current: index.current,
-      date: ''
+      current: index.current
     }
   }).then(function (response) {
     console.log(response.data)
     if (response.data.code === '200') {
+      index.inAccount = response.data.data.inAccount
+      index.outAccount = response.data.data.outAccount
       index.pageSize = response.data.data.pageSize
       index.current = response.data.data.current
       index.total = response.data.data.total
-      state.accountData.appList = []
       state.accountData.list = response.data.data.list
     }
   }).catch(function (error) {
@@ -194,23 +193,25 @@ export const initAccountListData = (state, index, row) => {
 // ///////////////////////交易明细列表数据//////////////////////////////
 export const initTransactionDetailListData = (state, index, row) => {
   verifyLoginAccessToken()
+  state.transactionDetailData.list = []
+  var startTime = formatDate(new Date(index.startTime))
+  var endTime = formatDate(new Date(index.endTime))
   axios({
     method: 'POST',
-    url: state.publicParameters.domain + '/accountItem/tradinglist',
+    url: state.publicParameters.domain + '/accountItem/tradingList',
     params: {
       accessToken: localStorage.getItem('accessToken'),
       pageSize: index.pageSize,
       current: index.current,
-      startDate: index.startTime,
-      endDate: index.endTime
+      startDate: startTime,
+      endDate: endTime
     }
   }).then(function (response) {
     console.log(response.data)
     if (response.data.code === '200') {
-      index.pageSize = response.data.data.PageSize
-      index.current = response.data.data.Current
-      index.total = response.data.data.Total
-      state.transactionDetailData.list = []
+      index.pageSize = response.data.data.pageSize
+      index.current = response.data.data.current
+      index.total = response.data.data.total
       state.transactionDetailData.list = response.data.data.list
     }
   }).catch(function (error) {
@@ -221,6 +222,7 @@ export const initTransactionDetailListData = (state, index, row) => {
 // ///////////////////////订单列表数据//////////////////////////////
 export const initOrderListData = (state, index, row) => {
   verifyLoginAccessToken()
+  state.orderData.list = []
   axios({
     method: 'POST',
     url: state.publicParameters.domain + '/order/list',
@@ -236,7 +238,6 @@ export const initOrderListData = (state, index, row) => {
       index.pageSize = response.data.data.pageSize
       index.current = response.data.data.current
       index.total = response.data.data.total
-      state.orderData.list = []
       state.orderData.list = response.data.data.list
     }
   }).catch(function (error) {
@@ -247,6 +248,7 @@ export const initOrderListData = (state, index, row) => {
 // ///////////////////////操作记录数据//////////////////////////////
 export const initLoggerListData = (state, index, row) => {
   verifyLoginAccessToken()
+  state.loggerData.list = []
   axios({
     method: 'POST',
     url: state.publicParameters.domain + '/logger/list',
@@ -262,10 +264,22 @@ export const initLoggerListData = (state, index, row) => {
       index.pageSize = response.data.data.pageSize
       index.current = response.data.data.current
       index.total = response.data.data.total
-      state.loggerData.list = []
       state.loggerData.list = response.data.data.list
     }
   }).catch(function (error) {
     console.log(error)
   })
+}
+
+function formatDate(date) {
+  var myyear = date.getFullYear()
+  var mymonth = date.getMonth() + 1
+  var myweekday = date.getDate()
+  if (mymonth < 10) {
+    mymonth = '0' + mymonth
+  }
+  if (myweekday < 10) {
+    myweekday = '0' + myweekday
+  }
+  return (myyear + '-' + mymonth + '-' + myweekday)
 }

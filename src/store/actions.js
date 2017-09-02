@@ -5,7 +5,7 @@ export const handleClick = ({commit}, index, row) => commit('handleClick', index
 // 首页数据
 export const initHomeData = ({commit}, index, row) => commit('initHomeData', index, row)
 // 我的信息数据
-export const initMyInfoData = ({commit}, index, row) => commit('initMyInfoData', index, row)
+export const initInfoData = ({commit}, index, row) => commit('initInfoData', index, row)
 // 企业信息数据
 export const initCompanyInfoData = ({commit}, index, row) => commit('initCompanyInfoData', index, row)
 // 应用管理数据
