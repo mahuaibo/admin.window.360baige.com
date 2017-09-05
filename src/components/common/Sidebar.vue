@@ -2,19 +2,19 @@
   <div class="common-sidebar">
     <div style="color:#ffffff;font-size: 16px;">
       <div class="menu-item" id="center" @click="handleClick('/application/center'),setStyle('center')" ref="center">
-        <img src="../../assets/logo.png" height="25" width="25"/>
+        <img src="../../assets/center.png" height="24" width="24"/>
         <label>应用中心</label>
       </div>
       <div class="menu-item" @click="handleClick('/account/list'),setStyle('accountList')" ref="accountList">
-        <img src="../../assets/logo.png" height="25" width="25"/>
+        <img src="../../assets/account.png" height="24" width="24"/>
         <label>账户信息</label>
       </div>
-      <div class="menu-item" @click="handleClick('/order/list'),setStyle('orderList')" ref="orderList">
-        <img src="../../assets/logo.png" height="25" width="25"/>
+      <div class="menu-item" id="orderList" @click="handleClick('/order/list'),setStyle('orderList')" ref="orderList">
+        <img src="../../assets/order.png" height="24" width="24"/>
         <label>订单信息</label>
       </div>
       <div class="menu-item" @click="handleClick('/logger/list'),setStyle('loggerList')" ref="loggerList">
-        <img src="../../assets/logo.png" height="25" width="25"/>
+        <img src="../../assets/operate.png" height="24" width="24"/>
         <label>操作日志</label>
       </div>
     </div>
@@ -36,6 +36,7 @@
       setStyle () {
         var setStyleObject = this.$refs
         var href = window.location.href
+        console.log(href.indexOf('/application/appTplDetail') >= 0)
         if (href.indexOf('/application/center') >= 0 || href.indexOf('/application/store') >= 0 || href.indexOf('/application/appTplDetail') >= 0) {
           setStyleObject = this.$refs.center
           this.$refs.orderList.style.backgroundColor = this.$refs.loggerList.style.backgroundColor = this.$refs.accountList.style.backgroundColor = ''

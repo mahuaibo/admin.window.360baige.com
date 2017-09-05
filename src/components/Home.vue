@@ -2,7 +2,7 @@
   <div class="layout">
     <div class="layout-sidebar">
       <div class="layout-sidebar-header">
-        <img src="../assets/logo.png" height="60" width="60"/>
+        <img src="../assets/logo-home.png" height="110" width="280"/>
       </div>
       <div class="layout-sidebar-wrapper">
         <common-sidebar></common-sidebar>
@@ -59,16 +59,10 @@
       transition: transform .3s ease-in-out, margin .3s ease-in-out;
       height: 100vh;
       .layout-sidebar-header {
-        background: #02284A;
         height: 110px;
-        line-height: 110px;
-        text-align: center;
-        img {
-          padding-top: 25px;
-        }
       }
       .layout-sidebar-wrapper {
-        background: #002f5c;
+        background-color: #002f5c;
         height: calc(100vh - 110px);
       }
     }

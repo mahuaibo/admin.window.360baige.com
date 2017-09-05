@@ -3,8 +3,11 @@
     <div class="appCenter-operatingArea">
       <div class="appCenter-seek">
         <el-input placeholder="请输入名称..." icon="search" v-model="appListData.appSeek"
-                  :on-icon-click="handleIconClick" style="width: 298px;height: 38px;"></el-input>
-        <el-button type="success" @click="handleClick('/application/store')" style="float:right;width: 108px;height: 34px;">应用商店</el-button>
+                  :on-icon-click="refreshDataList" style="width: 298px;height: 38px;"></el-input>
+        <el-button type="success" @click="handleClick('/application/store')"
+                   style="float:right;width:108px;height:34px">
+          <label>应用商店</label>
+        </el-button>
       </div>
     </div>
     <div class="appCenter-list">
@@ -39,7 +42,7 @@
       </el-table>
     </div>
     <div class="cappCenter-paging">
-      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+      <el-pagination @size-change="refreshDataList" @current-change="refreshDataList"
                      :current-page.sync="appListData.current" :page-sizes="[50, 100, 200]"
                      :page-size="appListData.pageSize" layout="total, sizes, prev, pager, next, jumper"
                      :total="appListData.total">
@@ -82,13 +85,7 @@
         'initApplicationData',
         'handleClick'
       ]),
-      handleIconClick (ev) {  // 搜索
-        this.initApplicationData(this.appListData)
-      },
-      handleSizeChange (val) { // 切换显示条数
-        this.initApplicationData(this.appListData)
-      },
-      handleCurrentChange (val) { // 翻页
+      refreshDataList (ev) {  // 搜索
         this.initApplicationData(this.appListData)
       },
       enterApp (index) { // 进入应用

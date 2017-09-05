@@ -2,7 +2,7 @@
   <div class="layout">
     <div class="layout-sidebar-header">
       <div class="layout-sidebar-header-content">
-        <img class="logo" src="../../assets/logo.png" height="78" width="78"/>
+        <img class="logo" src="../../assets/logo.png" height="38"/>
         <div class="action-buttons">
           <label @click="handleClick('/admin/register')">注册</label> | <label
           @click="handleClick('/admin/login')">登陆</label>
@@ -40,17 +40,7 @@
         <el-form-item prop="captcha">
           <el-input placeholder="请输入短信验证码" v-model="registerForm.captcha" class="registerForm-input">
             <template slot="prepend">短信验证码</template>
-            <el-button slot="append" calss="phone-captcha" @click="getVerificationCode('registerForm')">获取验证码
-
-
-
-
-
-
-
-
-
-            </el-button>
+            <el-button slot="append" calss="phone-captcha" @click="getVerificationCode('registerForm')">获取验证码</el-button>
           </el-input>
         </el-form-item>
         <el-form-item>
@@ -251,6 +241,7 @@
         .logo {
           position: absolute;
           left: 192px;
+          margin-top: 20px;
         }
         .action-buttons {
           color: #ffffff;

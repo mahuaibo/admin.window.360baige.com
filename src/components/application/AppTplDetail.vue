@@ -25,7 +25,10 @@
           <label>{{ appTplData.desc }}</label>
           <el-button type="text" id="packUp" style="float:right;" @click="packUpProfile">收起</el-button>
         </div>
-        <div class="data-feesDesc">费用说明</div>
+        <div class="data-feesDesc">
+          <label>费用说明</label>
+          <label style="font-size: 12px;font-weight:normal;">（服务截止: {{ appTplData.endTime }}）</label>
+        </div>
         <div style="padding-top: 6px;padding-bottom:24px;">{{ appTplData.priceDesc }}</div>
       </div>
     </div>
@@ -68,16 +71,17 @@
           <img :src="appTplData.image" class="pay-image">
           <label style="padding-left:6px;letter-spacing:14px;">微信</label>
         </div>
-        <!--<div v-model="payMode" id="aliPay" @click="optionPayMode('aliPay')">-->
-        <!--<img :src="appTplData.image" class="pay-image">-->
-        <!--<label style="padding-left:6px; ">支付宝</label>-->
-        <!--</div>-->
+        <div v-model="payMode" id="aliPay" @click="optionPayMode('aliPay')">
+          <img :src="appTplData.image" class="pay-image">
+          <label style="padding-left:6px; ">支付宝</label>
+        </div>
       </div>
     </div>
     <div style="float:right;text-align:right;width: 100%">
-      <el-button class="confirm-order" type="primary" @click="immediatePayment">立即支付</el-button>
+      <el-button class="confirm-order" type="primary" @click="immediatePayment" v-if="status===0">立即支付
+      </el-button>
     </div>
-    <el-dialog title="微信支付" v-model="payDialog" size="large">
+    <el-dialog title="微信支付" v-model="payDialog" size="large" :before-close="closeWindow">
       <div><img :src="payImage" height="180" width="180"></div>
       <div style="padding-bottom:-8px;">使用微信扫一扫支付</div>
     </el-dialog>
@@ -91,6 +95,9 @@
       this.publicParameters.returnButtom = true
       this.publicParameters.path = '/application/store'
       this.initAppTplDetail(this.showMore)
+      if (typeof (this.$route.query.oId) !== 'undefined') {
+        this.getOrderData(this.$route.query.oId)
+      }
     },
     computed: {
       ...mapGetters([
@@ -99,12 +106,14 @@
     },
     data () {
       return {
+        timing: null,
         payDialog: false,
         payMode: 1,
         showMore: false,
         number: 1,
         totalPrice: 0,
         payImage: '',
+        status: 0,
         appTplData: {
           id: '',
           startTime: '',
@@ -124,26 +133,6 @@
       ...mapActions([
         'handleClick'
       ]),
-      handleChange(value) {
-        this.number = value
-        this.totalPrice = (this.appTplData.price * this.number).toFixed(2)
-      },
-      // 应用介绍->更多
-      unfurledProfile (data) {
-        var productDesc = document.getElementById('product-desc')
-        productDesc.style.height = Math.ceil(data.length / (document.getElementById('productName').clientWidth / 14)) * 20 + 6 + 'px'
-        productDesc.style.width = '100%'
-        document.getElementById('more').style.display = 'none'
-        document.getElementById('packUp').style.display = 'inline'
-      },
-      // 应用介绍->收起
-      packUpProfile () {
-        var productDesc = document.getElementById('product-desc')
-        productDesc.style.height = '20px'
-        productDesc.style.width = '550px'
-        document.getElementById('more').style.display = 'inline'
-        document.getElementById('packUp').style.display = 'none'
-      },
       // 获取数据
       initAppTplDetail () {
         var current = this
@@ -170,8 +159,53 @@
           console.log(error)
         })
       },
-      // 确认订单
+      // 获取订单数据
+      getOrderData (orderId) {
+        var current = this
+        axios({
+          method: 'POST',
+          url: this.publicParameters.domain + '/order/detail',
+          params: {
+            accessToken: localStorage.getItem('accessToken'),
+            id: orderId
+          }
+        }).then(function (response) {
+          console.log(response.data)
+          if (response.data.code === '200') {
+            current.appTplData.price = response.data.data.price
+            current.number = response.data.data.num
+            current.status = response.data.data.status
+          } else {
+            current.messageRemind('error', response.data.message)
+          }
+        }).catch(function (error) {
+          console.log(error)
+        })
+      },
+      // 计算总价
+      handleChange(value) {
+        this.number = value
+        this.totalPrice = (this.appTplData.price * this.number).toFixed(2)
+      },
+      // 应用介绍->更多
+      unfurledProfile (data) {
+        var productDesc = document.getElementById('product-desc')
+        productDesc.style.height = Math.ceil(data.length / (document.getElementById('productName').clientWidth / 14)) * 20 + 6 + 'px'
+        productDesc.style.width = '100%'
+        document.getElementById('more').style.display = 'none'
+        document.getElementById('packUp').style.display = 'inline'
+      },
+      // 应用介绍->收起
+      packUpProfile () {
+        var productDesc = document.getElementById('product-desc')
+        productDesc.style.height = '20px'
+        productDesc.style.width = '550px'
+        document.getElementById('more').style.display = 'inline'
+        document.getElementById('packUp').style.display = 'none'
+      },
+      // 立即支付
       immediatePayment () {
+        console.log('确认订单')
         var current = this
         axios({
           method: 'POST',
@@ -187,20 +221,60 @@
           if (response.data.code === '200') {
             current.payDialog = true
             current.payImage = 'http://192.168.0.125:30000/cloud/window/v1/order/qr?size=356&url=' + response.data.data.codeUrl
+            current.payStatusTimer(response.data.data.id)
           }
         }).catch(function (error) {
           console.log(error)
         })
       },
+      // 定时获取支付状态
+      payStatusTimer (orderId) {
+        var current = this
+        if (typeof (orderId) !== 'undefined') {
+          current.timing = setInterval(function () {
+            axios({
+              method: 'POST',
+              url: current.publicParameters.domain + '/order/payResult',
+              params: {
+                accessToken: localStorage.getItem('accessToken'),
+                id: orderId
+              }
+            }).then(function (response) {
+              console.log(response.data)
+              if (response.data.code === '200') {
+                var tradeState = response.data.data.tradeState
+                if (tradeState === 'SUCCESS') {
+                  clearInterval(current.timing)
+                  current.payDialog = false
+                  current.handleClick('/application/center')
+                } else if (tradeState !== 'NOTPAY' && tradeState !== 'USERPAYING') {
+                  console.log(tradeState)
+                  clearInterval(current.timing)
+                  current.payDialog = false
+                  current.messageRemind('error', '支付失败')
+                }
+              }
+            }).catch(function (error) {
+              console.log(error)
+            })
+          }, 3000)
+        }
+      },
+      closeWindow () {
+        clearInterval(this.timing)
+        this.payDialog = false
+      },
+      // 切换支付方式
       optionPayMode (index) {
         if (index === 'weChatPay') {
-//          document.getElementById(index).style.border = '1px solid #ff5f27'
-//          document.getElementById('aliPay').style.border = '1px solid #f0f0f0'
-//          document.getElementById('aliPay').style.borderLeft = '0px solid #ffffff'
-        } else {
           document.getElementById(index).style.border = '1px solid #ff5f27'
-          document.getElementById('weChatPay').style.border = '1px solid #f0f0f0'
-          document.getElementById('weChatPay').style.borderRadius = '0px solid #ffffff'
+          document.getElementById('aliPay').style.border = '1px solid #f0f0f0'
+          document.getElementById('aliPay').style.borderLeft = '0px solid #ffffff'
+        } else {
+          this.messageRemind('warning', '猿类努力开发中...')
+//          document.getElementById(index).style.border = '1px solid #ff5f27'
+//          document.getElementById('weChatPay').style.border = '1px solid #f0f0f0'
+//          document.getElementById('weChatPay').style.borderRadius = '0px solid #ffffff'
         }
       },
       messageRemind  (type, info) { // type success成功   warning警告   error失败

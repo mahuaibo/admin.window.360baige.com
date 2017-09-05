@@ -32,7 +32,7 @@
   <div class="layout">
     <div class="layout-sidebar-header">
       <div class="layout-sidebar-header-content">
-        <img class="logo" src="../../assets/logo.png" height="78" width="78"/>
+        <img class="logo" src="../../assets/logo.png" height="38"/>
         <div class="action-buttons">
           <label @click="handleClick('/admin/register')">注册</label> | <label
           @click="handleClick('/admin/login')">登陆</label>
@@ -40,16 +40,20 @@
       </div>
     </div>
     <div class="layout-container">
+      <div style="text-align: left;position: absolute;bottom: 38px;">
+        <img class="logo" src="../../assets/bg.png"/>
+      </div>
       <div class="login-box">
         <div class="layout-container-left">
           <el-form :model="loginDataForm" :rules="loginDataRules" ref="loginDataForm" label-width="100px">
             <el-form-item label="" prop="username" style="width: 288px;">
+              <input style="display:none">
               <el-input v-model="loginDataForm.username" placeholder="请输入用户名"
-                        @keyup.enter.native="submitForm('loginDataForm')"></el-input>
+                        @keyup.enter.native="submitForm('loginDataForm')" autoComplete="off"></el-input>
             </el-form-item>
             <el-form-item label="" prop="password" style="width: 288px;">
               <el-input type="password" v-model="loginDataForm.password" placeholder="请输入密码"
-                        @keyup.enter.native="submitForm('loginDataForm')"></el-input>
+                        @keyup.enter.native="submitForm('loginDataForm')" autoComplete="off"></el-input>
             </el-form-item>
             <el-form-item id="box" style="width: 288px;">
               <el-button class="login-button" @click="submitForm('loginDataForm')">登陆</el-button>
@@ -62,8 +66,8 @@
           </div>
           <div class="loginbox-right-prompt" style="color: #fe5b5a;">— 快速登陆 —</div>
           <div class="loginbox-right-icon">
-            <img src="../../assets/qq.png" height="35" width="35"/>
-            <img src="../../assets/wechat.png" height="35" width="35"/>
+            <img src="../../assets/login-qq.png" height="35" width="35"/>
+            <img src="../../assets/login-weixin.png" style="margin-top: 5px;height:35px;width: 35px;"/>
           </div>
         </div>
       </div>
@@ -176,6 +180,8 @@
         .logo {
           position: absolute;
           left: 192px;
+          margin-top: 20px;
+          vertical-align: middle;
         }
         .action-buttons {
           color: #ffffff;
@@ -190,7 +196,7 @@
       }
     }
     .layout-container {
-      min-height: 518px;
+      min-height: 656px;
       width: 100%;
       overflow: hidden;
     }
@@ -198,6 +204,7 @@
       width: 516px;
       height: 238px;
       border: 1px solid #cadced;
+      background-color: #ffffff;
       border-radius: 3px;
       position: absolute;
       right: 192px;

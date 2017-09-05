@@ -1,5 +1,5 @@
 <template>
-  <div class="index" style="min-width: 1120px;">
+  <div class="index" style="padding-right:20px;min-width: 1120px;">
     <div class="content-head">
       <!--0:撤回 1：待审核  2：已通过 3：未通过 4：发货中 5：完成-->
       <el-tabs v-model="orderListData.status" @tab-click="filterList">
@@ -25,47 +25,48 @@
       <div class="content-list-data">
         <div style="height:164px;border: 1px solid #dae8f6;margin-bottom: 20px;" v-for="val in orderData.list">
           <div class="content-list-data-orderCode">
-            <label style="margin-left: 20px;"> 订单号：20170828979</label>
+            <label style="margin-left: 20px;"> 订单号：{{ val.code }}</label>
           </div>
-          <div class="content-list-datas" style="height: 109px;">
+          <div class="content-list-datas" style="width: 1078px;height: 109px;">
             <div class="data-item content-list-data-merchandise">
-              <img src="../../assets/logo.png" style="height:70px;width:70px;padding-left: 20px;"/>
-              <label class="commodity-name">安全中心</label>
-              <label style="position:relative;left: -42px;bottom: 26px;color:#808080;">分类：10000$/天</label>
+              <img :src="val.image" style="height:70px;width:70px;padding-left: 20px;"/>
+              <div class="commodity-name">{{ val.brief }}</div>
+              <div class="classify" v-if="val.productType==0">分类：应用</div>
             </div>
-            <div class="data-item content-list-data-price">72.00 元</div>
-            <div class="data-item content-list-data-number">2 个</div>
+            <div class="data-item content-list-data-price">{{ val.price }} 元</div>
+            <div class="data-item content-list-data-number">{{ val.num }} 个</div>
             <div class="data-item content-list-data-mOperation">申请售后</div>
-            <div class="data-item content-list-data-realPay">72.00 元</div>
+            <div class="data-item content-list-data-realPay">{{ val.totalPrice }} 元</div>
             <div class="data-item content-list-data-status">
-              <div>交易成功</div>
-              <el-button type="text" class="order-desc">订单详情</el-button>
+              <div v-if="val.status===0">
+                <label style="color: #505050;">待付款</label>
+              </div>
+              <div v-else-if="val.status===4">
+                <label style="color: #505050;">交易完成</label>
+              </div>
             </div>
             <div class="data-item content-list-data-tOperation">
-              <button class="appraise-button">评价</button>
-              <el-button type="text" class="again-buy">再次购买</el-button>
+              <div v-if="val.status===0">
+                <button class="immediately-pay" @click="immediatelyPay(val)">立即支付</button>
+                <el-button type="text" class="close-order" @click="closeOrder(val)">关闭订单</el-button>
+              </div>
+              <div v-else-if="val.status===4" style="width:97px;text-align:center;">
+                <el-button type="text" class="order-desc" @click="orderDetail(val)">订单详情</el-button>
+              </div>
+              <!--<button class="appraise-button">评价</button>-->
+              <!--<el-button type="text" class="again-buy">再次购买</el-button>-->
             </div>
           </div>
         </div>
       </div>
     </div>
     <div class="comtent-paging">
-      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+      <el-pagination @size-change="refreshDataList" @current-change="refreshDataList"
                      :current-page.sync="orderListData.current" :page-sizes="[50, 100, 200]"
                      :page-size="orderListData.pageSize" layout="total, sizes, prev, pager, next, jumper"
                      :total="orderListData.total">
       </el-pagination>
     </div>
-    <el-dialog title="订单详情" :visible.sync="orderDetailModel" size="tiny" :before-close="cancel">
-      <el-form ref="form" :model="orderDetailData" label-width="90px">
-        <el-form-item label="交易时间：">{{ orderDetailData.createTime }}</el-form-item>
-        <el-form-item label="订单号码：">{{ orderDetailData.code }}</el-form-item>
-        <el-form-item label="价格：">{{ orderDetailData.price }}</el-form-item>
-        <el-form-item label="支付方式：">{{ orderDetailData.payType }}</el-form-item>
-        <el-form-item label="详情：">{{ orderDetailData.brief }}</el-form-item>
-        <el-form-item label="状态：">{{ orderDetailData.status }}</el-form-item>
-      </el-form>
-    </el-dialog>
   </div>
 </template>
 <script>
@@ -84,15 +85,6 @@
     },
     data () {
       return {
-        orderDetailModel: false,
-        orderDetailData: {
-          createTime: null,
-          code: null,
-          price: null,
-          payType: null,
-          brief: null,
-          status: null
-        },
         orderListData: {
           status: '-1',
           pageSize: 50,
@@ -103,48 +95,52 @@
     },
     methods: {
       ...mapActions([
+        'handleClick',
         'initOrderListData'
       ]),
       filterList (val) {
         this.initOrderListData(this.orderListData)
       },
-      orderDetail (val) { // 订单详情
+      // 关闭订单
+      closeOrder (val) {
         var current = this
         axios({
-          method: 'GET',
-          url: this.publicParameters.domain + '/order/detail',
+          method: 'POST',
+          url: this.publicParameters.domain + '/order/cancel',
           params: {
-            access_token: localStorage.getItem('accessToken'),
+            accessToken: localStorage.getItem('accessToken'),
             id: val.id
           }
         }).then(function (response) {
           console.log(response.data)
           if (response.data.code === '200') {
-            current.orderDetailData.createTime = response.data.data.create_time
-            current.orderDetailData.code = response.data.data.code
-            current.orderDetailData.price = response.data.data.price
-            current.orderDetailData.payType = response.data.data.pay_type
-            current.orderDetailData.brief = response.data.data.brief
-            current.orderDetailData.status = response.data.data.status
+            current.messageRemind('success', response.data.message)
+            current.initOrderListData(current.orderListData)
           } else {
-            current.messageRemind('error', '失败！')
+            current.messageRemind('error', response.data.message)
           }
         }).catch(function (error) {
           console.log(error)
         })
-        this.orderDetailModel = true
       },
-      cancelOrder (val) { // 取消订单
-        console.log(val.id)
+      // 立即支付
+      immediatelyPay (val) {
+        this.menuItemStyle()
+        this.handleClick('/application/appTplDetail?i=' + val.productId + '&&oId=' + val.id)
       },
-      handleSizeChange (val) {
+      // 订单详情
+      orderDetail (val) {
+        this.menuItemStyle()
+        this.handleClick('/application/appTplDetail?i=' + val.productId + '&&oId=' + val.id)
+      },
+      menuItemStyle () {
+        document.getElementById('center').style.borderRight = '8px solid #69df8a'
+        document.getElementById('center').style.backgroundColor = '#4b5880'
+        document.getElementById('orderList').style.borderRight = ''
+        document.getElementById('orderList').style.backgroundColor = ''
+      },
+      refreshDataList () {
         this.initOrderListData(this.orderListData)
-      },
-      handleCurrentChange (val) {
-        this.initOrderListData(this.orderListData)
-      },
-      cancel () {
-        this.orderDetailModel = false
       },
       messageRemind  (type, info) { // type success成功   warning警告   error失败
         this.$message({message: info, type: type})
@@ -159,13 +155,15 @@
   }
 
   .content-list {
+    min-width: 1118px;
     text-align: left;
     .content-list-headings {
       background-color: #F5F5F5;
       border: 1px solid #E6E6E6;
       font-size: 14px;
       color: #505050;
-      margin: 0px 20px 32px 20px;
+      margin: 0px 0px 32px 20px;
+      width: 1078px;
       .headings-item {
         display: inline;
         height: 53px;
@@ -195,9 +193,15 @@
           width: 295px;
           .commodity-name {
             position: relative;
-            bottom: 54px;
-            left: 18px;
+            top: -74px;
+            left: 108px;
             color: #505050;
+          }
+          .classify {
+            position: relative;
+            left: 108px;
+            top: -62px;
+            color: #808080;
           }
         }
         .content-list-data-price {
@@ -214,37 +218,52 @@
         }
         .content-list-data-status {
           width: 158px;
+          text-align: left;
+        }
+        .content-list-data-tOperation {
+          width: 98px;
+          .immediately-pay {
+            font-weight: bold;
+            width: 97px;
+            height: 30px;
+            color: #ffffff;
+            background-color: #ff5f27;
+            border: 1px solid #ff5f27;
+            outline: none;
+            border-radius: 3px;
+          }
+          .immediately-pay:hover {
+            background-color: #ff6c39;
+          }
+          .close-order {
+            width: 97px;
+            margin-top: 14px;
+            color: #505050;
+            padding: 0px;
+          }
+          .close-order:hover {
+            color: #20a0ff;
+          }
           .order-desc {
-            padding-top: 12px;
+            padding: 0px;
             color: #505050;
           }
           .order-desc:hover {
             color: #20a0ff;
           }
-        }
-        .content-list-data-tOperation {
-          width: 85px;
-          .appraise-button {
-            outline: none;
-            cursor: pointer;
-            width: 68px;
-            height: 30px;
-            background-color: #ffffff;
-            border-radius: 3px;
-            border: 1px solid #cadced;
-          }
-          .appraise-button:hover {
-            color: #20a0ff;
-            border: 1px solid #20a0ff;
-          }
-          .again-buy {
-            margin: 14px 0px 0px 8px;
-            color: #505050;
-            padding: 0px;
-          }
-          .again-buy:hover {
-            color: #20a0ff;
-          }
+          /*.appraise-button {*/
+          /*outline: none;*/
+          /*cursor: pointer;*/
+          /*width: 68px;*/
+          /*height: 30px;*/
+          /*background-color: #ffffff;*/
+          /*border-radius: 3px;*/
+          /*border: 1px solid #cadced;*/
+          /*}*/
+          /*.appraise-button:hover {*/
+          /*color: #20a0ff;*/
+          /*border: 1px solid #20a0ff;*/
+          /*}*/
         }
       }
     }
@@ -253,6 +272,6 @@
   .comtent-paging {
     float: right;
     margin-right: 20px;
-    padding: 30px 0px 0px 0px;
+    padding: 22px 0px 0px 0px;
   }
 </style>

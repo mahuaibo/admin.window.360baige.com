@@ -41,30 +41,31 @@
   <div class="common-header">
     <div class="common-header-return" v-if="publicParameters.returnButtom">
       <el-button style="font-size: 14px;color: #505050;" type="text" @click="handleClick(publicParameters.path)">＜返回
+
       </el-button>
     </div>
     <div class="common-header-right">
-      <img class="roleLogo" src="../../assets/qq.png" height="30" width="30"/>
+      <img class="roleLogo" src="../../assets/login-qq.png" height="30" width="30"/>
       <div class="operating-menu">
         <div class="operating-menu-content">
           <div class="operating-menu-item" @click="openBox('identity')">
-            <img class="operating-menu-item-logo" src="../../assets/qq.png" height="15" width="15"/>
+            <img class="operating-menu-item-logo" src="../../assets/change_identity.png" height="16" width="16"/>
             <label>{{ name }}</label>
           </div>
           <div class="operating-menu-item" @click="openBox('company')">
-            <img class="operating-menu-item-logo" src="../../assets/qq.png" height="15" width="15"/>
+            <img class="operating-menu-item-logo" src="../../assets/company_infor.png" height="16" width="16"/>
             <label>企业信息</label>
           </div>
           <div class="operating-menu-item" @click="openBox('admin')">
-            <img class="operating-menu-item-logo" src="../../assets/qq.png" height="15" width="15"/>
+            <img class="operating-menu-item-logo" src="../../assets/user_infor.png" height="16" width="16"/>
             <label>用户信息</label>
           </div>
           <div class="operating-menu-item" @click="openBox('password')">
-            <img class="operating-menu-item-logo" src="../../assets/qq.png" height="15" width="15"/>
+            <img class="operating-menu-item-logo" src="../../assets/modify_password.png" height="16" width="16"/>
             <label>密码修改</label>
           </div>
           <div class="operating-menu-item" @click="logout">
-            <img class="operating-menu-item-logo" src="../../assets/qq.png" height="15" width="15"/>
+            <img class="operating-menu-item-logo" src="../../assets/quit.png" height="16" width="16"/>
             <label>退出</label>
           </div>
         </div>
@@ -72,7 +73,7 @@
       </div>
     </div>
     <div class="common-header-left">
-      <img class="messageLogo" src="../../assets/inform.png" height="30" width="30"/>
+      <img class="messageLogo" src="../../assets/message.png" height="30" width="30"/>
       <div class="message">
         <div class="message-content">
           <div class="message-item-head">
@@ -265,7 +266,7 @@
 
   .operating-menu {
     position: absolute;
-    top: 56px;
+    top: 58px;
     right: 60px;
     font-size: 14pt;
     min-height: 170px;
@@ -287,8 +288,8 @@
         padding-left: 18px;
         .operating-menu-item-logo {
           position: relative;
-          top: 2px;
-          margin-right: 16px;
+          top: 4px;
+          margin-right: 12px;
         }
       }
       .operating-menu-item:hover {
@@ -378,13 +379,16 @@
 
   .common-header-left {
     float: right;
-    width: 104px;
+    width: 74px;
     height: 58px;;
     text-align: right;
     .messageLogo {
       position: relative;
       top: 14px;
       right: 22px;
+    }
+    .message {
+      padding-top: 2px;
     }
   }
 
