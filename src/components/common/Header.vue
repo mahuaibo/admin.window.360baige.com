@@ -388,7 +388,7 @@
       right: 22px;
     }
     .message {
-      padding-top: 2px;
+      padding-top: px;
     }
   }
 
