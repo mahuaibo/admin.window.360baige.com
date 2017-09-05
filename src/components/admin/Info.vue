@@ -1,7 +1,49 @@
+<style lang="scss">
+  .el-upload-list__item {
+    display: none;
+  }
+
+  .head-upload {
+    float: right;
+    span {
+      position: absolute;
+      color: #728ca5;
+      height: 22px;
+      line-height: 22px;
+      font-size: 12px;
+      background-color: #cadced;
+      width: 84px;
+      margin-top: 12px;
+      border-top-right-radius: 20px;
+      border-bottom-right-radius: 20px;
+    }
+  }
+
+  .modify-button {
+    color: #ffffff;
+    width: 100%;
+    float: right;
+    background-color: #31a7ff;
+    border: 0px solid #ffffff;
+  }
+
+  .modify-button:hover {
+    color: #ffffff;
+  }
+</style>
+
 <template>
   <div class="admin-info">
     <el-form :model="myData" :rules="userInfoRules" ref="myData" label-width="100px" style="padding:0px 10px 0px 0px;">
-      <!--<el-form-item label="LOGO:" prop="logo"></el-form-item>-->
+      <el-form-item label="头像:" prop="head" style="text-align: left;">
+        <el-upload :action="publicParameters.domain + '/user/uploadHead?accessToken=' + accessToken + 'id=' + myData.id"
+          type="drag" :thumbnail-mode="true" name="uploadFile" :on-success="uploadSuccess">
+          <img :src="myData.head" height="48" width="48" style="float: left;border-radius: 2px;"/>
+          <div class="el-dragger__text head-upload">
+            <span class="buttom">点击上传</span>
+          </div>
+        </el-upload>
+      </el-form-item>
       <el-form-item label="用户名:" prop="username">
         <el-input type="username" v-model="myData.username" placeholder="请输入" :disabled="true"></el-input>
       </el-form-item>
@@ -37,8 +79,10 @@
         callback()
       }
       return {
+        accessToken: localStorage.getItem('accessToken'),
         myData: {
           id: null,
+          head: '',
           username: null,
           phone: null,
           email: null
@@ -95,16 +139,3 @@
     }
   }
 </script>
-<style lang="scss" scoped>
-  .modify-button {
-    color: #ffffff;
-    width: 100%;
-    float: right;
-    background-color: #31a7ff;
-    border: 0px solid #ffffff;
-  }
-
-  .modify-button:hover {
-    color: #ffffff;
-  }
-</style>

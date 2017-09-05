@@ -1,10 +1,50 @@
+<style lang="scss">
+  .el-upload-list__item {
+    display: none;
+  }
+
+  .modify-button {
+    color: #ffffff;
+    width: 100%;
+    float: right;
+    background-color: #31a7ff;
+    border: 0px solid #ffffff;
+  }
+
+  .modify-button:hover {
+    color: #ffffff;
+  }
+
+  .logo-upload {
+    float: right;
+    span {
+      position: absolute;
+      color: #728ca5;
+      height: 22px;
+      line-height: 22px;
+      font-size: 12px;
+      background-color: #cadced;
+      width: 84px;
+      margin-top: 12px;
+      border-top-right-radius: 20px;
+      border-bottom-right-radius: 20px;
+    }
+  }
+</style>
 <template>
   <div class="company-info">
     <div>
       <el-form :model="companyData" :rules="companyRules" ref="companyData" label-width="100px"
                style="padding:0px 10px 0px 0px;">
-        <el-form-item label="LOGO:" prop="logo">
-          <img src="../../assets/logo.png" height="60" width="60" style="float: left;"/>
+        <el-form-item label="LOGO:" prop="logo" style="text-align: left;">
+          <el-upload
+            :action="publicParameters.domain + '/company/uploadLogo?accessToken=' + accessToken + 'id=' + companyData.id"
+            type="drag" :thumbnail-mode="true" name="uploadFile" :on-success="uploadSuccess">
+            <img :src="companyData.logo" height="48" width="48" style="float: left;border-radius: 2px;"/>
+            <div class="el-dragger__text logo-upload">
+              <span class="buttom">点击上传</span>
+            </div>
+          </el-upload>
         </el-form-item>
         <el-form-item label="企业名称" prop="name">
           <el-input v-model="companyData.name" placeholder="请输入企业名称..."></el-input>
@@ -44,9 +84,10 @@
     },
     data () {
       return {
+        accessToken: localStorage.getItem('accessToken'),
         companyData: {
           id: null,
-          logo: null,
+          logo: '',
           name: null,
           short_name: null,
           address: null,
@@ -99,6 +140,9 @@
           }
         })
       },
+      uploadSuccess (response, file, fileList) {
+        this.companyData.logo = response.head
+      },
       messageRemind  (type, info) { // type success成功   warning警告   error失败
         this.$message({message: info, type: type})
         return false
@@ -106,16 +150,3 @@
     }
   }
 </script>
-<style lang="scss" scoped>
-  .modify-button {
-    color: #ffffff;
-    width: 100%;
-    float: right;
-    background-color: #31a7ff;
-    border: 0px solid #ffffff;
-  }
-
-  .modify-button:hover {
-    color: #ffffff;
-  }
-</style>
