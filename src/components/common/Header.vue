@@ -1,32 +1,43 @@
 <template>
   <div class="common-header">
     <div class="common-header-return" v-if="publicParameters.returnButtom">
-      <el-button style="font-size: 14px;color: #505050;" type="text" @click="handleClick(publicParameters.path)">＜返回
-
+      <el-button class="back-button" type="text" @click="handleClick(publicParameters.path)">
+        <img style="margin-top: 8px;" src="../../assets/back.png" height="12" width="12"/>
+        <label>返回</label>
       </el-button>
     </div>
     <div class="common-header-right">
-      <img class="roleLogo" src="../../assets/login-qq.png" height="30" width="30"/>
+      <img class="roleLogo" src="../../assets/login-qq.png" height="24" width="24"/>
       <div class="operating-menu">
         <div class="operating-menu-content">
-          <div class="operating-menu-item" @click="openBox('identity')">
-            <img class="operating-menu-item-logo" src="../../assets/change_identity.png" height="16" width="16"/>
+          <div class="operating-menu-item" @click="openBox('identity')" @mouseover="moveShow('changeIdentity')"
+               @mouseout="moutShow('changeIdentity')">
+            <img class="operating-menu-item-logo" src='../../assets/change_identity.png' v-if="changeIdentity==1"/>
+            <img class="operating-menu-item-logo" src='../../assets/change_identity2.png' v-else/>
             <label>{{ name }}</label>
           </div>
-          <div class="operating-menu-item" @click="openBox('company')">
-            <img class="operating-menu-item-logo" src="../../assets/company_infor.png" height="16" width="16"/>
+          <div class="operating-menu-item" @click="openBox('company')" @mouseover="moveShow('companyInfor')"
+               @mouseout="moutShow('companyInfor')">
+            <img class="operating-menu-item-logo" src="../../assets/company_infor.png" v-if="companyInfor==1"/>
+            <img class="operating-menu-item-logo" src="../../assets/company_infor2.png" v-else/>
             <label>企业信息</label>
           </div>
-          <div class="operating-menu-item" @click="openBox('admin')">
-            <img class="operating-menu-item-logo" src="../../assets/user_infor.png" height="16" width="16"/>
+          <div class="operating-menu-item" @click="openBox('admin')" @mouseover="moveShow('userInfor')"
+               @mouseout="moutShow('userInfor')">
+            <img class="operating-menu-item-logo" src="../../assets/user_infor.png" v-if="userInfor==1"/>
+            <img class="operating-menu-item-logo" src="../../assets/user_infor2.png" v-else/>
             <label>用户信息</label>
           </div>
-          <div class="operating-menu-item" @click="openBox('password')">
-            <img class="operating-menu-item-logo" src="../../assets/modify_password.png" height="16" width="16"/>
+          <div class="operating-menu-item" @click="openBox('password')" @mouseover="moveShow('modifyPassword')"
+               @mouseout="moutShow('modifyPassword')">
+            <img class="operating-menu-item-logo" src="../../assets/modify_password.png" v-if="modifyPassword==1"/>
+            <img class="operating-menu-item-logo" src="../../assets/modify_password2.png" v-else/>
             <label>密码修改</label>
           </div>
-          <div class="operating-menu-item" @click="logout">
-            <img class="operating-menu-item-logo" src="../../assets/quit.png" height="16" width="16"/>
+          <div class="operating-menu-item" @click="logout" @mouseover="moveShow('quit')"
+               @mouseout="moutShow('quit')">
+            <img class="operating-menu-item-logo" src="../../assets/quit.png" v-if="quit==1"/>
+            <img class="operating-menu-item-logo" src="../../assets/quit2.png" v-else/>
             <label>退出</label>
           </div>
         </div>
@@ -34,7 +45,7 @@
       </div>
     </div>
     <div class="common-header-left">
-      <img class="messageLogo" src="../../assets/message.png" height="30" width="30"/>
+      <img class="messageLogo" src="../../assets/message.png" height="24" width="24"/>
       <div class="message">
         <div class="message-content">
           <div class="message-item-head">
@@ -88,6 +99,11 @@
         callback()
       }
       return {
+        changeIdentity: 1,
+        companyInfor: 1,
+        userInfor: 1,
+        modifyPassword: 1,
+        quit: 1,
         name: localStorage.getItem('username'),
         myData: {
           id: null,
@@ -111,6 +127,34 @@
         'handleClick',
         'getUserPositionList'
       ]),
+      // 移入
+      moveShow (key) {
+        if (key === 'changeIdentity') {
+          this.changeIdentity = 2
+        } else if (key === 'companyInfor') {
+          this.companyInfor = 2
+        } else if (key === 'userInfor') {
+          this.userInfor = 2
+        } else if (key === 'modifyPassword') {
+          this.modifyPassword = 2
+        } else if (key === 'quit') {
+          this.quit = 2
+        }
+      },
+      // 移出
+      moutShow (key) {
+        if (key === 'changeIdentity') {
+          this.changeIdentity = 1
+        } else if (key === 'companyInfor') {
+          this.companyInfor = 1
+        } else if (key === 'userInfor') {
+          this.userInfor = 1
+        } else if (key === 'modifyPassword') {
+          this.modifyPassword = 1
+        } else if (key === 'quit') {
+          this.quit = 1
+        }
+      },
       openBox (key) {
         if (key === 'identity') {
           this.publicParameters.identityListDialog = true
@@ -230,11 +274,16 @@
   .el-table th {
     text-align: center;
   }
+
   .common-header-return {
     float: left;
     height: 58px;
     line-height: 58px;
     margin-left: 40px;
+    .back-button {
+      font-size: 14px;
+      color: #505050;
+    }
   }
 
   .common-header-right {
@@ -245,7 +294,7 @@
     border-left: 1px solid #cbc9ca;
     .roleLogo {
       position: relative;
-      top: 14px;
+      top: 18px;
       left: 22px;
     }
   }
@@ -285,6 +334,8 @@
         line-height: 34px;
         padding-left: 18px;
         .operating-menu-item-logo {
+          height: 16px;
+          width: 16px;
           position: relative;
           top: 4px;
           margin-right: 12px;
@@ -298,7 +349,7 @@
     s {
       position: absolute;
       top: -20px;
-      right: -4px;
+      right: 0px;
       border-color: transparent transparent #e9e9e9 transparent;
       border-style: dashed dashed solid dashed;
       border-width: 10px;
@@ -358,8 +409,8 @@
     }
     s {
       position: absolute;
-      top: -20px;
-      right: 90px;
+      top: -18px;
+      right: 86px;
       border-color: transparent transparent #e9e9e9 transparent;
       border-style: dashed dashed solid dashed;
       border-width: 10px;
@@ -382,11 +433,11 @@
     text-align: right;
     .messageLogo {
       position: relative;
-      top: 14px;
+      top: 18px;
       right: 22px;
     }
     .message {
-      padding-top: px;
+      padding-top: 2px;
     }
   }
 
