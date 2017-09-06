@@ -15,15 +15,17 @@
     <div class="content-list">
       <div class="content-list-headings">
         <div class="headings-item" style="padding-left:65px;">商品</div>
-        <div class="headings-item" style="padding-left:210px;">单价</div>
+        <div class="headings-item" style="padding-left:190px;">单价 (￥)</div>
         <div class="headings-item" style="padding-left:96px;">数量</div>
         <div class="headings-item" style="padding-left:82px;">商品操作</div>
-        <div class="headings-item" style="padding-left:75px;">实付款</div>
+        <div class="headings-item" style="padding-left:75px;">实付款 (￥)</div>
         <div class="headings-item" style="padding-left:76px;">交易状态</div>
         <div class="headings-item" style="padding-left:118px;">交易操作</div>
       </div>
-      <div class="content-list-data">
-        <div style="height:164px;border: 1px solid #dae8f6;margin-bottom: 20px;" v-for="val in orderData.list">
+      <div class="content-list-data" style="overflow:overlay;">
+        <div v-if="orderListData.total==0" style="font-size: 14px;text-align: center;color: #5e7382;">暂无数据</div>
+        <div v-else style="height:164px;border: 1px solid #dae8f6;margin-bottom: 20px;"
+             v-for="val in orderData.list">
           <div class="content-list-data-orderCode">
             <label style="margin-left: 20px;"> 订单号：{{ val.code }}</label>
           </div>
@@ -33,10 +35,10 @@
               <div class="commodity-name">{{ val.brief }}</div>
               <div class="classify" v-if="val.productType==0">分类：应用</div>
             </div>
-            <div class="data-item content-list-data-price">{{ val.price }} 元</div>
-            <div class="data-item content-list-data-number">{{ val.num }} 个</div>
+            <div class="data-item content-list-data-price">{{ money(val.price) }} </div>
+            <div class="data-item content-list-data-number">{{ val.num }}</div>
             <div class="data-item content-list-data-mOperation">申请售后</div>
-            <div class="data-item content-list-data-realPay">{{ val.totalPrice }} 元</div>
+            <div class="data-item content-list-data-realPay">{{ money(val.totalPrice) }} </div>
             <div class="data-item content-list-data-status">
               <div v-if="val.status===0">
                 <label style="color: #505050;">待付款</label>
@@ -87,10 +89,10 @@
     data () {
       return {
         orderListData: {
-          status: '-1',
+          status: '-100',
           pageSize: 50,
           current: 1,
-          total: 1
+          total: 0
         }
       }
     },
@@ -99,6 +101,13 @@
         'handleClick',
         'initOrderListData'
       ]),
+      money (amount) {
+        if (amount === 0) {
+          return '0.00'
+        } else {
+          return amount / 100
+        }
+      },
       filterList (val) {
         this.initOrderListData(this.orderListData)
       },

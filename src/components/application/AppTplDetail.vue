@@ -124,7 +124,11 @@
         'handleClick'
       ]),
       money (amount) {
-        return amount / 100
+        if (amount === 0) {
+          return '0.00'
+        } else {
+          return amount / 100
+        }
       },
       // 获取数据
       initAppTplDetail () {
