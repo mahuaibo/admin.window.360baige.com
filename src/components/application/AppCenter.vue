@@ -52,7 +52,7 @@
 </template>
 <script>
   import axios from 'axios'
-  import { mapGetters, mapActions } from 'vuex'
+  import {mapGetters, mapActions} from 'vuex'
 
   export default {
     created () {
@@ -90,7 +90,7 @@
         this.initApplicationData(this.appListData)
       },
       enterApp (index) { // 进入应用
-        console.log(index)
+        console.log(index.site)
         window.open(index.site + '?a=' + localStorage.getItem('accessToken'))
       },
       unsubscribeApp (index) { // 退订

@@ -69,7 +69,7 @@
 </template>
 <script>
   import axios from 'axios'
-  import { mapGetters, mapActions } from 'vuex'
+  import {mapGetters, mapActions} from 'vuex'
 
   export default {
     created () {
@@ -86,21 +86,21 @@
     data () {
       var now = new Date()  // 当前日期
       // 获得本月的开始日期
-      function getMonthStartDate () {
+      function getMonthStartDate() {
         var monthStartDate = new Date(now.getFullYear(), now.getMonth(), 1)
         return formatDate(monthStartDate)
       }
 
       // 获得本月的结束日期
-      function getMonthEndDate () {
+      function getMonthEndDate() {
         var monthEndDate = new Date()
         return formatDate(monthEndDate)
       }
 
-      function formatDate (date) {
+      function formatDate(date) {
         var myyear = date.getFullYear()
         var mymonth = date.getMonth() + 1
-        var myweekday = date.getDate()
+        var myweekday = date.getDate() + 1
         if (mymonth < 10) {
           mymonth = '0' + mymonth
         }
