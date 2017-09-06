@@ -37,7 +37,8 @@
     <el-form :model="myData" :rules="userInfoRules" ref="myData" label-width="100px" style="padding:0px 10px 0px 0px;">
       <el-form-item label="头像:" prop="head" style="text-align: left;">
         <el-upload :action="publicParameters.domain + '/user/uploadHead?accessToken=' + accessToken + 'id=' + myData.id"
-          type="drag" :thumbnail-mode="true" name="uploadFile" :on-success="uploadSuccess">
+                   type="drag" :thumbnail-mode="true" name="uploadFile" :on-success="uploadSuccess"
+                   style="height: 48px;">
           <img :src="myData.head" height="48" width="48" style="float: left;border-radius: 2px;"/>
           <div class="el-dragger__text head-upload">
             <span class="buttom">点击上传</span>
@@ -113,7 +114,8 @@
                 accessToken: localStorage.getItem('accessToken'),
                 id: this.myData.id,
                 phone: this.myData.phone,
-                email: this.myData.email
+                email: this.myData.email,
+                head: this.myData.head
               }
             }).then(function (response) {
               console.log(response.data)
@@ -131,6 +133,10 @@
             return false
           }
         })
+      },
+      uploadSuccess (response, file, fileList) {
+        console.log(response)
+        this.myData.head = response.head
       },
       promptInfo (type, info) { // type success成功   warning警告   error失败
         this.$message({message: info, type: type})

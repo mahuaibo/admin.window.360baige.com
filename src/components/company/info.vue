@@ -37,9 +37,9 @@
       <el-form :model="companyData" :rules="companyRules" ref="companyData" label-width="100px"
                style="padding:0px 10px 0px 0px;">
         <el-form-item label="LOGO:" prop="logo" style="text-align: left;">
-          <el-upload
-            :action="publicParameters.domain + '/company/uploadLogo?accessToken=' + accessToken + 'id=' + companyData.id"
-            type="drag" :thumbnail-mode="true" name="uploadFile" :on-success="uploadSuccess">
+          <el-upload style="height: 48px;" type="drag" :thumbnail-mode="true"
+                     name="uploadFile" :on-success="uploadSuccess"
+                     :action="publicParameters.domain + '/company/uploadLogo?accessToken=' + accessToken + 'id=' + companyData.id">
             <img :src="companyData.logo" height="48" width="48" style="float: left;border-radius: 2px;"/>
             <div class="el-dragger__text logo-upload">
               <span class="buttom">点击上传</span>
@@ -141,6 +141,7 @@
         })
       },
       uploadSuccess (response, file, fileList) {
+        console.log(response)
         this.companyData.logo = response.head
       },
       messageRemind  (type, info) { // type success成功   warning警告   error失败
