@@ -67,7 +67,11 @@
         'initApplicationTplData'
       ]),
       money (amount) {
-        return amount / 100
+        if (amount === 0) {
+          return '0.00'
+        } else {
+          return amount / 100
+        }
       },
       handleIconClick (ev) {  // 搜索
         this.initApplicationTplData(this.appStore)

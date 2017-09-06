@@ -14,27 +14,25 @@
     </div>
     <div class="transaction-comtent-list" max-height="510">
       <el-table :data="transactionDetailData.list" style="width: 100%">
-        <el-table-column label="日期" width="180">
+        <el-table-column label="交易时间" width="180">
           <template scope="scope">
             <span style="margin-left: 10px">{{ scope.row.createTime }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="交易类型" width="120">
+        <el-table-column label="交易金额(￥)" width="160">
           <template scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.amountType }}</span>
+            <span v-if="scope.row.amount>=0" style="margin-left: 10px;color: #0BB20C;">+{{ money(scope.row.amount)
+              }} (进账)</span>
+            <span v-else-if="scope.row.amount<0" style="margin-left: 10px;color: red;">{{ money(scope.row.amount)
+              }} (出账)</span>
           </template>
         </el-table-column>
-        <el-table-column label="金额" width="160">
+        <el-table-column label="账户余额(￥)" width="160">
           <template scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.amount }}</span>
+            <span style="margin-left: 10px;color: #20a0ff;">{{ money(scope.row.balance) }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="余额" width="160">
-          <template scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.balance }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="交易备注" width="160">
+        <el-table-column label="描述" width="180">
           <template scope="scope">
             <span style="margin-left: 10px">{{ scope.row.remark }}</span>
           </template>
@@ -56,11 +54,15 @@
     <el-dialog title="详情" :visible.sync="transactionDetailModal" size="tiny" :before-close="cancel">
       <el-form ref="form" :model="transactionForm" label-width="100px" style="text-align:left;padding-right:10px;">
         <el-form-item label="交易日期：">{{ transactionForm.createTime }}</el-form-item>
-        <el-form-item label="交易类型：">{{ transactionForm.amountType }}</el-form-item>
-        <el-form-item label="交易金额：">{{ transactionForm.amount }}</el-form-item>
-        <el-form-item label="账户余额：">{{ transactionForm.balance }}</el-form-item>
-        <el-form-item label="订 单 号 ：">{{ transactionForm.orderCode }}</el-form-item>
-        <el-form-item label="备　　注：">{{ transactionForm.remark }}</el-form-item>
+        <el-form-item label="交易金额：">
+          <span v-if="transactionForm.amount>=0"
+                style="margin-left: 10px;color: #0BB20C;">+{{ money(transactionForm.amount) }} (进账)</span>
+          <span v-else-if="transactionForm.amount<0"
+                style="margin-left: 10px;color: red;">{{ money(transactionForm.amount) }} (出账)</span>
+        </el-form-item>
+        <el-form-item style="color: #20a0ff;" label="账户余额：">{{ money(transactionForm.balance) }}</el-form-item>
+        <el-form-item label="描　　述：">{{ transactionForm.remark }}</el-form-item>
+        <el-form-item label="订 单 号 ：">{{ transactionForm.orderCode }} 查看</el-form-item>
       </el-form>
     </el-dialog>
   </div>
@@ -88,11 +90,13 @@
         var monthStartDate = new Date(now.getFullYear(), now.getMonth(), 1)
         return formatDate(monthStartDate)
       }
+
       // 获得本月的结束日期
       function getMonthEndDate () {
         var monthEndDate = new Date()
         return formatDate(monthEndDate)
       }
+
       function formatDate (date) {
         var myyear = date.getFullYear()
         var mymonth = date.getMonth() + 1
@@ -105,6 +109,7 @@
         }
         return (myyear + '-' + mymonth + '-' + myweekday)
       }
+
       return {
         detailListData: {
           startTime: getMonthStartDate(),
@@ -128,6 +133,13 @@
       ...mapActions([
         'initTransactionDetailListData'
       ]),
+      money (amount) {
+        if (amount === 0) {
+          return '0.00'
+        } else {
+          return amount / 100
+        }
+      },
       handleDetail (row) {
         var current = this
         axios({

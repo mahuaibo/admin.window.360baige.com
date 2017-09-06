@@ -90,6 +90,7 @@
         height: 58px;
       }
       .layout-container-wrapper {
+        overflow: hidden!important;
         background: white;
         height: calc(100vh - 100px);
         overflow: scroll;

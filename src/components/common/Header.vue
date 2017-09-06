@@ -81,7 +81,8 @@
   import CompanyInfo from '@/components/company/Info'
   import AdminInfo from '@/components/admin/Info'
   import ModifyPwd from '@/components/admin/ModifyPwd'
-  import {mapGetters, mapActions} from 'vuex'
+  import { mapGetters, mapActions } from 'vuex'
+
   export default {
     components: {AdminUserPosition, CompanyInfo, AdminInfo, ModifyPwd},
     computed: {
@@ -227,7 +228,7 @@
       viewAll () {
         console.log('查看全部。。。')
       },
-      messageRemind  (type, info) { // type success成功   warning警告   error失败
+      messageRemind (type, info) { // type success成功   warning警告   error失败
         this.$message({message: info, type: type})
         return false
       }

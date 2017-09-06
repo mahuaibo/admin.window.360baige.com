@@ -4,34 +4,45 @@
       <div class="account-content-head-detail">
         <el-row :gutter="24">
           <el-col :span="6">
-            <div class="bg-purple" style="font-size: 14px;">账户余额(￥)：{{ money(statistical.balance) }}</div>
+            <div style="text-align: left;height:55px;line-height:55px;padding-left: 20px;font-size: 14px;">
+              <label style="font-weight: bold;">账户余额(￥)</label>：{{ money(statistical.balance) }}
+            </div>
           </el-col>
           <el-col :span="6">
-            <div class="bg-purple" style="font-size: 14px;">总入账(￥)：{{ money(statistical.inAccount) }}</div>
+            <div style="text-align: left;height:55px;line-height:55px;padding-left: 20px;font-size: 14px;">
+              <label style="font-weight: bold;">总进账(￥)</label>：{{ money(statistical.inAccount) }}
+            </div>
           </el-col>
           <el-col :span="6">
-            <div class="bg-purple" style="font-size: 14px;">总出账(￥)：{{ money(statistical.outAccount) }}</div>
+            <div style="text-align: left;height:55px;line-height:55px;padding-left: 20px;font-size: 14px;">
+              <label style="font-weight: bold;">总出账(￥)</label>：{{ money(statistical.outAccount) }}
+            </div>
           </el-col>
-          <el-col :span="6" style="line-height: 55px;">
-            <el-button type="text" style="font-size: 12px;" @click="handleClick('/account/transactionDetail')">
-              查看交易明细>>
-            </el-button>
+          <el-col :span="6">
+            <div @click="handleClick('/account/transactionDetail')"
+                 style="text-align: right;height:55px;line-height:55px;padding-right: 20px;font-size: 12px;color: #31a7ff;">
+              交易明细 >>
+            </div>
           </el-col>
         </el-row>
       </div>
       <div class="account-content-head-overview">
         <el-tabs v-model="activeName" @tab-click="getAccountData">
-          <el-tab-pane label="当月" name="1"></el-tab-pane>
-          <el-tab-pane label="季度" name="2"></el-tab-pane>
-          <el-tab-pane label="半年" name="3"></el-tab-pane>
-          <el-tab-pane label="本年" name="4"></el-tab-pane>
+          <el-tab-pane label="　当月　" name="1"></el-tab-pane>
+          <el-tab-pane label="　季度　" name="2"></el-tab-pane>
+          <el-tab-pane label="　半年　" name="3"></el-tab-pane>
+          <el-tab-pane label="　本年　" name="4"></el-tab-pane>
         </el-tabs>
         <el-row :gutter="12">
           <el-col :span="6">
-            <div class="bg-purple">存入(￥)：{{ money(accountListData.inAccount)}}</div>
+            <div style="text-align: left;padding-left: 20px;font-size: 14px;">
+              <label style="font-weight: bold;">进账(￥)</label>：{{ money(accountListData.inAccount)}}
+            </div>
           </el-col>
           <el-col :span="6">
-            <div class="bg-purple">支出(￥)：{{ money(accountListData.outAccount) }}</div>
+            <div style="text-align: left;padding-left: 20px;font-size: 14px;">
+              <label style="font-weight: bold;">出账(￥)</label>：{{ money(accountListData.outAccount)}}
+            </div>
           </el-col>
         </el-row>
       </div>
@@ -43,14 +54,17 @@
             <span style="margin-left: 10px">{{ scope.row.createTime }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="交易类型" width="180">
+        <el-table-column label="交易金额(￥)" initApplicationTplDatawidth="180">
           <template scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.amountType }}</span>
+            <span v-if="scope.row.amount>=0" style="margin-left: 10px;color: #0BB20C;">+{{ money(scope.row.amount)
+              }} (进账)</span>
+            <span v-else-if="scope.row.amount<0" style="margin-left: 10px;color: red;">{{ money(scope.row.amount)
+              }} (出账)</span>
           </template>
         </el-table-column>
-        <el-table-column label="金额" initApplicationTplDatawidth="180">
+        <el-table-column label="描述" initApplicationTplDatawidth="180">
           <template scope="scope">
-            <span style="margin-left: 10px">{{ money(scope.row.amount) }}</span>
+            <span style="margin-left: 10px">{{ scope.row.remark }}</span>
           </template>
         </el-table-column>
         <el-table-column label="操作">
@@ -72,10 +86,14 @@
     <el-dialog title="详情" :visible.sync="accountDetailModal" size="tiny" :before-close="cancel">
       <el-form ref="form" :model="accountFrom" label-width="100px" style="text-align:left;padding:0px 10px 0px 0px;">
         <el-form-item label="交易时间：">{{ accountFrom.createTime }}</el-form-item>
-        <el-form-item label="订单号：">{{ accountFrom.orderCode }}</el-form-item>
-        <el-form-item label="交易类型：">{{ accountFrom.amountType }}</el-form-item>
-        <el-form-item label="交易金额：">{{ money(accountFrom.amount) }}</el-form-item>
-        <el-form-item label="备注：">{{ accountFrom.remark }}</el-form-item>
+        <el-form-item label="交易金额：">
+          <span v-if="accountFrom.amount>=0" style="margin-left: 10px;color: #0BB20C;">+{{ money(accountFrom.amount)
+            }} (进账)</span>
+          <span v-else-if="accountFrom.amount<0" style="margin-left: 10px;color: red;">{{ money(accountFrom.amount)
+            }} (出账)</span>
+        </el-form-item>
+        <el-form-item label="描　　述：">{{ accountFrom.remark }}</el-form-item>
+        <!--<el-form-item label="订 单 号：">{{ accountFrom.orderCode }} 查看</el-form-item>-->
       </el-form>
     </el-dialog>
   </div>
