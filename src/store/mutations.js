@@ -58,6 +58,7 @@ export const initInfoData = (state, index, row) => {
       index.username = response.data.data.username
       index.phone = response.data.data.phone
       index.email = response.data.data.email
+      index.head = response.data.data.head
     } else {
 
     }
