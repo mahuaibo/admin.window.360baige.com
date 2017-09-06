@@ -21,7 +21,7 @@
         </div>
         <div class="appStore-app-card-right">
           <div @click="appSubscribe(val)" style="font-size: 16px;margin-top: 2px;color: #505050;">{{ val.name }}
-            <label style="color: #fe4f4f;font-size: 10px;">￥{{ val.price }}
+            <label style="color: #fe4f4f;font-size: 10px;">￥{{ money(val.price) }}
               <label v-if="val.payCycle==1">/月</label>
               <label v-else-if="val.payCycle==2">/季</label>
               <label v-else-if="val.payCycle==3">/半年</label>
@@ -66,6 +66,9 @@
         'handleClick',
         'initApplicationTplData'
       ]),
+      money (amount) {
+        return amount / 100
+      },
       handleIconClick (ev) {  // 搜索
         this.initApplicationTplData(this.appStore)
       },

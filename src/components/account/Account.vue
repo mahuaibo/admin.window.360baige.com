@@ -4,13 +4,13 @@
       <div class="account-content-head-detail">
         <el-row :gutter="24">
           <el-col :span="6">
-            <div class="bg-purple" style="font-size: 14px;">账户余额(￥)：{{ statistical.balance }}</div>
+            <div class="bg-purple" style="font-size: 14px;">账户余额(￥)：{{ money(statistical.balance) }}</div>
           </el-col>
           <el-col :span="6">
-            <div class="bg-purple" style="font-size: 14px;">总入账(￥)：{{ statistical.inAccount }}</div>
+            <div class="bg-purple" style="font-size: 14px;">总入账(￥)：{{ money(statistical.inAccount) }}</div>
           </el-col>
           <el-col :span="6">
-            <div class="bg-purple" style="font-size: 14px;">总出账(￥)：{{ statistical.outAccount }}</div>
+            <div class="bg-purple" style="font-size: 14px;">总出账(￥)：{{ money(statistical.outAccount) }}</div>
           </el-col>
           <el-col :span="6" style="line-height: 55px;">
             <el-button type="text" style="font-size: 12px;" @click="handleClick('/account/transactionDetail')">
@@ -28,10 +28,10 @@
         </el-tabs>
         <el-row :gutter="12">
           <el-col :span="6">
-            <div class="bg-purple">存入(￥)：{{ accountListData.inAccount}}</div>
+            <div class="bg-purple">存入(￥)：{{ money(accountListData.inAccount)}}</div>
           </el-col>
           <el-col :span="6">
-            <div class="bg-purple">支出(￥)：{{ accountListData.outAccount }}</div>
+            <div class="bg-purple">支出(￥)：{{ money(accountListData.outAccount) }}</div>
           </el-col>
         </el-row>
       </div>
@@ -50,7 +50,7 @@
         </el-table-column>
         <el-table-column label="金额" initApplicationTplDatawidth="180">
           <template scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.amount }}</span>
+            <span style="margin-left: 10px">{{ money(scope.row.amount) }}</span>
           </template>
         </el-table-column>
         <el-table-column label="操作">
@@ -74,7 +74,7 @@
         <el-form-item label="交易时间：">{{ accountFrom.createTime }}</el-form-item>
         <el-form-item label="订单号：">{{ accountFrom.orderCode }}</el-form-item>
         <el-form-item label="交易类型：">{{ accountFrom.amountType }}</el-form-item>
-        <el-form-item label="交易金额：">{{ accountFrom.amount }}</el-form-item>
+        <el-form-item label="交易金额：">{{ money(accountFrom.amount) }}</el-form-item>
         <el-form-item label="备注：">{{ accountFrom.remark }}</el-form-item>
       </el-form>
     </el-dialog>
@@ -82,7 +82,8 @@
 </template>
 <script>
   import axios from 'axios'
-  import {mapGetters, mapActions} from 'vuex'
+  import { mapGetters, mapActions } from 'vuex'
+
   export default {
     created () {
       this.publicParameters.returnButtom = false
@@ -129,6 +130,13 @@
         'initAccountListData',
         'handleClick'
       ]),
+      money (amount) {
+        if (amount === 0) {
+          return '0.00'
+        } else {
+          return amount / 100
+        }
+      },
       handleDetail (row) {
         var modalData = true
         var current = this
@@ -166,7 +174,7 @@
       handleCurrentChange () {
         this.initAccountListData(this.accountListData)
       },
-      messageRemind  (type, info) { // type success成功   warning警告   error失败
+      messageRemind (type, info) { // type success成功   warning警告   error失败
         this.$message({message: info, type: type})
         return false
       },

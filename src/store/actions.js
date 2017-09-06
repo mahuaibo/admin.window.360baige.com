@@ -22,3 +22,4 @@ export const initLoggerListData = ({commit}, index, row) => commit('initLoggerLi
 export const initTransactionDetailListData = ({commit}, index, row) => commit('initTransactionDetailListData', index, row)
 // 操作记录列表数据
 export const initOrderListData = ({commit}, index, row) => commit('initOrderListData', index, row)
+

@@ -59,15 +59,16 @@
         <el-form-item label="交易类型：">{{ transactionForm.amountType }}</el-form-item>
         <el-form-item label="交易金额：">{{ transactionForm.amount }}</el-form-item>
         <el-form-item label="账户余额：">{{ transactionForm.balance }}</el-form-item>
-        <el-form-item label="订单号：">{{ transactionForm.orderCode }}</el-form-item>
-        <el-form-item label="备注：">{{ transactionForm.remark }}</el-form-item>
+        <el-form-item label="订 单 号 ：">{{ transactionForm.orderCode }}</el-form-item>
+        <el-form-item label="备　　注：">{{ transactionForm.remark }}</el-form-item>
       </el-form>
     </el-dialog>
   </div>
 </template>
 <script>
   import axios from 'axios'
-  import {mapGetters, mapActions} from 'vuex'
+  import { mapGetters, mapActions } from 'vuex'
+
   export default {
     created () {
       this.publicParameters.returnButtom = true
@@ -83,16 +84,16 @@
     data () {
       var now = new Date()  // 当前日期
       // 获得本月的开始日期
-      function getMonthStartDate() {
+      function getMonthStartDate () {
         var monthStartDate = new Date(now.getFullYear(), now.getMonth(), 1)
         return formatDate(monthStartDate)
       }
       // 获得本月的结束日期
-      function getMonthEndDate() {
+      function getMonthEndDate () {
         var monthEndDate = new Date()
         return formatDate(monthEndDate)
       }
-      function formatDate(date) {
+      function formatDate (date) {
         var myyear = date.getFullYear()
         var mymonth = date.getMonth() + 1
         var myweekday = date.getDate()

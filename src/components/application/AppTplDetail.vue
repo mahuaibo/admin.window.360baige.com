@@ -1,15 +1,3 @@
-<style lang="scss">
-  .el-radio__label {
-    padding-left: 24px;
-  }
-
-  .el-dialog {
-    width: 300px;
-    .el-dialog__body {
-      padding: 0px 0px 10px 0px;
-    }
-  }
-</style>
 <template>
   <div class="index">
     <div class="tplDetail-head">
@@ -42,14 +30,14 @@
       <el-row :gutter="24" style="padding-top: 6px;">
         <el-col :span="6" style="padding-left: 12px;">
           <div class="data-product">
-            <label style="font-size: 24px;color: #ff5f27;">￥{{ appTplData.price }}</label>
+            <label style="font-size: 24px;color: #ff5f27;">￥{{ money(appTplData.price) }}</label>
             <div class="data-product-card">
               <div class="data-product-text">每{{ appTplData.payCycle }}</div>
             </div>
           </div>
         </el-col>
         <el-col :span="6">
-          <div style="height: 104px;line-height: 104px;">￥{{ appTplData.price }}</div>
+          <div style="height: 104px;line-height: 104px;">￥{{ money(appTplData.price) }}</div>
         </el-col>
         <el-col :span="6">
           <div style="height:70px;padding-top: 34px;">
@@ -60,7 +48,7 @@
           </div>
         </el-col>
         <el-col :span="6">
-          <div style="height: 104px;line-height: 104px;color: #ff5f27;">￥{{ totalPrice }}</div>
+          <div style="height: 104px;line-height: 104px;color: #ff5f27;">￥{{ money(totalPrice) }}</div>
         </el-col>
       </el-row>
     </div>
@@ -82,14 +70,16 @@
       </el-button>
     </div>
     <el-dialog title="微信支付" v-model="payDialog" size="large" :before-close="closeWindow">
-      <div><img :src="payImage" height="180" width="180"></div>
-      <div style="padding-bottom:-8px;">使用微信扫一扫支付</div>
+      <div><img :src="payImage" height="256" width="256"/></div>
+      <div>使用微信扫一扫支付</div>
+      <div style="height:40px;"></div>
     </el-dialog>
   </div>
 </template>
 <script>
   import axios from 'axios'
-  import {mapGetters, mapActions} from 'vuex'
+  import { mapGetters, mapActions } from 'vuex'
+
   export default {
     created () {
       this.publicParameters.returnButtom = true
@@ -133,6 +123,9 @@
       ...mapActions([
         'handleClick'
       ]),
+      money (amount) {
+        return amount / 100
+      },
       // 获取数据
       initAppTplDetail () {
         var current = this
@@ -183,7 +176,7 @@
         })
       },
       // 计算总价
-      handleChange(value) {
+      handleChange (value) {
         this.number = value
         this.totalPrice = (this.appTplData.price * this.number).toFixed(2)
       },
@@ -277,7 +270,7 @@
 //          document.getElementById('weChatPay').style.borderRadius = '0px solid #ffffff'
         }
       },
-      messageRemind  (type, info) { // type success成功   warning警告   error失败
+      messageRemind (type, info) { // type success成功   warning警告   error失败
         this.$message({message: info, type: type})
         return false
       }
@@ -285,6 +278,16 @@
   }
 </script>
 <style lang="scss" scoped>
+  .el-radio__label {
+    padding-left: 24px;
+  }
+
+  .el-dialog {
+    width: 300px;
+    .el-dialog__body {
+      padding: 0px 0px 10px 0px;
+    }
+  }
   .index {
     min-width: 830px;
     margin-left: 20px;
