@@ -1,15 +1,15 @@
 <template>
   <div class="index" style="padding-right:20px;min-width: 1120px;">
     <div class="content-head">
-      <!--0:撤回 1：待审核  2：已通过 3：未通过 4：发货中 5：完成-->
+      <!--状态 -1销毁 0 待付款 1待发货 2 待收货 3待评价 4完成 5退货/售后 -->
       <el-tabs v-model="orderListData.status" @tab-click="filterList">
-        <el-tab-pane label="全部" name="-1"></el-tab-pane>
-        <el-tab-pane label="撤回" name="0"></el-tab-pane>
-        <el-tab-pane label="待审核" name="1"></el-tab-pane>
-        <el-tab-pane label="已通过" name="2"></el-tab-pane>
-        <el-tab-pane label="未通过" name="3"></el-tab-pane>
-        <el-tab-pane label="发货中" name="4"></el-tab-pane>
-        <el-tab-pane label="交易完成" name="5"></el-tab-pane>
+        <el-tab-pane label="全部" name="-100"></el-tab-pane>
+        <el-tab-pane label="待付款" name="0"></el-tab-pane>
+        <el-tab-pane label="待发货" name="1"></el-tab-pane>
+        <el-tab-pane label="待收货" name="2"></el-tab-pane>
+        <el-tab-pane label="待评价" name="3"></el-tab-pane>
+        <el-tab-pane label="完成" name="4"></el-tab-pane>
+        <el-tab-pane label="退货/售后" name="5"></el-tab-pane>
       </el-tabs>
     </div>
     <div class="content-list">
@@ -71,7 +71,8 @@
 </template>
 <script>
   import axios from 'axios'
-  import {mapGetters, mapActions} from 'vuex'
+  import { mapGetters, mapActions } from 'vuex'
+
   export default {
     created () {
       this.publicParameters.returnButtom = false
@@ -142,7 +143,7 @@
       refreshDataList () {
         this.initOrderListData(this.orderListData)
       },
-      messageRemind  (type, info) { // type success成功   warning警告   error失败
+      messageRemind (type, info) { // type success成功   warning警告   error失败
         this.$message({message: info, type: type})
         return false
       }

@@ -14,7 +14,7 @@
     </div>
     <div class="transaction-comtent-list" max-height="510">
       <el-table :data="transactionDetailData.list" style="width: 100%">
-        <el-table-column label="日期" width="160">
+        <el-table-column label="日期" width="180">
           <template scope="scope">
             <span style="margin-left: 10px">{{ scope.row.createTime }}</span>
           </template>

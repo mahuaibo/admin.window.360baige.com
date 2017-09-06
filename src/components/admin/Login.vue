@@ -1,33 +1,3 @@
-<style lang="scss">
-  .el-dialog {
-    width: 456px;
-    .el-dialog__body {
-      padding: 12px 8px 6px 0px;
-    }
-    .el-form-item {
-      margin: 14px 14px 20px 14px;
-    }
-  }
-
-  .el-dialog__header {
-    background-color: #31a7ff;
-    padding: 0px;
-    margin: 0px;
-    height: 55px;
-    line-height: 60px;
-    border-radius: 2px;
-    text-align: center;
-    .el-dialog__title {
-      color: #ffffff;
-      font-size: 18px;
-      font-weight: normal;
-    }
-    .el-dialog__headerbtn {
-      padding-top: 20px;
-      padding-right: 20px;
-    }
-  }
-</style>
 <template>
   <div class="layout">
     <div class="layout-sidebar-header">
@@ -40,14 +10,14 @@
       </div>
     </div>
     <div class="layout-container">
-      <div style="text-align: left;position: absolute;bottom: 38px;">
+      <div style="text-align: left;position: absolute;bottom: 38px;z-index: -1;">
         <img class="logo" src="../../assets/bg.png"/>
       </div>
       <div class="login-box">
         <div class="layout-container-left">
-          <el-form :model="loginDataForm" :rules="loginDataRules" ref="loginDataForm" label-width="100px">
+          <el-form :model="loginDataForm" :rules="loginDataRules" ref="loginDataForm">
             <el-form-item label="" prop="username" style="width: 288px;">
-              <input style="display:none">
+              <input style="display:none"/>
               <el-input v-model="loginDataForm.username" placeholder="请输入用户名"
                         @keyup.enter.native="submitForm('loginDataForm')" autoComplete="off"></el-input>
             </el-form-item>
@@ -64,7 +34,7 @@
           <div class="loginbox-right-register">
             <div type="text" @click="handleClick('/admin/register')" style="color: #31a7ff;padding: 0;">免费注册</div>
           </div>
-          <div class="loginbox-right-prompt" style="color: #fe5b5a;">— 快速登陆 —</div>
+          <div class="loginbox-right-prompt" style="color: #fe5b5a;"> — 快速登陆 — </div>
           <div class="loginbox-right-icon">
             <img src="../../assets/login-qq.png" height="35" width="35"/>
             <img src="../../assets/login-weixin.png" style="margin-top: 5px;height:35px;width: 35px;"/>
@@ -75,17 +45,18 @@
     <div class="layout-container-tail">
       <label class="layout-container-tail-text">Copyright © 2015 粤ICP备15062920号</label>
     </div>
-    <el-dialog title="切换身份" :visible.sync="identityListDialog">
+    <el-dialog title="选择身份" :visible.sync="identityListDialog" style="width: 992px;margin: 0 auto">
       <admin-user-position></admin-user-position>
     </el-dialog>
   </div>
 </template>
 <script>
   import axios from 'axios'
-  import {mapGetters, mapActions} from 'vuex'
+  import { mapGetters, mapActions } from 'vuex'
   import CommonHeader from '@/components/common/Header'
   import CommonSidebar from '@/components/common/Sidebar'
   import AdminUserPosition from '@/components/admin/UserPosition'
+
   export default {
     computed: {
       ...mapGetters([
@@ -168,7 +139,36 @@
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="scss" scoped>
+<style lang="scss">
+  .el-dialog {
+    width: 456px;
+    .el-dialog__body {
+      padding: 12px 8px 6px 0px;
+    }
+    .el-form-item {
+      margin: 14px 14px 20px 14px;
+    }
+  }
+
+  .el-dialog__header {
+    background-color: #31a7ff;
+    padding: 0px;
+    margin: 0px;
+    height: 55px;
+    line-height: 60px;
+    border-radius: 2px;
+    text-align: center;
+    .el-dialog__title {
+      color: #ffffff;
+      font-size: 18px;
+      font-weight: normal;
+    }
+    .el-dialog__headerbtn {
+      padding-top: 20px;
+      padding-right: 20px;
+    }
+  }
+
   $color: #002f5c !default;
   .layout {
     height: 100vh;

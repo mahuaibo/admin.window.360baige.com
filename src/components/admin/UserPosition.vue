@@ -1,25 +1,19 @@
 <template>
   <div class="admin-user-position">
     <div v-for="val in userPositionList.list" class="identityTab" @click="identitySwitch(val)"
-          style="border: 1px solid #31a7ff;border-radius: 2px;">
+         style="border: 1px solid #31a7ff;border-radius: 2px;">
       <label class="identityTab-identityImg">
         <img class="logo" :src="val.companyLogo" height="52" width="52"/>
       </label>
       <div class="identityTab-companyName">{{ val.companyName }}</div>
       <div class="identityTab-userPositionName">{{ val.userPositionName }}</div>
     </div>
-    <!--<div v-for="val in userPositionList.list" class="identityTab" @click="identitySwitch(val)" v-else>-->
-      <!--<label class="identityTab-identityImg">-->
-        <!--<img class="logo" :src="val.companyLogo" height="52" width="52"/>-->
-      <!--</label>-->
-      <!--<div class="identityTab-companyName">{{ val.companyName }}</div>-->
-      <!--<div class="identityTab-userPositionName">{{ val.userPositionName }}</div>-->
-    <!--</div>-->
   </div>
 </template>
 <script>
   import axios from 'axios'
-  import {mapGetters, mapActions} from 'vuex'
+  import { mapGetters, mapActions } from 'vuex'
+
   export default {
     created () {
       this.getUserPositionList()
@@ -70,6 +64,7 @@
     }
   }
 </script>
+
 <style lang="scss" scoped>
   .identityTab {
     float: left;

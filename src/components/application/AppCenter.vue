@@ -12,11 +12,6 @@
     </div>
     <div class="appCenter-list">
       <el-table :data="appCenterData.list" style="width: 100%" max-height="510">
-        <el-table-column label="日期" width="220">
-          <template scope="scope">
-            <span>{{ scope.row.createTime }}</span>
-          </template>
-        </el-table-column>
         <el-table-column label="应用图标" width="180">
           <template scope="scope">
             <span><img :src="scope.row.image" width="30" height="30" style="padding-top: 8px;"/></span>
@@ -25,6 +20,11 @@
         <el-table-column label="应用名称" width="180">
           <template scope="scope">
             <span>{{ scope.row.name }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="服务截止时间" width="220">
+          <template scope="scope">
+            <span>{{ scope.row.endTime }}</span>
           </template>
         </el-table-column>
         <el-table-column label="状态" width="180">
@@ -52,7 +52,8 @@
 </template>
 <script>
   import axios from 'axios'
-  import {mapGetters, mapActions} from 'vuex'
+  import { mapGetters, mapActions } from 'vuex'
+
   export default {
     created () {
       this.publicParameters.returnButtom = false
@@ -134,13 +135,15 @@
           console.log(error)
         })
       },
-      messageRemind  (type, info) { // type success成功   warning警告   error失败
+      messageRemind (type, info) { // type success成功   warning警告   error失败
         this.$message({message: info, type: type})
         return false
       }
     }
   }
 </script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
   .appCenter-operatingArea {
     margin-top: 12px;

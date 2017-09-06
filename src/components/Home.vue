@@ -22,7 +22,8 @@
 <script>
   import CommonHeader from '@/components/common/Header'
   import CommonSidebar from '@/components/common/Sidebar'
-  import {mapActions} from 'vuex'
+  import { mapActions } from 'vuex'
+
   export default {
     components: {CommonHeader, CommonSidebar},
     created () {
@@ -67,6 +68,7 @@
       }
     }
     .layout-container {
+      width: calc(100vw - 280px);
       box-sizing: border-box;
       position: absolute;
       top: 0;
