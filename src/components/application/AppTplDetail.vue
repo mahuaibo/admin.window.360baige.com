@@ -56,17 +56,18 @@
       <div style="color: #505050;font-weight:bold;">支付方式</div>
       <div style="width: 222px;height:42px;margin-top: 24px;">
         <div v-model="payMode" id="weChatPay" @click="optionPayMode('weChatPay')">
-          <img :src="appTplData.image" class="pay-image">
+          <img src="../../assets/weixin.png" class="pay-image">
           <label style="padding-left:6px;letter-spacing:14px;">微信</label>
         </div>
         <div v-model="payMode" id="aliPay" @click="optionPayMode('aliPay')">
-          <img :src="appTplData.image" class="pay-image">
+          <img src="../../assets/zhifubao.png" class="pay-image">
           <label style="padding-left:6px; ">支付宝</label>
         </div>
       </div>
     </div>
     <div style="float:right;text-align:right;width: 100%">
       <el-button class="confirm-order" type="primary" @click="immediatePayment" v-if="status===0">立即支付
+
       </el-button>
     </div>
     <el-dialog title="微信支付" v-model="payDialog" size="large" :before-close="closeWindow">
@@ -78,7 +79,7 @@
 </template>
 <script>
   import axios from 'axios'
-  import { mapGetters, mapActions } from 'vuex'
+  import {mapGetters, mapActions} from 'vuex'
 
   export default {
     created () {
@@ -292,6 +293,7 @@
       padding: 0px 0px 10px 0px;
     }
   }
+
   .index {
     min-width: 830px;
     margin-left: 20px;
