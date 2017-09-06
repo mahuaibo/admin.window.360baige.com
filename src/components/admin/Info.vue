@@ -36,7 +36,7 @@
   <div class="admin-info">
     <el-form :model="myData" :rules="userInfoRules" ref="myData" label-width="100px" style="padding:0px 10px 0px 0px;">
       <el-form-item label="头像:" prop="head" style="text-align: left;">
-        <el-upload :action="publicParameters.domain + '/user/uploadHead?accessToken=' + accessToken + 'id=' + myData.id"
+        <el-upload :action="publicParameters.domain + '/user/uploadHead?accessToken=' + accessToken + '&&id=' + myData.id"
                    type="drag" :thumbnail-mode="true" name="uploadFile" :on-success="uploadSuccess"
                    style="height: 48px;">
           <img :src="myData.head" height="48" width="48" style="float: left;border-radius: 2px;"/>

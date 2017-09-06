@@ -39,7 +39,7 @@
         <el-form-item label="LOGO:" prop="logo" style="text-align: left;">
           <el-upload style="height: 48px;" type="drag" :thumbnail-mode="true"
                      name="uploadFile" :on-success="uploadSuccess"
-                     :action="publicParameters.domain + '/company/uploadLogo?accessToken=' + accessToken + 'id=' + companyData.id">
+                     :action="publicParameters.domain + '/company/uploadLogo?accessToken=' + accessToken + '&&id=' + companyData.id">
             <img :src="companyData.logo" height="48" width="48" style="float: left;border-radius: 2px;"/>
             <div class="el-dragger__text logo-upload">
               <span class="buttom">点击上传</span>

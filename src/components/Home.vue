@@ -1,3 +1,8 @@
+<style>
+  .el-button {
+    font-size: 14px;
+  }
+</style>
 <template>
   <div class="layout">
     <div class="layout-sidebar">
@@ -22,7 +27,7 @@
 <script>
   import CommonHeader from '@/components/common/Header'
   import CommonSidebar from '@/components/common/Sidebar'
-  import { mapActions } from 'vuex'
+  import {mapActions} from 'vuex'
 
   export default {
     components: {CommonHeader, CommonSidebar},
