@@ -14,49 +14,51 @@
     </div>
     <div class="content-list">
       <div class="content-list-headings">
-        <div class="headings-item" style="padding-left:65px;">商品</div>
-        <div class="headings-item" style="padding-left:190px;">单价 (￥)</div>
-        <div class="headings-item" style="padding-left:96px;">数量</div>
-        <div class="headings-item" style="padding-left:82px;">商品操作</div>
-        <div class="headings-item" style="padding-left:75px;">实付款 (￥)</div>
-        <div class="headings-item" style="padding-left:76px;">交易状态</div>
+        <div class="headings-item" style="padding-left:80px;">商品</div>
+        <div class="headings-item" style="padding-left:180px;">单价 (￥)</div>
+        <div class="headings-item" style="padding-left:80px;">数量</div>
+        <!--<div class="headings-item" style="padding-left:80px;">商品操作</div>-->
+        <div class="headings-item" style="padding-left:80px;">实付款 (￥)</div>
+        <div class="headings-item" style="padding-left:80px;">交易状态</div>
         <div class="headings-item" style="padding-left:118px;">交易操作</div>
       </div>
-      <div class="content-list-data" style="overflow:overlay;">
-        <div v-if="orderListData.total==0" style="font-size: 14px;text-align: center;color: #5e7382;">暂无数据</div>
-        <div v-else style="height:164px;border: 1px solid #dae8f6;margin-bottom: 20px;"
-             v-for="val in orderData.list">
-          <div class="content-list-data-orderCode">
-            <label style="margin-left: 20px;"> 订单号：{{ val.code }}</label>
-          </div>
-          <div class="content-list-datas" style="width: 1078px;height: 109px;">
-            <div class="data-item content-list-data-merchandise">
-              <img :src="val.image" style="height:70px;width:70px;padding-left: 20px;"/>
-              <div class="commodity-name">{{ val.brief }}</div>
-              <div class="classify" v-if="val.productType==0">分类：应用</div>
+      <div class="content-list-data-div">
+        <div class="content-list-data">
+          <div v-if="orderListData.total==0" style="font-size: 14px;text-align: center;color: #5e7382;">暂无数据</div>
+          <div v-else style="height:164px;border: 1px solid #dae8f6;margin-bottom: 20px;"
+               v-for="val in orderData.list">
+            <div class="content-list-data-orderCode">
+              <label style="margin-left: 20px;"> 订单号：{{ val.code }}</label>
             </div>
-            <div class="data-item content-list-data-price">{{ money(val.price) }} </div>
-            <div class="data-item content-list-data-number">{{ val.num }}</div>
-            <div class="data-item content-list-data-mOperation">申请售后</div>
-            <div class="data-item content-list-data-realPay">{{ money(val.totalPrice) }} </div>
-            <div class="data-item content-list-data-status">
-              <div v-if="val.status===0">
-                <label style="color: #505050;">待付款</label>
+            <div class="content-list-datas" style="width: 1078px;height: 109px;">
+              <div class="data-item content-list-data-merchandise">
+                <img :src="val.image" style="height:70px;width:70px;padding-left: 20px;"/>
+                <div class="commodity-name">{{ val.brief }}</div>
+                <div class="classify" v-if="val.productType==0">分类：应用</div>
               </div>
-              <div v-else-if="val.status===4">
-                <label style="color: #505050;">交易完成</label>
+              <div class="data-item content-list-data-price">{{ money(val.price) }} </div>
+              <div class="data-item content-list-data-number">{{ val.num }}</div>
+              <!--<div class="data-item content-list-data-mOperation">申请售后</div>-->
+              <div class="data-item content-list-data-realPay">{{ money(val.totalPrice) }} </div>
+              <div class="data-item content-list-data-status">
+                <div v-if="val.status===0">
+                  <label style="color: #505050;">待付款</label>
+                </div>
+                <div v-else-if="val.status===4">
+                  <label style="color: #505050;">交易完成</label>
+                </div>
               </div>
-            </div>
-            <div class="data-item content-list-data-tOperation">
-              <div v-if="val.status===0">
-                <button class="immediately-pay" @click="immediatelyPay(val)">立即支付</button>
-                <el-button type="text" class="close-order" @click="closeOrder(val)">关闭订单</el-button>
+              <div class="data-item content-list-data-tOperation">
+                <div v-if="val.status===0">
+                  <button class="immediately-pay" @click="immediatelyPay(val)">立即支付</button>
+                  <el-button type="text" class="close-order" @click="closeOrder(val)">关闭订单</el-button>
+                </div>
+                <div v-else-if="val.status===4" style="width:97px;text-align:center;">
+                  <el-button type="text" class="order-desc" @click="orderDetail(val)">订单详情</el-button>
+                </div>
+                <!--<button class="appraise-button">评价</button>-->
+                <!--<el-button type="text" class="again-buy">再次购买</el-button>-->
               </div>
-              <div v-else-if="val.status===4" style="width:97px;text-align:center;">
-                <el-button type="text" class="order-desc" @click="orderDetail(val)">订单详情</el-button>
-              </div>
-              <!--<button class="appraise-button">评价</button>-->
-              <!--<el-button type="text" class="again-buy">再次购买</el-button>-->
             </div>
           </div>
         </div>
@@ -180,100 +182,106 @@
         line-height: 53px;
       }
     }
-    .content-list-data {
-      height: calc(100vh - 336px);
-      overflow: scroll;
-      padding-left: 20px;
-      padding-right: 20px;
-      .content-list-data-orderCode {
-        height: 55px;
-        line-height: 55px;
-        background-color: #eef6fe;
-        font-size: 14px;
-        color: #505050;
-      }
-      .content-list-datas {
-        .data-item {
-          height: 90px;
-          float: left;
-          margin-top: 18px;
+    .content-list-data-div {
+      width: 1098px;
+      overflow: hidden;
+      .content-list-data {
+        width: 1093px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        height: calc(100vh - 336px);
+        padding-left: 20px;
+        padding-right: 20px;
+        .content-list-data-orderCode {
+          height: 55px;
+          line-height: 55px;
+          background-color: #eef6fe;
           font-size: 14px;
+          color: #505050;
         }
-        .content-list-data-merchandise {
-          width: 295px;
-          .commodity-name {
-            position: relative;
-            top: -74px;
-            left: 108px;
-            color: #505050;
+        .content-list-datas {
+          .data-item {
+            height: 90px;
+            float: left;
+            margin-top: 18px;
+            font-size: 14px;
           }
-          .classify {
-            position: relative;
-            left: 108px;
-            top: -62px;
-            color: #808080;
+          .content-list-data-merchandise {
+            width: 295px;
+            .commodity-name {
+              position: relative;
+              top: -74px;
+              left: 108px;
+              color: #505050;
+            }
+            .classify {
+              position: relative;
+              left: 108px;
+              top: -62px;
+              color: #808080;
+            }
           }
-        }
-        .content-list-data-price {
-          width: 140px;
-        }
-        .content-list-data-number {
-          width: 112px;
-        }
-        .content-list-data-mOperation {
-          width: 128px;
-        }
-        .content-list-data-realPay {
-          width: 130px;
-        }
-        .content-list-data-status {
-          width: 158px;
-          text-align: left;
-        }
-        .content-list-data-tOperation {
-          width: 98px;
-          .immediately-pay {
-            font-weight: bold;
-            width: 97px;
-            height: 30px;
-            color: #ffffff;
-            background-color: #ff5f27;
-            border: 1px solid #ff5f27;
-            outline: none;
-            border-radius: 3px;
+          .content-list-data-price {
+            width: 140px;
           }
-          .immediately-pay:hover {
-            background-color: #ff6c39;
+          .content-list-data-number {
+            width: 112px;
           }
-          .close-order {
-            width: 97px;
-            margin-top: 14px;
-            color: #505050;
-            padding: 0px;
+          .content-list-data-mOperation {
+            width: 128px;
           }
-          .close-order:hover {
-            color: #20a0ff;
+          .content-list-data-realPay {
+            width: 150px;
           }
-          .order-desc {
-            padding: 0px;
-            color: #505050;
+          .content-list-data-status {
+            width: 158px;
+            text-align: left;
           }
-          .order-desc:hover {
-            color: #20a0ff;
+          .content-list-data-tOperation {
+            width: 98px;
+            .immediately-pay {
+              font-weight: bold;
+              width: 97px;
+              height: 30px;
+              color: #ffffff;
+              background-color: #ff5f27;
+              border: 1px solid #ff5f27;
+              outline: none;
+              border-radius: 3px;
+            }
+            .immediately-pay:hover {
+              background-color: #ff6c39;
+            }
+            .close-order {
+              width: 97px;
+              margin-top: 14px;
+              color: #505050;
+              padding: 0px;
+            }
+            .close-order:hover {
+              color: #20a0ff;
+            }
+            .order-desc {
+              padding: 0px;
+              color: #505050;
+            }
+            .order-desc:hover {
+              color: #20a0ff;
+            }
+            /*.appraise-button {*/
+            /*outline: none;*/
+            /*cursor: pointer;*/
+            /*width: 68px;*/
+            /*height: 30px;*/
+            /*background-color: #ffffff;*/
+            /*border-radius: 3px;*/
+            /*border: 1px solid #cadced;*/
+            /*}*/
+            /*.appraise-button:hover {*/
+            /*color: #20a0ff;*/
+            /*border: 1px solid #20a0ff;*/
+            /*}*/
           }
-          /*.appraise-button {*/
-          /*outline: none;*/
-          /*cursor: pointer;*/
-          /*width: 68px;*/
-          /*height: 30px;*/
-          /*background-color: #ffffff;*/
-          /*border-radius: 3px;*/
-          /*border: 1px solid #cadced;*/
-          /*}*/
-          /*.appraise-button:hover {*/
-          /*color: #20a0ff;*/
-          /*border: 1px solid #20a0ff;*/
-          /*}*/
         }
       }
     }
