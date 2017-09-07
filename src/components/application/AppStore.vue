@@ -9,30 +9,40 @@
       <!--<el-option v-for="item in appStoreData.appTypeList" :label="item.label" :value="item.value"></el-option>-->
       <!--</el-select>-->
     </div>
-    <div class="appStore-list">
-      <div class="appStore-list-noData" v-if="appStoreData.appList==''">暂无数据</div>
-      <div v-for="val in appStoreData.appList" class="appStore-app-card" v-else>
-        <div class="appStore-app-card-left">
-          <img :src="val.image" @click="appDetail(val)" style="width: 70px;height: 70px;border-radius: 20px;">
-          <el-button style="margin-top:6px;width:70px;height:22px;" type="primary" size="mini">
-            <label v-if=" val.subscriptionStatus == 0" @click="subscribe(val)">订阅</label>
-            <label v-else-if=" val.subscriptionStatus == 1" @click="unsubscribe(val)">退订</label>
-          </el-button>
-        </div>
-        <div class="appStore-app-card-right">
-          <div @click="appSubscribe(val)" style="font-size: 16px;margin-top: 2px;color: #505050;">{{ val.name }}
-            <label style="color: #fe4f4f;font-size: 10px;">￥{{ money(val.price) }}
-              <label v-if="val.payCycle==1">/月</label>
-            <label v-else-if="val.payCycle==2">/季</label>
-            <label v-else-if="val.payCycle==3">/半年</label>
-            <label v-else-if="val.payCycle==2">/年</label>
-          </label>
+    <div class="appStore-list-div">
+      <div class="appStore-list">
+        <div class="appStore-list-noData" v-if="appStoreData.appList==''">暂无数据</div>
+        <div v-for="val in appStoreData.appList" class="appStore-app-card" v-else>
+          <div class="appStore-app-card-left">
+            <img :src="val.image" @click="appDetail(val)" style="width: 70px;height: 70px;border-radius: 20px;">
+            <el-button style="font-size:12px;margin-top:6px;width:70px;height:22px;" type="primary" size="mini">
+              <label v-if=" val.subscriptionStatus == 0" @click="subscribe(val)">订阅</label>
+              <label v-else-if=" val.subscriptionStatus == 1" @click="unsubscribe(val)">退订</label>
+            </el-button>
           </div>
-          <div style="font-size: 12px;margin-top: 4px;width: 130px;color: #808080;height:54px;overflow: hidden;">
-            {{ val.desc }}
-
+          <div class="appStore-app-card-right">
+            <div @click="appSubscribe(val)">
+              <div
+                style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;font-size: 16px;color: #505050;margin-top: 2px;">
+                {{ val.name }}
+              </div>
+              <div
+                style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;font-size: 14px;color: #808080;margin-top: 2px;">
+                {{ val.desc }}
+              </div>
+              <div
+                style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;font-size: 12px;color: #ff5500;margin-top: 2px;">
+                ￥{{ money(val.price) }}
+                <label v-if="val.payCycle==1">/月</label>
+                <label v-else-if="val.payCycle==2">/季</label>
+                <label v-else-if="val.payCycle==3">/半年</label>
+                <label v-else-if="val.payCycle==2">/年</label>
+              </div>
+            </div>
+            <div class="subscription" style="margin-top: 16px;">订阅<label style="color: #ff5500;"> {{ val.subscription
+              }} </label>次
+            </div>
           </div>
-          <div class="subscription">订阅<label style="color: #fe4f4f;"> {{ val.subscription }} </label>次</div>
         </div>
       </div>
     </div>
@@ -40,7 +50,8 @@
 </template>
 <script>
   import axios from 'axios'
-  import {mapGetters, mapActions} from 'vuex'
+  import { mapGetters, mapActions } from 'vuex'
+
   export default {
     created () {
       this.publicParameters.returnButtom = true
@@ -141,12 +152,17 @@
     }
   }
 
-  .appStore-list {
-    position: absolute;
-    left: 20px;
-    right: 20px;
-    height: calc(100vh - 150px);
-    overflow: scroll;
+  .appStore-list-div {
+    width: 1098px;
+    overflow: hidden;
+    .appStore-list {
+      width: 1093px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      margin-left: 20px;
+      margin-right: 20px;
+      height: calc(100vh - 150px);
+    }
   }
 
   .appStore-app-card {
