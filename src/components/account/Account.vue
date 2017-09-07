@@ -28,10 +28,10 @@
       </div>
       <div class="account-content-head-overview">
         <el-tabs v-model="activeName" @tab-click="getAccountData">
-          <el-tab-pane label="　当月　" name="1"></el-tab-pane>
-          <el-tab-pane label="　季度　" name="2"></el-tab-pane>
-          <el-tab-pane label="　半年　" name="3"></el-tab-pane>
-          <el-tab-pane label="　本年　" name="4"></el-tab-pane>
+          <el-tab-pane label="　近1月　" name="1"></el-tab-pane>
+          <el-tab-pane label="　近3月　" name="2"></el-tab-pane>
+          <el-tab-pane label="　近6月　" name="3"></el-tab-pane>
+          <el-tab-pane label="　近1年　" name="4"></el-tab-pane>
         </el-tabs>
         <el-row :gutter="12">
           <el-col :span="6">
@@ -57,9 +57,9 @@
         <el-table-column label="交易金额(￥)" initApplicationTplDatawidth="180">
           <template scope="scope">
             <span v-if="scope.row.amount>=0" style="margin-left: 10px;color: #0BB20C;">+{{ money(scope.row.amount)
-              }} (进账)</span>
+              }} (充值)</span>
             <span v-else-if="scope.row.amount<0" style="margin-left: 10px;color: red;">{{ money(scope.row.amount)
-              }} (出账)</span>
+              }} (消费)</span>
           </template>
         </el-table-column>
         <el-table-column label="描述" initApplicationTplDatawidth="180">
@@ -88,9 +88,9 @@
         <el-form-item label="交易时间：">{{ accountFrom.createTime }}</el-form-item>
         <el-form-item label="交易金额：">
           <span v-if="accountFrom.amount>=0" style="margin-left: 10px;color: #0BB20C;">+{{ money(accountFrom.amount)
-            }} (进账)</span>
+            }} (充值)</span>
           <span v-else-if="accountFrom.amount<0" style="margin-left: 10px;color: red;">{{ money(accountFrom.amount)
-            }} (出账)</span>
+            }} (消费)</span>
         </el-form-item>
         <el-form-item label="描　　述：">{{ accountFrom.remark }}</el-form-item>
         <!--<el-form-item label="订 单 号：">{{ accountFrom.orderCode }} 查看</el-form-item>-->

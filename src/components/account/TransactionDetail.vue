@@ -22,9 +22,9 @@
         <el-table-column label="交易金额(￥)" width="160">
           <template scope="scope">
             <span v-if="scope.row.amount>=0" style="margin-left: 10px;color: #0BB20C;">+{{ money(scope.row.amount)
-              }} (进账)</span>
+              }} (充值)</span>
             <span v-else-if="scope.row.amount<0" style="margin-left: 10px;color: red;">{{ money(scope.row.amount)
-              }} (出账)</span>
+              }} (消费)</span>
           </template>
         </el-table-column>
         <el-table-column label="账户余额(￥)" width="160">
@@ -56,9 +56,9 @@
         <el-form-item label="交易日期：">{{ transactionForm.createTime }}</el-form-item>
         <el-form-item label="交易金额：">
           <span v-if="transactionForm.amount>=0"
-                style="margin-left: 10px;color: #0BB20C;">+{{ money(transactionForm.amount) }} (进账)</span>
+                style="margin-left: 10px;color: #0BB20C;">+{{ money(transactionForm.amount) }} (充值)</span>
           <span v-else-if="transactionForm.amount<0"
-                style="margin-left: 10px;color: red;">{{ money(transactionForm.amount) }} (出账)</span>
+                style="margin-left: 10px;color: red;">{{ money(transactionForm.amount) }} (消费)</span>
         </el-form-item>
         <el-form-item style="color: #20a0ff;" label="账户余额：">{{ money(transactionForm.balance) }}</el-form-item>
         <el-form-item label="描　　述：">{{ transactionForm.remark }}</el-form-item>
@@ -69,7 +69,7 @@
 </template>
 <script>
   import axios from 'axios'
-  import {mapGetters, mapActions} from 'vuex'
+  import { mapGetters, mapActions } from 'vuex'
 
   export default {
     created () {
@@ -86,18 +86,18 @@
     data () {
       var now = new Date()  // 当前日期
       // 获得本月的开始日期
-      function getMonthStartDate() {
+      function getMonthStartDate () {
         var monthStartDate = new Date(now.getFullYear(), now.getMonth(), 1)
         return formatDate(monthStartDate)
       }
 
       // 获得本月的结束日期
-      function getMonthEndDate() {
+      function getMonthEndDate () {
         var monthEndDate = new Date()
         return formatDate(monthEndDate)
       }
 
-      function formatDate(date) {
+      function formatDate (date) {
         var myyear = date.getFullYear()
         var mymonth = date.getMonth() + 1
         var myweekday = date.getDate() + 1
