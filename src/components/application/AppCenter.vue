@@ -29,7 +29,7 @@
         </el-table-column>
         <el-table-column label="状态" width="180">
           <template scope="scope">
-            <el-button size="small" type="text" @click="disableApp(scope.row)" v-if="scope.row.status==1">启用</el-button>
+            <el-button size="small" type="text" @click="disableApp(scope.row)" v-if="scope.row.status==0">启用</el-button>
             <el-button size="small" type="text" @click="enableApp(scope.row)" v-else>停用</el-button>
           </template>
         </el-table-column>
@@ -102,14 +102,14 @@
       enableApp (index) { // 启用
         this.submitData.url = this.publicParameters.domain + '/application/modifyStatus'
         this.submitData.appId = index.id
-        this.submitData.status = 1
+        this.submitData.status = 0
         this.submitData.remindMessage = '启用'
         this.submit()
       },
       disableApp (index) { // 停用
         this.submitData.url = this.publicParameters.domain + '/application/modifyStatus'
         this.submitData.appId = index.id
-        this.submitData.status = 0
+        this.submitData.status = 1
         this.submitData.remindMessage = '停用'
         this.submit()
       },

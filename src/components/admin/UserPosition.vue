@@ -1,12 +1,21 @@
 <template>
   <div class="admin-user-position">
-    <div v-for="val in userPositionList.list" class="identityTab" @click="identitySwitch(val)"
-         style="border: 1px solid #31a7ff;border-radius: 2px;">
-      <label class="identityTab-identityImg">
-        <img class="logo" :src="val.companyLogo" height="52" width="52"/>
-      </label>
-      <div class="identityTab-companyName">{{ val.companyName }}</div>
-      <div class="identityTab-userPositionName">{{ val.userPositionName }}</div>
+    <div v-for="val in userPositionList.list" class="identityTab" @click="identitySwitch(val)">
+      <div class="userPosition" style="width: 202px;height: 74px;border: 1px solid #31a7ff;border-radius: 2px;"
+           v-if="val.userPositionId==userPositionId">
+        <label class="identityTab-identityImg">
+          <img class="logo" :src="val.companyLogo" height="52" width="52"/>
+        </label>
+        <div class="identityTab-companyName">{{ val.companyName }}</div>
+        <div class="identityTab-userPositionName">{{ val.userPositionName }}</div>
+      </div>
+      <div class="userPosition" v-else>
+        <label class="identityTab-identityImg">
+          <img class="logo" :src="val.companyLogo" height="52" width="52"/>
+        </label>
+        <div class="identityTab-companyName">{{ val.companyName }}</div>
+        <div class="identityTab-userPositionName">{{ val.userPositionName }}</div>
+      </div>
     </div>
   </div>
 </template>
@@ -37,14 +46,21 @@
         if (data.userPositionId + '' === localStorage.getItem('userPositionId')) {
           return
         }
+        var params = {}
+        if (localStorage.getItem('accessToken')) {
+          params = {
+            accessType: 1,
+            accessValue: localStorage.getItem('accessToken'),
+            userPositionId: data.userPositionId
+          }
+        } else {
+          params = {accessValue: localStorage.getItem('accessTicket'), userPositionId: data.userPositionId}
+        }
         var current = this
         axios({
           method: 'POST',
           url: this.publicParameters.domain + '/userPosition/getAccessToken',
-          params: {
-            accessValue: localStorage.getItem('accessTicket'),
-            userPositionId: data.userPositionId
-          }
+          params
         }).then(function (response) {
           console.log(response.data)
           if (response.data.code === '200') {
@@ -52,6 +68,8 @@
             localStorage.setItem('userPositionId', data.userPositionId)
             localStorage.setItem('accessToken', response.data.data.accessToken)
             window.location.href = '#/application/center'
+            current.userPositionId = data.userPositionId
+            current.publicParameters.identityListDialog = false
           } else {
             current.promptInfo('error', '角色切换失败！')
           }
@@ -70,10 +88,17 @@
 <style lang="scss" scoped>
   .identityTab {
     float: left;
-    margin: 10px -4px 16px 4px;
-    width: 220px;
+    margin: 10px 0px 16px 18px;
+    width: 200px;
     height: 72px;
     border: 1px solid #ffffff;
+    .userPosition:hover {
+      cursor: pointer;
+      width: 202px;
+      height: 74px;
+      border: 1px solid #31a7ff;
+      border-radius: 2px;
+    }
     .identityTab-identityImg {
       float: left;
       margin-left: 10px;
@@ -81,22 +106,17 @@
       margin-right: 17px;
     }
     .identityTab-companyName {
-      width: 140px;
+      width: 118px;
       float: right;
       margin-top: 18px;
       text-align: left;
       color: #505050;
     }
     .identityTab-userPositionName {
-      width: 140px;
-      margin-top: 14px;
+      width: 118px;
+      float: right;
       text-align: left;
       color: #31a7ff;
     }
-  }
-
-  .identityTab:hover {
-    border: 1px solid #31a7ff;
-    border-radius: 2px;
   }
 </style>

@@ -15,7 +15,7 @@ const state = {
     modifyPwdDialog: false,
     returnButtom: false,
     path: '',
-    domain: 'http://192.168.5.103:30000/cloud/window/v1'
+    domain: 'http://192.168.0.127:30000/cloud/window/v1'
   },
   userPositionList: {
     list: {}
