@@ -32,6 +32,10 @@
   export default {
     components: {CommonHeader, CommonSidebar},
     created () {
+      var hash = window.location.hash
+      if (hash === '#/') {
+        window.location.href = '#/application/center'
+      }
       this.initHomeData()
     },
     methods: {
@@ -90,7 +94,7 @@
         height: 58px;
       }
       .layout-container-wrapper {
-        overflow: hidden!important;
+        overflow: hidden !important;
         background: white;
         height: calc(100vh - 100px);
         overflow: scroll;

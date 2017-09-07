@@ -81,7 +81,7 @@
   import CompanyInfo from '@/components/company/Info'
   import AdminInfo from '@/components/admin/Info'
   import ModifyPwd from '@/components/admin/ModifyPwd'
-  import { mapGetters, mapActions } from 'vuex'
+  import {mapGetters, mapActions} from 'vuex'
 
   export default {
     components: {AdminUserPosition, CompanyInfo, AdminInfo, ModifyPwd},
@@ -105,7 +105,7 @@
         userInfor: 1,
         modifyPassword: 1,
         quit: 1,
-        name: localStorage.getItem('username'),
+        name: localStorage.getItem('username') + localStorage.getItem('positionName'),
         myData: {
           id: null,
           username: null,

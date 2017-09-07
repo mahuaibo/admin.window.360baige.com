@@ -35,21 +35,20 @@
       ]),
       setStyle () {
         var setStyleObject = this.$refs
-        var href = window.location.href
-        console.log(href.indexOf('/application/appTplDetail') >= 0)
-        if (href.indexOf('/application/center') >= 0 || href.indexOf('/application/store') >= 0 || href.indexOf('/application/appTplDetail') >= 0) {
+        var hash = window.location.hash
+        if (hash.indexOf('application') >= 0 || hash.indexOf('#/') >= 0) {
           setStyleObject = this.$refs.center
           this.$refs.orderList.style.backgroundColor = this.$refs.loggerList.style.backgroundColor = this.$refs.accountList.style.backgroundColor = ''
           this.$refs.orderList.style.borderRight = this.$refs.loggerList.style.borderRight = this.$refs.accountList.style.borderRight = ''
-        } else if (href.indexOf('/account/list') >= 0 || href.indexOf('/account/transactionDetail') >= 0) {
+        } else if (hash.indexOf('account') >= 0 || hash.indexOf('/account/transactionDetail') >= 0) {
           setStyleObject = this.$refs.accountList
           this.$refs.orderList.style.backgroundColor = this.$refs.loggerList.style.backgroundColor = this.$refs.center.style.backgroundColor = ''
           this.$refs.orderList.style.borderRight = this.$refs.loggerList.style.borderRight = this.$refs.center.style.borderRight = ''
-        } else if (href.indexOf('/order/list') >= 0) {
+        } else if (hash.indexOf('order') >= 0) {
           setStyleObject = this.$refs.orderList
           this.$refs.accountList.style.backgroundColor = this.$refs.loggerList.style.backgroundColor = this.$refs.center.style.backgroundColor = ''
           this.$refs.accountList.style.borderRight = this.$refs.loggerList.style.borderRight = this.$refs.center.style.borderRight = ''
-        } else if (href.indexOf('/logger/list') >= 0) {
+        } else if (hash.indexOf('logger') >= 0) {
           setStyleObject = this.$refs.loggerList
           this.$refs.accountList.style.backgroundColor = this.$refs.orderList.style.backgroundColor = this.$refs.center.style.backgroundColor = ''
           this.$refs.accountList.style.borderRight = this.$refs.orderList.style.borderRight = this.$refs.center.style.borderRight = ''

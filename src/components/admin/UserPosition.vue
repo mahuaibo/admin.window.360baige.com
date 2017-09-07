@@ -12,7 +12,7 @@
 </template>
 <script>
   import axios from 'axios'
-  import { mapGetters, mapActions } from 'vuex'
+  import {mapGetters, mapActions} from 'vuex'
 
   export default {
     created () {
@@ -34,7 +34,9 @@
         'getUserPositionList'
       ]),
       identitySwitch (data) {
-        console.log(data)
+        if (data.userPositionId + '' === localStorage.getItem('userPositionId')) {
+          return
+        }
         var current = this
         axios({
           method: 'POST',
@@ -46,7 +48,7 @@
         }).then(function (response) {
           console.log(response.data)
           if (response.data.code === '200') {
-            localStorage.setItem('username', localStorage.getItem('username') + '(' + data.userPositionName + ')')
+            localStorage.setItem('positionName', '(' + data.userPositionName + ')')
             localStorage.setItem('userPositionId', data.userPositionId)
             localStorage.setItem('accessToken', response.data.data.accessToken)
             window.location.href = '#/application/center'
