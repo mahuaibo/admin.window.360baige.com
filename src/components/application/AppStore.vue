@@ -13,23 +13,24 @@
       <div class="appStore-list-noData" v-if="appStoreData.appList==''">暂无数据</div>
       <div v-for="val in appStoreData.appList" class="appStore-app-card" v-else>
         <div class="appStore-app-card-left">
-          <img :src="val.image" @click="appSubscribe(val)" style="width: 70px;height: 70px;border-radius: 20px;">
+          <img :src="val.image" @click="appDetail(val)" style="width: 70px;height: 70px;border-radius: 20px;">
           <el-button style="margin-top:6px;width:70px;height:22px;" type="primary" size="mini">
-            <label v-if=" val.subscriptionStatus == 0">订阅</label>
-            <label v-else-if=" val.subscriptionStatus == 1">退订</label>
+            <label v-if=" val.subscriptionStatus == 0" @click="subscribe(val)">订阅</label>
+            <label v-else-if=" val.subscriptionStatus == 1" @click="unsubscribe(val)">退订</label>
           </el-button>
         </div>
         <div class="appStore-app-card-right">
           <div @click="appSubscribe(val)" style="font-size: 16px;margin-top: 2px;color: #505050;">{{ val.name }}
             <label style="color: #fe4f4f;font-size: 10px;">￥{{ money(val.price) }}
               <label v-if="val.payCycle==1">/月</label>
-              <label v-else-if="val.payCycle==2">/季</label>
-              <label v-else-if="val.payCycle==3">/半年</label>
-              <label v-else-if="val.payCycle==2">/年</label>
-            </label>
+            <label v-else-if="val.payCycle==2">/季</label>
+            <label v-else-if="val.payCycle==3">/半年</label>
+            <label v-else-if="val.payCycle==2">/年</label>
+          </label>
           </div>
           <div style="font-size: 12px;margin-top: 4px;width: 130px;color: #808080;height:54px;overflow: hidden;">
             {{ val.desc }}
+
           </div>
           <div class="subscription">订阅<label style="color: #fe4f4f;"> {{ val.subscription }} </label>次</div>
         </div>
@@ -38,9 +39,8 @@
   </div>
 </template>
 <script>
-  //  import axios from 'axios'
-  import { mapGetters, mapActions } from 'vuex'
-
+  import axios from 'axios'
+  import {mapGetters, mapActions} from 'vuex'
   export default {
     created () {
       this.publicParameters.returnButtom = true
@@ -76,8 +76,52 @@
       handleIconClick (ev) {  // 搜索
         this.initApplicationTplData(this.appStore)
       },
-      appSubscribe (val) { // 订阅
+      appDetail (val) { // 订阅
         this.handleClick('/application/appTplDetail?i=' + val.id)
+      },
+      subscribe (data) {
+        console.log('订阅')
+        var current = this
+        axios({
+          method: 'POST',
+          url: this.publicParameters.domain + '/applicationTpl/subscribe',
+          params: {
+            accessToken: localStorage.getItem('accessToken'),
+            id: data.id
+          }
+        }).then(function (response) {
+          console.log(response.data.message)
+          if (response.data.code === '200') {
+            current.initApplicationTplData(current.appStore)
+            current.messageRemind('success', response.data.message)
+          } else {
+            current.messageRemind('error', '应用订阅失败')
+          }
+        }).catch(function (error) {
+          console.log(error)
+        })
+      },
+      unsubscribe (data) {
+        console.log('退订')
+        var current = this
+        axios({
+          method: 'POST',
+          url: this.publicParameters.domain + '/applicationTpl/unSubscribe',
+          params: {
+            accessToken: localStorage.getItem('accessToken'),
+            id: data.id
+          }
+        }).then(function (response) {
+          console.log(response.data)
+          if (response.data.code === '200') {
+            current.initApplicationTplData(current.appStore)
+            current.messageRemind('success', response.data.message)
+          } else {
+            current.messageRemind('error', '应用退订失败')
+          }
+        }).catch(function (error) {
+          console.log(error)
+        })
       },
       messageRemind (type, info) { // type success成功   warning警告   error失败
         this.$message({message: info, type: type})

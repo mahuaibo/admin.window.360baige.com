@@ -45,7 +45,7 @@
     <div class="layout-container-tail">
       <label class="layout-container-tail-text">Copyright © 2015 粤ICP备15062920号</label>
     </div>
-    <el-dialog title="选择身份" :visible.sync="identityListDialog" style="width: 992px;margin: 0 auto">
+    <el-dialog title="选择身份" :visible.sync="publicParameters.identityListDialog" style="width: 992px;margin: 0 auto">
       <admin-user-position></admin-user-position>
     </el-dialog>
   </div>
@@ -66,7 +66,6 @@
     components: {CommonHeader, CommonSidebar, AdminUserPosition},
     data () {
       return {
-        identityListDialog: false,
         loginDataForm: {
           username: null,
           password: null
@@ -104,8 +103,7 @@
               if (response.data.code === '200') {
                 localStorage.setItem('username', current.loginDataForm.username)
                 localStorage.setItem('accessTicket', response.data.data.accessTicket)
-                current.getUserPositionList()
-                current.identityListDialog = true
+                current.publicParameters.identityListDialog = true
               } else {
                 current.promptInfo('error', '用户名密码错误！')
               }

@@ -36,7 +36,7 @@
       setStyle () {
         var setStyleObject = this.$refs
         var hash = window.location.hash
-        if (hash.indexOf('application') >= 0 || hash.indexOf('#/') >= 0) {
+        if (hash.indexOf('application') >= 0) {
           setStyleObject = this.$refs.center
           this.$refs.orderList.style.backgroundColor = this.$refs.loggerList.style.backgroundColor = this.$refs.accountList.style.backgroundColor = ''
           this.$refs.orderList.style.borderRight = this.$refs.loggerList.style.borderRight = this.$refs.accountList.style.borderRight = ''
