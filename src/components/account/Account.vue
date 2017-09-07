@@ -83,7 +83,7 @@
       </el-pagination>
     </div>
 
-    <el-dialog title="详情" :visible.sync="accountDetailModal" size="tiny" :before-close="cancel">
+    <el-dialog title="详情" :visible.sync="accountDetailModal" size="tiny" :before-close="cancel" :close-on-click-modal="false">
       <el-form ref="form" :model="accountFrom" label-width="100px" style="text-align:left;padding:0px 10px 0px 0px;">
         <el-form-item label="交易时间：">{{ accountFrom.createTime }}</el-form-item>
         <el-form-item label="交易金额：">

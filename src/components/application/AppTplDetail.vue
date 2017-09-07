@@ -30,7 +30,7 @@
       <el-row :gutter="24" style="padding-top: 6px;">
         <el-col :span="6" style="padding-left: 12px;">
           <div class="data-product">
-            <label style="font-size: 24px;color: #ff5f27;">￥{{ money(appTplData.price) }}</label>
+            <div class="data-product-price">￥{{ money(appTplData.price) }}</div>
             <div class="data-product-card">
               <div class="data-product-text">每{{ appTplData.payCycle }}</div>
             </div>
@@ -68,9 +68,10 @@
     <div style="float:right;text-align:right;width: 100%">
       <el-button class="confirm-order" type="primary" @click="immediatePayment" v-if="status===0">立即支付
 
+
       </el-button>
     </div>
-    <el-dialog title="微信支付" v-model="payDialog" size="large" :before-close="closeWindow">
+    <el-dialog title="微信支付" v-model="payDialog" size="large" :before-close="closeWindow" :close-on-click-modal="false">
       <div><img :src="payImage" height="256" width="256"/></div>
       <div>使用微信扫一扫支付</div>
       <div style="height:40px;"></div>
@@ -359,12 +360,22 @@
       height: 102px;
       line-height: 102px;
       border: 1px solid #ff5f27;
+      background-color: #ff5f27;
       font-size: 14px;
+      .data-product-price {
+        float: left;
+        width: 163px;
+        height: 102px;
+        font-size: 24px;
+        color: #ff5f27;
+        background: #ffffff;
+      }
       .data-product-card {
         float: right;
         background-color: #f0f0f0;
         width: 57px;
         height: 102px;
+        border-bottom-right-radius: 25px;
       }
       .data-product-text {
         margin: 20px;
@@ -408,7 +419,7 @@
     margin-top: 6px;
     width: 107px;
     height: 30px;
-    padding: 8px 15px 8px 15px;
+    padding: 6px 15px 7px 15px;
   }
 
 </style>

@@ -45,7 +45,7 @@
     <div class="layout-container-tail">
       <label class="layout-container-tail-text">Copyright © 2015 粤ICP备15062920号</label>
     </div>
-    <el-dialog title="选择身份" :visible.sync="publicParameters.identityListDialog" style="width: 992px;margin: 0 auto">
+    <el-dialog title="选择身份" :visible.sync="publicParameters.identityListDialog" :close-on-click-modal="false">
       <admin-user-position></admin-user-position>
     </el-dialog>
   </div>
