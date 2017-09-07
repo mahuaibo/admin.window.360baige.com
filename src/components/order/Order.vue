@@ -15,12 +15,12 @@
     <div class="content-list">
       <div class="content-list-headings">
         <div class="headings-item" style="padding-left:80px;">商品</div>
-        <div class="headings-item" style="padding-left:180px;">单价 (￥)</div>
-        <div class="headings-item" style="padding-left:80px;">数量</div>
+        <div class="headings-item" style="padding-left:230px;">单价 (￥)</div>
+        <div class="headings-item" style="padding-left:85px;">数量</div>
         <!--<div class="headings-item" style="padding-left:80px;">商品操作</div>-->
-        <div class="headings-item" style="padding-left:80px;">实付款 (￥)</div>
-        <div class="headings-item" style="padding-left:80px;">交易状态</div>
-        <div class="headings-item" style="padding-left:118px;">交易操作</div>
+        <div class="headings-item" style="padding-left:85px;">实付款 (￥)</div>
+        <div class="headings-item" style="padding-left:85px;">交易状态</div>
+        <div class="headings-item" style="padding-left:120px;">交易操作</div>
       </div>
       <div class="content-list-data-div">
         <div class="content-list-data">
@@ -207,7 +207,7 @@
             font-size: 14px;
           }
           .content-list-data-merchandise {
-            width: 295px;
+            width: 350px;
             .commodity-name {
               position: relative;
               top: -74px;
@@ -225,20 +225,20 @@
             width: 140px;
           }
           .content-list-data-number {
-            width: 112px;
+            width: 120px;
           }
           .content-list-data-mOperation {
-            width: 128px;
+            width: 130px;
           }
           .content-list-data-realPay {
             width: 150px;
           }
           .content-list-data-status {
-            width: 158px;
+            width: 180px;
             text-align: left;
           }
           .content-list-data-tOperation {
-            width: 98px;
+            width: 100px;
             .immediately-pay {
               font-weight: bold;
               width: 97px;
@@ -268,19 +268,6 @@
             .order-desc:hover {
               color: #20a0ff;
             }
-            /*.appraise-button {*/
-            /*outline: none;*/
-            /*cursor: pointer;*/
-            /*width: 68px;*/
-            /*height: 30px;*/
-            /*background-color: #ffffff;*/
-            /*border-radius: 3px;*/
-            /*border: 1px solid #cadced;*/
-            /*}*/
-            /*.appraise-button:hover {*/
-            /*color: #20a0ff;*/
-            /*border: 1px solid #20a0ff;*/
-            /*}*/
           }
         }
       }
