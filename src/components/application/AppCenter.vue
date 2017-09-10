@@ -24,7 +24,7 @@
         </el-table-column>
         <el-table-column label="服务截止时间" width="220">
           <template scope="scope">
-            <span>{{ scope.row.endTime }}</span>
+            <span style="color: red;">{{ datetime(scope.row.endTime) }}</span>
           </template>
         </el-table-column>
         <el-table-column label="状态" width="180">
@@ -52,7 +52,7 @@
 </template>
 <script>
   import axios from 'axios'
-  import {mapGetters, mapActions} from 'vuex'
+  import { mapGetters, mapActions } from 'vuex'
 
   export default {
     created () {
@@ -86,6 +86,21 @@
         'initApplicationData',
         'handleClick'
       ]),
+      datetime (timestamp) {  // 搜索
+        var today = new Date().getTime()
+        if (today >= timestamp) {
+          return '请续费后使用...'
+        } else {
+          var date = new Date(timestamp)
+          var Y = date.getFullYear() + '-'
+          var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-'
+          var D = (date.getDate() < 10 ? '0' + date.getDate() : date.getDate()) + ' '
+          var h = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':'
+          var m = (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) + ':'
+          var s = (date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds())
+          return Y + M + D + h + m + s
+        }
+      },
       refreshDataList (ev) {  // 搜索
         this.initApplicationData(this.appListData)
       },

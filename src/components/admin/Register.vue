@@ -11,7 +11,7 @@
     </div>
     <div class="layout-container">
       <div class="layout-container-slogan">欢迎注册 百鸽用户</div>
-      <el-form :model="registerForm" ref="registerForm" :rules="registerRules" label-width="100px">
+      <el-form :model="registerForm" ref="registerForm" :rules="registerRules">
         <el-form-item prop="username">
           <el-input type="text" placeholder="请输入用户名" v-model="registerForm.username">
             <template slot="prepend">用 &nbsp;&nbsp;&nbsp;户&nbsp;&nbsp; 名</template>

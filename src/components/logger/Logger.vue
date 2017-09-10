@@ -2,7 +2,7 @@
   <div class="index">
     <div class="comtent-list">
       <el-table :data="loggerData.list" style="width: 100%" max-height="810">
-        <el-table-column label="日期" width="213">
+        <el-table-column label="操作时间" width="213">
           <template scope="scope">
             <span style="margin-left: 10px">{{ scope.row.createTime }}</span>
           </template>
@@ -17,6 +17,10 @@
             <span style="margin-left: 10px">{{ scope.row.remark }}</span>
           </template>
         </el-table-column>
+        <el-table-column label="IP地址" width="214">
+        </el-table-column>
+        <el-table-column label="操作者信息" width="214">
+        </el-table-column>
       </el-table>
       <el-pagination class="comtent-paging" @size-change="handleSizeChange" @current-change="handleCurrentChange"
                      :current-page.sync="loggerListData.current" :page-sizes="[50, 100, 200]"
@@ -28,7 +32,8 @@
 </template>
 <script>
   //  import axios from 'axios'
-  import {mapGetters, mapActions} from 'vuex'
+  import { mapGetters, mapActions } from 'vuex'
+
   export default {
     created () {
       this.publicParameters.returnButtom = false

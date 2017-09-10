@@ -21,7 +21,7 @@
 </template>
 <script>
   import axios from 'axios'
-  import {mapGetters, mapActions} from 'vuex'
+  import { mapGetters, mapActions } from 'vuex'
 
   export default {
     created () {
@@ -65,6 +65,7 @@
           console.log(response.data)
           if (response.data.code === '200') {
             localStorage.setItem('positionName', '(' + data.userPositionName + ')')
+            current.publicParameters.name = localStorage.getItem('username') + localStorage.getItem('positionName')
             localStorage.setItem('userPositionId', data.userPositionId)
             localStorage.setItem('accessToken', response.data.data.accessToken)
             window.location.href = '#/application/center'

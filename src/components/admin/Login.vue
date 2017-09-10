@@ -102,6 +102,7 @@
               console.log(response.data)
               if (response.data.code === '200') {
                 localStorage.setItem('username', current.loginDataForm.username)
+                localStorage.setItem('head', response.data.data.head)
                 localStorage.setItem('accessTicket', response.data.data.accessTicket)
                 current.publicParameters.identityListDialog = true
               } else {

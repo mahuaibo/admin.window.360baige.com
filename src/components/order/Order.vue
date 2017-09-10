@@ -50,7 +50,9 @@
               </div>
               <div class="data-item content-list-data-tOperation">
                 <div v-if="val.status===0">
-                  <button class="immediately-pay" @click="immediatelyPay(val)">立即支付</button>
+                  <button v-if="shixiao(val.createTime)" class="immediately-pay" @click="closeOrder(val)">订单超时
+                  </button>
+                  <button v-else class="immediately-pay" @click="immediatelyPay(val)">立即支付</button>
                   <el-button type="text" class="close-order" @click="closeOrder(val)">关闭订单</el-button>
                 </div>
                 <div v-else-if="val.status===4" style="width:97px;text-align:center;">
@@ -103,6 +105,15 @@
         'handleClick',
         'initOrderListData'
       ]),
+      shixiao (time) {
+        var toDay = new Date()
+        var toTime = toDay.getTime()
+        if (toTime - time > 7200000) {
+          return true
+        } else {
+          return false
+        }
+      },
       money (amount) {
         if (amount === 0) {
           return '0.00'
@@ -138,12 +149,12 @@
       // 立即支付
       immediatelyPay (val) {
         this.menuItemStyle()
-        this.handleClick('/application/appTplDetail?i=' + val.productId + '&&oId=' + val.id)
+        this.handleClick('/application/appTplDetail?i=' + val.productId + '&oId=' + val.id)
       },
       // 订单详情
       orderDetail (val) {
         this.menuItemStyle()
-        this.handleClick('/application/appTplDetail?i=' + val.productId + '&&oId=' + val.id)
+        this.handleClick('/application/appTplDetail?i=' + val.productId + '&oId=' + val.id)
       },
       menuItemStyle () {
         document.getElementById('center').style.borderRight = '8px solid #69df8a'
