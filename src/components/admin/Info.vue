@@ -13,7 +13,7 @@
       font-size: 12px;
       background-color: #cadced;
       width: 84px;
-      margin-top: 12px;
+      margin-top: 14px;
       border-top-right-radius: 20px;
       border-bottom-right-radius: 20px;
     }
@@ -39,7 +39,7 @@
         <el-upload :action="publicParameters.domain + '/user/uploadHead?accessToken=' + accessToken + '&&id=' + myData.id"
                    type="drag" :thumbnail-mode="true" name="uploadFile" :on-success="uploadSuccess"
                    style="height: 48px;">
-          <img :src="myData.head" height="48" width="48" style="float: left;border-radius: 2px;"/>
+          <img :src="myData.head" height="48" width="48" style="float: left;border-radius: 5px;border:1px solid #cadced;background: #cadced;"/>
           <div class="el-dragger__text head-upload">
             <span class="buttom">点击上传</span>
           </div>
@@ -75,7 +75,7 @@
     data () {
       var phone = (rule, value, callback) => {
         if (!/^1[34578]\d{9}$/.test(value)) {
-          callback(new Error('请输入手机号码'))
+          callback(new Error('手机号码格式错误'))
         }
         callback()
       }

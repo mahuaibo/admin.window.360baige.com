@@ -59,16 +59,16 @@
       </div>
     </div>
     <div class="dialog">
-      <el-dialog title="选择身份" :visible.sync="publicParameters.identityListDialog" style="width: 992px;margin: 0 auto">
+      <el-dialog title="选择身份" :visible.sync="publicParameters.identityListDialog" :close-on-click-modal="false">
         <admin-user-position></admin-user-position>
       </el-dialog>
-      <el-dialog title="企业信息" :visible.sync="publicParameters.companyInfoDialog">
+      <el-dialog title="企业信息" :visible.sync="publicParameters.companyInfoDialog" :close-on-click-modal="false">
         <company-info></company-info>
       </el-dialog>
-      <el-dialog title="用户信息" :visible.sync="publicParameters.adminInfoDialog">
+      <el-dialog title="用户信息" :visible.sync="publicParameters.adminInfoDialog" :close-on-click-modal="false">
         <admin-info></admin-info>
       </el-dialog>
-      <el-dialog title="密码修改" :visible.sync="publicParameters.modifyPwdDialog">
+      <el-dialog title="密码修改" :visible.sync="publicParameters.modifyPwdDialog" :close-on-click-modal="false">
         <modify-pwd></modify-pwd>
       </el-dialog>
     </div>

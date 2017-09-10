@@ -51,7 +51,7 @@
                      :total="detailListData.total">
       </el-pagination>
     </div>
-    <el-dialog title="详情" :visible.sync="transactionDetailModal" size="tiny" :before-close="cancel">
+    <el-dialog title="详情" :visible.sync="transactionDetailModal" size="tiny" :before-close="cancel" :close-on-click-modal="false">
       <el-form ref="form" :model="transactionForm" label-width="100px" style="text-align:left;padding-right:10px;">
         <el-form-item label="交易日期：">{{ transactionForm.createTime }}</el-form-item>
         <el-form-item label="交易金额：">
