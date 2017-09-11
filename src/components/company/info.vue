@@ -47,7 +47,7 @@
           </el-upload>
         </el-form-item>
         <el-form-item label="企业名称" prop="name">
-          <el-input v-model="companyData.name" placeholder="请输入企业名称..."></el-input>
+          <el-input v-model="companyData.name" placeholder="请输入企业名称..." :disabled="true"></el-input>
         </el-form-item>
         <el-form-item label="企业简称" prop="short_name">
           <el-input v-model="companyData.short_name" placeholder="请输入简称..."></el-input>

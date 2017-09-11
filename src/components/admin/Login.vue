@@ -10,9 +10,6 @@
       </div>
     </div>
     <div class="layout-container">
-      <div style="text-align: left;position: absolute;bottom: 38px;z-index: -1;">
-        <img class="logo" src="../../assets/bg.png"/>
-      </div>
       <div class="login-box">
         <div class="layout-container-left">
           <el-form :model="loginDataForm" :rules="loginDataRules" ref="loginDataForm">
@@ -196,8 +193,10 @@
     }
     .layout-container {
       min-height: 656px;
+      background: url("../../assets/bg.jpg") no-repeat;
+      background-position:center;
+      height: calc(100vh - 124px);
       width: 100%;
-      overflow: hidden;
     }
     .login-box {
       width: 516px;
@@ -247,8 +246,6 @@
     .layout-container-tail {
       background: $color;
       height: 46px;
-      position: absolute;
-      bottom: 0px;
       width: 100%;
       .layout-container-tail-text {
         color: #ffffff;
