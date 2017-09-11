@@ -13,7 +13,7 @@
         <label class="identityTab-identityImg">
           <img class="logo" :src="val.companyLogo" height="52" width="52"/>
         </label>
-        <div class="identityTab-companyName">{{ val.companyName }}</div>
+        <div class="identityTab-companyName" style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">{{ val.companyName }}</div>
         <div class="identityTab-userPositionName">{{ val.userPositionName }}</div>
       </div>
     </div>

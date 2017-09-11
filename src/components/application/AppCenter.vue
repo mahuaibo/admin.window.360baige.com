@@ -173,9 +173,6 @@
   .appCenter-list {
     padding-left: 20px;
     padding-right: 20px;
-    /*text-align: left;*/
-    /*min-height: calc(100vh - 180px);*/
-    /*overflow: scroll;*/
   }
 
   .cappCenter-paging {

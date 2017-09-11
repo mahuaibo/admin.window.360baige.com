@@ -229,7 +229,7 @@
             if (response.data.code === '200') {
               current.payDialog = true
               current.codeUrl = response.data.data.codeUrl
-              current.payImage = 'http://192.168.0.125:30000/cloud/window/v1/order/qr?size=356&url=' + current.codeUrl
+              current.payImage = current.publicParameters.domain + '/order/qr?size=356&url=' + current.codeUrl
               current.payStatusTimer(response.data.data.id)
               current.orderId = response.data.data.id
             }
@@ -240,12 +240,12 @@
           if (current.codeUrl === '') {
             console.log('1，' + current.codeUrl)
             current.payDialog = true
-            current.payImage = 'http://192.168.0.125:30000/cloud/window/v1/order/qr?size=356&url=' + current.codeUrl
+            current.payImage = current.publicParameters.domain + '/order/qr?size=356&url=' + current.codeUrl
             current.payStatusTimer(current.orderId)
           } else {
             console.log('2，' + current.codeUrl)
             current.payDialog = true
-            current.payImage = 'http://192.168.0.125:30000/cloud/window/v1/order/qr?size=356&url=' + current.codeUrl
+            current.payImage = current.publicParameters.domain + '/order/qr?size=356&url=' + current.codeUrl
             current.payStatusTimer(current.orderId)
           }
         }

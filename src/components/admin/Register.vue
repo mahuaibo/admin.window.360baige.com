@@ -40,7 +40,8 @@
         <el-form-item prop="captcha">
           <el-input placeholder="请输入短信验证码" v-model="registerForm.captcha" class="registerForm-input">
             <template slot="prepend">短信验证码</template>
-            <el-button slot="append" calss="phone-captcha" @click="getVerificationCode('registerForm')">获取验证码</el-button>
+            <el-button slot="append" calss="phone-captcha" @click="getVerificationCode('registerForm')">获取验证码
+            </el-button>
           </el-input>
         </el-form-item>
         <el-form-item>
@@ -55,9 +56,10 @@
 </template>
 <script>
   import axios from 'axios'
-  import {mapGetters, mapActions} from 'vuex'
+  import { mapGetters, mapActions } from 'vuex'
   import CommonHeader from '@/components/common/Header'
   import CommonSidebar from '@/components/common/Sidebar'
+
   export default {
     computed: {
       ...mapGetters([
@@ -257,13 +259,13 @@
     }
     .layout-container {
       width: 388px;
-      position: relative;
-      top: 70px;
+      min-height: 656px;
+      height: calc(100vh - 124px);
       margin: 0 auto;
       .layout-container-slogan {
         font-size: 30px;
         color: #373d41;
-        margin-bottom: 40px;
+        padding: 40px 0;
       }
       .register-button {
         width: 388px;
@@ -275,8 +277,6 @@
     .layout-container-tail {
       background: $color;
       height: 46px;
-      position: absolute;
-      bottom: 0;
       width: 100%;
       .layout-container-tail-text {
         color: #ffffff;

@@ -134,37 +134,39 @@
 
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
   .el-dialog {
-    width: 456px;
+    width: 456px !important;
     .el-dialog__body {
-      padding: 12px 8px 6px 0px;
+      padding: 12px 8px 6px 0px !important;
     }
     .el-form-item {
-      margin: 14px 14px 20px 14px;
+      margin: 14px 14px 20px 14px !important;
     }
   }
 
   .el-dialog__header {
-    background-color: #31a7ff;
-    padding: 0px;
-    margin: 0px;
-    height: 55px;
-    line-height: 60px;
-    border-radius: 2px;
-    text-align: center;
+    background-color: #31a7ff !important;
+    padding: 0px !important;
+    margin: 0px !important;
+    height: 55px !important;
+    line-height: 60px !important;
+    border-radius: 2px !important;
+    text-align: center !important;
     .el-dialog__title {
-      color: #ffffff;
-      font-size: 18px;
-      font-weight: normal;
+      color: #ffffff !important;
+      font-size: 18px !important;
+      font-weight: normal !important;
     }
     .el-dialog__headerbtn {
-      padding-top: 20px;
-      padding-right: 20px;
+      padding-top: 20px !important;
+      padding-right: 20px !important;
     }
   }
 
+</style>
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style lang="scss" scoped>
   $color: #002f5c !default;
   .layout {
     height: 100vh;
@@ -194,7 +196,7 @@
     .layout-container {
       min-height: 656px;
       background: url("../../assets/bg.jpg") no-repeat;
-      background-position:center;
+      background-position: center;
       height: calc(100vh - 124px);
       width: 100%;
     }

@@ -1,33 +1,33 @@
 <style lang="scss">
   .el-upload-list__item {
-    display: none;
+    display: none !important;
   }
 
   .modify-button {
-    color: #ffffff;
-    width: 100%;
-    float: right;
-    background-color: #31a7ff;
-    border: 0px solid #ffffff;
+    color: #ffffff !important;
+    width: 100% !important;
+    float: right !important;
+    background-color: #31a7ff !important;
+    border: 0px solid #ffffff !important;
   }
 
   .modify-button:hover {
-    color: #ffffff;
+    color: #ffffff !important;
   }
 
   .logo-upload {
-    float: right;
+    float: right !important;
     span {
-      position: absolute;
-      color: #728ca5;
-      height: 22px;
-      line-height: 22px;
-      font-size: 12px;
-      background-color: #cadced;
-      width: 84px;
-      margin-top: 12px;
-      border-top-right-radius: 20px;
-      border-bottom-right-radius: 20px;
+      position: absolute !important;
+      color: #728ca5 !important;
+      height: 22px !important;
+      line-height: 22px !important;
+      font-size: 12px !important;
+      background-color: #cadced !important;
+      width: 84px !important;
+      margin-top: 12px !important;
+      border-top-right-radius: 20px !important;
+      border-bottom-right-radius: 20px !important;
     }
   }
 </style>
@@ -40,7 +40,8 @@
           <el-upload style="height: 48px;" type="drag" :thumbnail-mode="true"
                      name="uploadFile" :on-success="uploadSuccess"
                      :action="publicParameters.domain + '/company/uploadLogo?accessToken=' + accessToken + '&&id=' + companyData.id">
-            <img :src="companyData.logo" height="48" width="48" style="float: left;border-radius: 5px;border:1px solid #cadced;background: #cadced;"/>
+            <img :src="companyData.logo" height="48" width="48"
+                 style="float: left;border-radius: 5px;border:1px solid #cadced;background: #cadced;"/>
             <div class="el-dragger__text logo-upload">
               <span class="buttom">点击上传</span>
             </div>
@@ -72,7 +73,8 @@
 </template>
 <script>
   import axios from 'axios'
-  import {mapGetters, mapActions} from 'vuex'
+  import { mapGetters, mapActions } from 'vuex'
+
   export default {
     created () {
       this.initCompanyInfoData(this.companyData)
@@ -144,7 +146,7 @@
         console.log(response)
         this.companyData.logo = response.head
       },
-      messageRemind  (type, info) { // type success成功   warning警告   error失败
+      messageRemind (type, info) { // type success成功   warning警告   error失败
         this.$message({message: info, type: type})
         return false
       }
