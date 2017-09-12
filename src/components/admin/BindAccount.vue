@@ -12,9 +12,6 @@
     <div class="bind_tips_wrap" style="background-color: #f9f9f9;">
       <div class="bind_tips" style="padding:45px 32%;line-height: 24px;color:#808080;font-size: 14px;">
         为了给您更好的操作体验，请选择注册账号绑定或绑定已有账号。以后使用用户名或微信均可登录。
-
-
-
       </div>
     </div>
     <div class="layout-container">
@@ -51,9 +48,6 @@
             <el-input placeholder="请输入短信验证码" v-model="registerForm.captcha" class="registerForm-input">
               <template slot="prepend">短信验证码</template>
               <el-button slot="append" calss="phone-captcha" @click="getVerificationCode('registerForm')">获取验证码
-
-
-
               </el-button>
             </el-input>
           </el-form-item>
@@ -91,10 +85,11 @@
 </template>
 <script>
   import axios from 'axios'
-  import {mapGetters, mapActions} from 'vuex'
+  import { mapGetters, mapActions } from 'vuex'
   import CommonHeader from '@/components/common/Header'
   import CommonSidebar from '@/components/common/Sidebar'
   import AdminUserPosition from '@/components/admin/UserPosition'
+
   export default {
     components: {CommonHeader, CommonSidebar, AdminUserPosition},
     created () {

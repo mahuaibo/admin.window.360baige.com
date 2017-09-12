@@ -53,7 +53,7 @@
           this.$refs.accountList.style.backgroundColor = this.$refs.orderList.style.backgroundColor = this.$refs.center.style.backgroundColor = ''
           this.$refs.accountList.style.borderRight = this.$refs.orderList.style.borderRight = this.$refs.center.style.borderRight = ''
         }
-        setStyleObject.style.backgroundColor = '#4b5880'
+//        setStyleObject.style.backgroundColor = '#4b5880'
         setStyleObject.style.borderRight = '8px solid #69df8a'
       }
     }

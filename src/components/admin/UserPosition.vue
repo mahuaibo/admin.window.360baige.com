@@ -13,7 +13,7 @@
         <label class="identityTab-identityImg">
           <img class="logo" :src="val.companyLogo" height="52" width="52"/>
         </label>
-        <div class="identityTab-companyName" style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">{{ val.companyName }}</div>
+        <div class="identityTab-companyName">{{ val.companyName }}</div>
         <div class="identityTab-userPositionName">{{ val.userPositionName }}</div>
       </div>
     </div>
@@ -107,6 +107,9 @@
       margin-right: 17px;
     }
     .identityTab-companyName {
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+      white-space: nowrap !important;
       width: 118px;
       float: right;
       margin-top: 18px;
