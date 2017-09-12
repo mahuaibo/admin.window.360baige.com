@@ -1,6 +1,6 @@
 <template>
-  <div class="index" style="padding-right:20px;min-width: 1120px;">
-    <div class="content-head">
+  <div class="order">
+    <div class="order-tab">
       <!--状态 -1销毁 0待付款 1待发货 2待收货 3待评价 4完成 5退货/售后 -->
       <el-tabs v-model="orderListData.status" @tab-click="filterList">
         <el-tab-pane label="全部" name="-100"></el-tab-pane>
@@ -12,62 +12,69 @@
         <el-tab-pane label="退货/售后" name="5"></el-tab-pane>
       </el-tabs>
     </div>
-    <div class="content-list">
-      <div class="content-list-headings">
-        <div class="headings-item" style="padding-left:80px;">商品</div>
-        <div class="headings-item" style="padding-left:230px;">单价 (￥)</div>
-        <div class="headings-item" style="padding-left:85px;">数量</div>
-        <!--<div class="headings-item" style="padding-left:80px;">商品操作</div>-->
-        <div class="headings-item" style="padding-left:85px;">实付款 (￥)</div>
-        <div class="headings-item" style="padding-left:85px;">交易状态</div>
-        <div class="headings-item" style="padding-left:120px;">交易操作</div>
+    <div class="order-main">
+      <div class="order-main-title">
+        <div class="order-main-title-item">商品</div>
+        <div class="order-main-title-item">单价 (￥)</div>
+        <div class="order-main-title-item">数量</div>
+        <div class="order-main-title-item">实付款 (￥)</div>
+        <div class="order-main-title-item">交易状态</div>
+        <div class="order-main-title-item">交易操作</div>
       </div>
-      <div class="content-list-data-div">
-        <div class="content-list-data">
-          <div class="content-list-data-item content-none" v-if="orderListData.total===0">
-            暂无数据
-          </div>
-          <div v-else class="content-list-data-item" v-for="val in orderData.list">
-            <div class="content-list-data-orderCode">
-              <label style="margin-left: 20px;"> 订单号：{{ val.code }}</label>
+      <div class="order-main-content">
+        <div class="order-main-content-empty" v-if="orderListData.total===0">
+          暂无数据
+        </div>
+        <div class="order-main-content-list" v-else>
+          <div class="order-main-content-list-item" v-for="val in orderData.list">
+            <div class="order-main-content-list-item-title">
+              订单号：{{ val.code }}
             </div>
-            <div class="content-list-datas" style="width: 1078px;height: 109px;">
-              <div class="data-item content-list-data-merchandise">
-                <img :src="val.image" style="height:70px;width:70px;padding-left: 20px;"/>
-                <div class="commodity-name">{{ val.brief }}</div>
-                <div class="classify" v-if="val.productType==0">分类：应用</div>
+            <div class="order-main-content-list-item-table">
+              <div class="order-main-content-list-item-table-item">
+                <div class="photo">
+                  <img width="100%" height="100%" :src="val.image"/>
+                </div>
+                <div class="title">{{ val.brief }}</div>
+                <div class="classify" v-if="val.productType==0">分类: 应用</div>
               </div>
-              <div class="data-item content-list-data-price">{{ money(val.price) }} </div>
-              <div class="data-item content-list-data-number">{{ val.num }}</div>
-              <!--<div class="data-item content-list-data-mOperation">申请售后</div>-->
-              <div class="data-item content-list-data-realPay">{{ money(val.totalPrice) }} </div>
-              <div class="data-item content-list-data-status">
-                <div v-if="val.status===0">
+              <div class="order-main-content-list-item-table-item">
+                <div class="text">{{ money(val.price) }}</div>
+              </div>
+              <div class="order-main-content-list-item-table-item">
+                <div class="text">{{ money(val.num) }}</div>
+              </div>
+              <div class="order-main-content-list-item-table-item">
+                <div class="text">{{ money(val.totalPrice) }}</div>
+              </div>
+              <div class="order-main-content-list-item-table-item">
+                <div v-if="val.status===0" class="text">
                   <label style="color: #505050;">待付款</label>
                 </div>
-                <div v-else-if="val.status===4">
+                <div v-else-if="val.status===4" class="text">
                   <label style="color: #505050;">交易完成</label>
                 </div>
               </div>
-              <div class="data-item content-list-data-tOperation">
-                <div v-if="val.status===0">
-                  <button v-if="shixiao(val.createTime)" class="immediately-pay" @click="closeOrder(val)">订单超时
+              <div class="order-main-content-list-item-table-item">
+                <div v-if="val.status===0" class="text2">
+                  <button v-if="shixiao(val.createTime)" class="immediately-pay" @click="closeOrder(val)">
+                    订单超时
                   </button>
                   <button v-else class="immediately-pay" @click="immediatelyPay(val)">立即支付</button>
-                  <el-button type="text" class="close-order" @click="closeOrder(val)">关闭订单</el-button>
+                  <div>
+                    <el-button type="text" class="close-order" @click="closeOrder(val)">关闭订单</el-button>
+                  </div>
                 </div>
-                <div v-else-if="val.status===4" style="width:97px;text-align:center;">
+                <div v-else-if="val.status===4" class="text">
                   <el-button type="text" class="order-desc" @click="orderDetail(val)">订单详情</el-button>
                 </div>
-                <!--<button class="appraise-button">评价</button>-->
-                <!--<el-button type="text" class="again-buy">再次购买</el-button>-->
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="comtent-paging">
+    <div class="order-page">
       <el-pagination @size-change="refreshDataList" @current-change="refreshDataList"
                      :current-page.sync="orderListData.current" :page-sizes="[50, 100, 200]"
                      :page-size="orderListData.pageSize" layout="total, sizes, prev, pager, next, jumper"
@@ -174,137 +181,158 @@
   }
 </script>
 <style lang="scss" scoped>
-  .content-head {
-    padding: 12px 20px 32px 20px;
-  }
-
-  .content-none {
-    width: 1078px!important;
-    height: 80px !important;
-    line-height: 80px;
-    font-size: 14px;
-    text-align: center;
-    color: #5e7382;
-  }
-
-  .content-list {
-    min-width: 1080px;
-    max-width: 1080px;
-    width: 1080px;
-    padding: 0 20px;
-    text-align: left;
-    .content-list-headings {
-      background-color: #F5F5F5;
-      border: 1px solid #E6E6E6;
-      font-size: 14px;
-      color: #505050;
-      margin-bottom: 20px;
-      width: 1080px;
-      .headings-item {
-        display: inline;
-        height: 53px;
-        line-height: 53px;
-      }
+  $min-width-order: 664px;
+  $min-width-order-list: 679px;
+  .order {
+    .order-tab {
+      min-width: $min-width-order !important;
+      padding: 12px 20px 32px 20px;
     }
-    .content-list-data-div {
-      width: 1080px !important;
-      overflow: hidden;
-      .content-list-data {
-        width: 1095px !important;
-        overflow-y: visible;
-        overflow-x: hidden;
-        height: calc(100vh - 336px);
-        .content-list-data-item {
-          width: 1078px!important;
-          height: 164px;
-          border: 1px solid #dae8f6;
-          margin-bottom: 20px;
-          .content-list-data-orderCode {
-            height: 55px;
-            line-height: 55px;
-            background-color: #eef6fe;
-            font-size: 14px;
-            color: #505050;
-          }
-          .content-list-datas {
-            .data-item {
-              height: 90px;
-              float: left;
-              margin-top: 18px;
+    .order-main {
+      min-width: $min-width-order !important;
+      padding: 0 20px;
+      text-align: left;
+      .order-main-title {
+        background: #F5F5F5;
+        border: 1px solid #E6E6E6;
+        font-size: 14px;
+        color: #505050;
+        margin-bottom: 20px;
+        min-width: $min-width-order !important;
+        width: calc(100vw - 360px);
+        .order-main-title-item {
+          display: inline-block;
+          min-width: 100px;
+          width: 16%;
+          height: 53px;
+          line-height: 53px;
+          text-align: center !important;
+        }
+      }
+      .order-main-content {
+        min-width: $min-width-order !important;
+        width: calc(100vw - 360px) !important;
+        overflow: hidden;
+        .order-main-content-empty {
+          height: 80px !important;
+          line-height: 80px;
+          font-size: 14px;
+          text-align: center;
+          color: #5e7382;
+        }
+        .order-main-content-list {
+          min-width: $min-width-order-list !important;
+          width: calc(100vw - 345px) !important;
+          overflow-y: visible;
+          overflow-x: hidden;
+          height: calc(100vh - 336px) !important;
+          .order-main-content-list-item {
+            min-width: $min-width-order !important;
+            width: calc(100vw - 360px) !important;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            height: 164px;
+            border: 1px solid #dae8f6;
+            margin-bottom: 20px;
+            .order-main-content-list-item-title {
+              min-width: $min-width-order !important;
+              padding: 0 20px;
+              height: 55px;
+              line-height: 55px;
+              background: #eef6fe;
               font-size: 14px;
+              color: #505050;
             }
-            .content-list-data-merchandise {
-              width: 350px;
-              .commodity-name {
-                position: relative;
-                top: -74px;
-                left: 108px;
-                color: #505050;
-              }
-              .classify {
-                position: relative;
-                left: 108px;
-                top: -62px;
-                color: #808080;
-              }
-            }
-            .content-list-data-price {
-              width: 140px;
-            }
-            .content-list-data-number {
-              width: 120px;
-            }
-            .content-list-data-mOperation {
-              width: 130px;
-            }
-            .content-list-data-realPay {
-              width: 150px;
-            }
-            .content-list-data-status {
-              width: 180px;
-              text-align: left;
-            }
-            .content-list-data-tOperation {
-              width: 100px;
-              .immediately-pay {
-                font-weight: bold;
-                width: 97px;
-                height: 30px;
-                color: #ffffff;
-                background-color: #ff5f27;
-                border: 1px solid #ff5f27;
-                outline: none;
-                border-radius: 3px;
-              }
-              .immediately-pay:hover {
-                background-color: #ff6c39;
-              }
-              .close-order {
-                width: 97px;
-                margin-top: 14px;
-                color: #505050;
-                padding: 0px;
-              }
-              .close-order:hover {
-                color: #20a0ff;
-              }
-              .order-desc {
-                padding: 0px;
-                color: #505050;
-              }
-              .order-desc:hover {
-                color: #20a0ff;
+            .order-main-content-list-item-table {
+              min-width: $min-width-order !important;
+              height: 110px;
+              .order-main-content-list-item-table-item {
+                display: inline-table;
+                min-width: 100px;
+                width: 16%;
+                height: 110px;
+                text-align: center;
+                float: left;
+                font-size: 14px;
+                .text {
+                  line-height: 110px;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  white-space: nowrap;
+                }
+                .text2 {
+                  margin-top: 20px;
+                }
+                .photo {
+                  position: relative;
+                  top: 20px;
+                  left: 20px;
+                  width: 70px;
+                  height: 70px;
+                }
+                .title {
+                  width: 160px;
+                  position: relative;
+                  top: -40px;
+                  left: 100px;
+                  color: #505050;
+                  text-align: left;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  white-space: nowrap;
+                }
+                .classify {
+                  width: 160px;
+                  position: relative;
+                  top: -30px;
+                  left: 100px;
+                  color: #505050;
+                  text-align: left;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  white-space: nowrap;
+                }
+                .immediately-pay {
+                  font-weight: bold;
+                  width: 97px;
+                  height: 30px;
+                  color: #ffffff;
+                  background-color: #ff5f27;
+                  border: 1px solid #ff5f27;
+                  outline: none;
+                  border-radius: 3px;
+                }
+                .immediately-pay:hover {
+                  background-color: #ff6c39;
+                }
+                .close-order {
+                  width: 97px;
+                  margin-top: 10px;
+                  color: #505050;
+                  padding: 0px;
+                }
+                .close-order:hover {
+                  color: #20a0ff;
+                }
+                .order-desc {
+                  padding: 0px;
+                  color: #505050;
+                }
+                .order-desc:hover {
+                  color: #20a0ff;
+                }
               }
             }
           }
         }
       }
     }
-  }
 
-  .comtent-paging {
-    float: right;
-    margin-right: 20px;
-    padding: 22px 0px 0px 0px;
+    .order-page {
+      min-width: $min-width-order !important;
+      text-align: right;
+      padding: 0 20px;
+    }
   }
 </style>

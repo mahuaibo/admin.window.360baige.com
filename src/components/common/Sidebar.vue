@@ -1,24 +1,23 @@
 <template>
   <div class="common-sidebar">
     <div style="color:#ffffff;font-size: 16px;">
-      <div class="menu-item" id="center" @click="handleClick('/application/center'),setStyle('center')"
-      ="center">
-      <img src="../../assets/center.png" height="20" width="20"/>
-      <label>应用中心</label>
+      <div class="menu-item" id="center" @click="handleClick('/application/center'),setStyle('center')" ref="center">
+        <img src="../../assets/center.png" height="20" width="20"/>
+        <label>应用中心</label>
+      </div>
+      <div class="menu-item" @click="handleClick('/account/list'),setStyle('accountList')" ref="accountList">
+        <img src="../../assets/account.png" height="20" width="20"/>
+        <label>账户信息</label>
+      </div>
+      <div class="menu-item" id="orderList" @click="handleClick('/order/list'),setStyle('orderList')" ref="orderList">
+        <img src="../../assets/order.png" height="20" width="20"/>
+        <label>订单信息</label>
+      </div>
+      <div class="menu-item" @click="handleClick('/logger/list'),setStyle('loggerList')" ref="loggerList">
+        <img src="../../assets/operate.png" height="20" width="20"/>
+        <label>操作日志</label>
+      </div>
     </div>
-    <div class="menu-item" @click="handleClick('/account/list'),setStyle('accountList')" ref="accountList">
-      <img src="../../assets/account.png" height="20" width="20"/>
-      <label>账户信息</label>
-    </div>
-    <div class="menu-item" id="orderList" @click="handleClick('/order/list'),setStyle('orderList')" ref="orderList">
-      <img src="../../assets/order.png" height="20" width="20"/>
-      <label>订单信息</label>
-    </div>
-    <div class="menu-item" @click="handleClick('/logger/list'),setStyle('loggerList')" ref="loggerList">
-      <img src="../../assets/operate.png" height="20" width="20"/>
-      <label>操作日志</label>
-    </div>
-  </div>
   </div>
 </template>
 <script>
@@ -67,7 +66,6 @@
 <style lang="scss" scoped>
   .menu-item {
     height: 70px;
-    width: 238px;
     text-align: left;
     padding-left: 34px;
     line-height: 70px;

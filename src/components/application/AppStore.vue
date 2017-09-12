@@ -25,8 +25,6 @@
               <div
                 style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;font-size: 16px;color: #505050;margin-top: 2px;">
                 {{ val.name }}
-
-
               </div>
               <div
                 style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;font-size: 14px;color: #808080;margin-top: 2px;">
