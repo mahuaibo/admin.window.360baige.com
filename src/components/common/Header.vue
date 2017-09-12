@@ -81,7 +81,7 @@
   import CompanyInfo from '@/components/company/Info'
   import AdminInfo from '@/components/admin/Info'
   import ModifyPwd from '@/components/admin/ModifyPwd'
-  import { mapGetters, mapActions } from 'vuex'
+  import {mapGetters, mapActions} from 'vuex'
 
   export default {
     components: {AdminUserPosition, CompanyInfo, AdminInfo, ModifyPwd},
@@ -188,6 +188,9 @@
               localStorage.removeItem('username')
               localStorage.removeItem('userPositionId')
               localStorage.removeItem('accessToken')
+              localStorage.removeItem('head')
+              localStorage.removeItem('positionName')
+              localStorage.removeItem('accessTicket')
               window.location.href = '#/admin/login'
             } else {
               window.location.href = '#/'
