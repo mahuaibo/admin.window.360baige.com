@@ -13,7 +13,7 @@
         <label class="identityTab-identityImg">
           <img class="logo" :src="val.companyLogo" height="52" width="52"/>
         </label>
-        <div class="identityTab-companyName">{{ val.companyName }}</div>
+        <div class="identityTab-companyName" style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">{{ val.companyName }}</div>
         <div class="identityTab-userPositionName">{{ val.userPositionName }}</div>
       </div>
     </div>
@@ -21,7 +21,8 @@
 </template>
 <script>
   import axios from 'axios'
-  import {mapGetters, mapActions} from 'vuex'
+  import { mapGetters, mapActions } from 'vuex'
+
   export default {
     created () {
       this.getUserPositionList()
@@ -64,6 +65,7 @@
           console.log(response.data)
           if (response.data.code === '200') {
             localStorage.setItem('positionName', '(' + data.userPositionName + ')')
+            current.publicParameters.name = localStorage.getItem('username') + localStorage.getItem('positionName')
             localStorage.setItem('userPositionId', data.userPositionId)
             localStorage.setItem('accessToken', response.data.data.accessToken)
             window.location.href = '#/application/center'

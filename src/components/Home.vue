@@ -1,8 +1,3 @@
-<style>
-  .el-button {
-    font-size: 14px;
-  }
-</style>
 <template>
   <div class="layout">
     <div class="layout-sidebar">
@@ -27,7 +22,7 @@
 <script>
   import CommonHeader from '@/components/common/Header'
   import CommonSidebar from '@/components/common/Sidebar'
-  import {mapActions} from 'vuex'
+  import { mapActions } from 'vuex'
 
   export default {
     components: {CommonHeader, CommonSidebar},
@@ -46,6 +41,42 @@
   }
 
 </script>
+
+
+<style lang="scss">
+  .el-dialog {
+    width: 456px !important;
+    .el-dialog__body {
+      padding: 12px 8px 6px 0px !important;
+    }
+    .el-form-item {
+      margin: 14px 14px 20px 14px !important;
+    }
+  }
+
+  .el-dialog__header {
+    background-color: #31a7ff !important;
+    padding: 0px !important;
+    margin: 0px !important;
+    height: 55px !important;
+    line-height: 60px !important;
+    border-radius: 2px !important;
+    text-align: center !important;
+    .el-dialog__title {
+      color: #ffffff !important;
+      font-size: 18px !important;
+      font-weight: normal !important;
+    }
+    .el-dialog__headerbtn {
+      padding-top: 20px !important;
+      padding-right: 20px !important;
+    }
+  }
+
+  .el-button {
+    font-size: 14px !important;
+  }
+</style>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>

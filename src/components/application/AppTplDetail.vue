@@ -17,7 +17,11 @@
           <label>费用说明</label>
           <label style="font-size: 12px;font-weight:normal;">（服务截止: {{ appTplData.endTime }}）</label>
         </div>
-        <div style="padding-top: 6px;padding-bottom:24px;">{{ appTplData.priceDesc }}</div>
+        <div style="padding-top: 6px;padding-bottom:24px;">该应用功能费用为<span
+          style="color: #ff5f27;font-weight: bold;">￥{{ money(appTplData.price)
+          }}/{{ appTplData.payCycle }}</span>，您可根据需求选择订购。
+        </div>
+        <!--<div style="padding-top: 6px;padding-bottom:24px;">{{ appTplData.priceDesc }}</div>-->
       </div>
     </div>
     <div class="tplDetail-middle">
@@ -80,7 +84,7 @@
 </template>
 <script>
   import axios from 'axios'
-  import {mapGetters, mapActions} from 'vuex'
+  import { mapGetters, mapActions } from 'vuex'
 
   export default {
     created () {
@@ -98,6 +102,8 @@
     },
     data () {
       return {
+        orderId: 0,
+        codeUrl: '',
         timing: null,
         payDialog: false,
         payMode: 1,
@@ -161,6 +167,7 @@
       // 获取订单数据
       getOrderData (orderId) {
         var current = this
+        current.orderId = orderId
         axios({
           method: 'POST',
           url: this.publicParameters.domain + '/order/detail',
@@ -174,6 +181,7 @@
             current.appTplData.price = response.data.data.price
             current.number = response.data.data.num
             current.status = response.data.data.status
+            current.codeUrl = response.data.data.codeUrl
           } else {
             current.messageRemind('error', response.data.message)
           }
@@ -206,25 +214,41 @@
       immediatePayment () {
         console.log('确认订单')
         var current = this
-        axios({
-          method: 'POST',
-          url: this.publicParameters.domain + '/order/add',
-          params: {
-            accessToken: localStorage.getItem('accessToken'),
-            applicationTplId: this.appTplData.id,
-            num: this.number,
-            payType: this.payMode
-          }
-        }).then(function (response) {
-          console.log(response.data)
-          if (response.data.code === '200') {
+        if (current.orderId === 0) {
+          axios({
+            method: 'POST',
+            url: this.publicParameters.domain + '/order/add',
+            params: {
+              accessToken: localStorage.getItem('accessToken'),
+              applicationTplId: this.appTplData.id,
+              num: this.number,
+              payType: this.payMode
+            }
+          }).then(function (response) {
+            console.log(response.data)
+            if (response.data.code === '200') {
+              current.payDialog = true
+              current.codeUrl = response.data.data.codeUrl
+              current.payImage = current.publicParameters.domain + '/order/qr?size=356&url=' + current.codeUrl
+              current.payStatusTimer(response.data.data.id)
+              current.orderId = response.data.data.id
+            }
+          }).catch(function (error) {
+            console.log(error)
+          })
+        } else {
+          if (current.codeUrl === '') {
+            console.log('1，' + current.codeUrl)
             current.payDialog = true
-            current.payImage = 'http://192.168.0.125:30000/cloud/window/v1/order/qr?size=356&url=' + response.data.data.codeUrl
-            current.payStatusTimer(response.data.data.id)
+            current.payImage = current.publicParameters.domain + '/order/qr?size=356&url=' + current.codeUrl
+            current.payStatusTimer(current.orderId)
+          } else {
+            console.log('2，' + current.codeUrl)
+            current.payDialog = true
+            current.payImage = current.publicParameters.domain + '/order/qr?size=356&url=' + current.codeUrl
+            current.payStatusTimer(current.orderId)
           }
-        }).catch(function (error) {
-          console.log(error)
-        })
+        }
       },
       // 定时获取支付状态
       payStatusTimer (orderId) {
@@ -245,6 +269,8 @@
                 if (tradeState === 'SUCCESS') {
                   clearInterval(current.timing)
                   current.payDialog = false
+                  current.orderId = 0
+                  current.codeUrl = ''
                   current.handleClick('/application/center')
                 } else if (tradeState !== 'NOTPAY' && tradeState !== 'USERPAYING') {
                   console.log(tradeState)

@@ -7,14 +7,14 @@
       </el-button>
     </div>
     <div class="common-header-right">
-      <img class="roleLogo" src="../../assets/login-qq.png" height="24" width="24"/>
+      <img class="roleLogo" :src="publicParameters.head" height="24" width="24"/>
       <div class="operating-menu">
         <div class="operating-menu-content">
           <div class="operating-menu-item" @click="openBox('identity')" @mouseover="moveShow('changeIdentity')"
                @mouseout="moutShow('changeIdentity')">
             <img class="operating-menu-item-logo" src='../../assets/change_identity.png' v-if="changeIdentity==1"/>
             <img class="operating-menu-item-logo" src='../../assets/change_identity2.png' v-else/>
-            <label>{{ name }}</label>
+            <label>{{ publicParameters.name }}</label>
           </div>
           <div class="operating-menu-item" @click="openBox('company')" @mouseover="moveShow('companyInfor')"
                @mouseout="moutShow('companyInfor')">
@@ -81,10 +81,13 @@
   import CompanyInfo from '@/components/company/Info'
   import AdminInfo from '@/components/admin/Info'
   import ModifyPwd from '@/components/admin/ModifyPwd'
-  import {mapGetters, mapActions} from 'vuex'
+  import { mapGetters, mapActions } from 'vuex'
 
   export default {
     components: {AdminUserPosition, CompanyInfo, AdminInfo, ModifyPwd},
+    created () {
+      this.publicParameters.head = localStorage.getItem('head')
+    },
     computed: {
       ...mapGetters([
         'publicParameters',
@@ -105,7 +108,6 @@
         userInfor: 1,
         modifyPassword: 1,
         quit: 1,
-        name: localStorage.getItem('username') + localStorage.getItem('positionName'),
         myData: {
           id: null,
           username: null,
