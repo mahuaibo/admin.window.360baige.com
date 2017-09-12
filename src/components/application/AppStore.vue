@@ -25,10 +25,14 @@
               <div
                 style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;font-size: 16px;color: #505050;margin-top: 2px;">
                 {{ val.name }}
+
+
               </div>
               <div
                 style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;font-size: 14px;color: #808080;margin-top: 2px;">
                 {{ val.desc }}
+
+
               </div>
               <div
                 style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;font-size: 12px;color: #ff5500;margin-top: 2px;">
@@ -41,6 +45,8 @@
             </div>
             <div class="subscription" style="margin-top: 16px;">订阅<label style="color: #ff5500;"> {{ val.subscription
               }} </label>次
+
+
             </div>
           </div>
         </div>
@@ -50,7 +56,7 @@
 </template>
 <script>
   import axios from 'axios'
-  import { mapGetters, mapActions } from 'vuex'
+  import {mapGetters, mapActions} from 'vuex'
 
   export default {
     created () {
@@ -90,8 +96,8 @@
       appDetail (val) { // 订阅
         this.handleClick('/application/appTplDetail?i=' + val.id)
       },
+      // 订阅
       subscribe (data) {
-        console.log('订阅')
         var current = this
         axios({
           method: 'POST',
@@ -112,8 +118,8 @@
           console.log(error)
         })
       },
+      // 退订
       unsubscribe (data) {
-        console.log('退订')
         var current = this
         axios({
           method: 'POST',
