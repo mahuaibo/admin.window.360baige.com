@@ -21,7 +21,7 @@
 </template>
 <script>
   import axios from 'axios'
-  import { mapGetters, mapActions } from 'vuex'
+  import {mapGetters, mapActions} from 'vuex'
 
   export default {
     created () {
@@ -54,7 +54,10 @@
             userPositionId: data.userPositionId
           }
         } else {
-          params = {accessValue: localStorage.getItem('accessTicket'), userPositionId: data.userPositionId}
+          params = {
+            accessValue: localStorage.getItem('accessTicket'),
+            userPositionId: data.userPositionId
+          }
         }
         var current = this
         axios({
