@@ -21,7 +21,7 @@
             </el-button>
           </div>
           <div class="appStore-app-card-right">
-            <div @click="appSubscribe(val)">
+            <div @click="appDetail(val)">
               <div
                 style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;font-size: 16px;color: #505050;margin-top: 2px;">
                 {{ val.name }}
@@ -168,6 +168,10 @@
       margin-left: 20px;
       margin-right: 20px;
       height: calc(100vh - 150px);
+      .appStore-list-noData {
+        color: #5e7382;
+        font-size: 14px;
+      }
     }
   }
 

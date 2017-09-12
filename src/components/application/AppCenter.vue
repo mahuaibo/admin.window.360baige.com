@@ -24,7 +24,7 @@
         </el-table-column>
         <el-table-column label="服务截止时间" width="220">
           <template scope="scope">
-            <span style="color: red;">{{ datetime(scope.row.endTime) }}</span>
+            <span style="color: red;">{{ toDatetime(scope.row.endTime) }}</span>
           </template>
         </el-table-column>
         <el-table-column label="状态" width="180">
@@ -86,33 +86,22 @@
         'initApplicationData',
         'handleClick'
       ]),
-      datetime (timestamp) {  // 搜索
-        var today = new Date().getTime()
-        if (today >= timestamp) {
-          return '请续费后使用...'
-        } else {
-          var date = new Date(timestamp)
-          var Y = date.getFullYear() + '-'
-          var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-'
-          var D = (date.getDate() < 10 ? '0' + date.getDate() : date.getDate()) + ' '
-          var h = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':'
-          var m = (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) + ':'
-          var s = (date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds())
-          return Y + M + D + h + m + s
-        }
-      },
       refreshDataList (ev) {  // 搜索
         this.initApplicationData(this.appListData)
       },
       enterApp (index) { // 进入应用
-        console.log(index.site)
-        window.open(index.site + '?a=' + localStorage.getItem('accessToken'))
+        var theDay = new Date()
+        var theTime = theDay.getTime()
+        if (theTime < index.endTime) {
+          window.open(index.site + '?a=' + localStorage.getItem('accessToken'))
+        } else {
+          this.messageRemind('warning', '请续费后使用...')
+        }
       },
       unsubscribeApp (index) { // 退订
         this.submitData.url = ''
         this.submitData.appId = index.id
         console.log('待定...')
-//        this.submit()
       },
       enableApp (index) { // 启用
         this.submitData.url = this.publicParameters.domain + '/application/modifyStatus'

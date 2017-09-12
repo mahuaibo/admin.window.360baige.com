@@ -1,7 +1,7 @@
 <template>
   <div class="index" style="padding-right:20px;min-width: 1120px;">
     <div class="content-head">
-      <!--状态 -1销毁 0 待付款 1待发货 2 待收货 3待评价 4完成 5退货/售后 -->
+      <!--状态 -1销毁 0待付款 1待发货 2待收货 3待评价 4完成 5退货/售后 -->
       <el-tabs v-model="orderListData.status" @tab-click="filterList">
         <el-tab-pane label="全部" name="-100"></el-tab-pane>
         <el-tab-pane label="待付款" name="0"></el-tab-pane>
@@ -24,9 +24,10 @@
       </div>
       <div class="content-list-data-div">
         <div class="content-list-data">
-          <div v-if="orderListData.total==0" style="font-size: 14px;text-align: center;color: #5e7382;">暂无数据</div>
-          <div v-else style="height:164px;border: 1px solid #dae8f6;margin-bottom: 20px;"
-               v-for="val in orderData.list">
+          <div class="content-list-data-item content-none" v-if="orderListData.total===0">
+            暂无数据
+          </div>
+          <div v-else class="content-list-data-item" v-for="val in orderData.list">
             <div class="content-list-data-orderCode">
               <label style="margin-left: 20px;"> 订单号：{{ val.code }}</label>
             </div>
@@ -177,16 +178,28 @@
     padding: 12px 20px 32px 20px;
   }
 
+  .content-none {
+    width: 1078px!important;
+    height: 80px !important;
+    line-height: 80px;
+    font-size: 14px;
+    text-align: center;
+    color: #5e7382;
+  }
+
   .content-list {
-    min-width: 1118px;
+    min-width: 1080px;
+    max-width: 1080px;
+    width: 1080px;
+    padding: 0 20px;
     text-align: left;
     .content-list-headings {
       background-color: #F5F5F5;
       border: 1px solid #E6E6E6;
       font-size: 14px;
       color: #505050;
-      margin: 0px 0px 32px 20px;
-      width: 1078px;
+      margin-bottom: 20px;
+      width: 1080px;
       .headings-item {
         display: inline;
         height: 53px;
@@ -194,90 +207,94 @@
       }
     }
     .content-list-data-div {
-      width: 1098px;
+      width: 1080px !important;
       overflow: hidden;
       .content-list-data {
-        width: 1093px;
-        overflow-y: auto;
+        width: 1095px !important;
+        overflow-y: visible;
         overflow-x: hidden;
         height: calc(100vh - 336px);
-        padding-left: 20px;
-        padding-right: 20px;
-        .content-list-data-orderCode {
-          height: 55px;
-          line-height: 55px;
-          background-color: #eef6fe;
-          font-size: 14px;
-          color: #505050;
-        }
-        .content-list-datas {
-          .data-item {
-            height: 90px;
-            float: left;
-            margin-top: 18px;
+        .content-list-data-item {
+          width: 1078px!important;
+          height: 164px;
+          border: 1px solid #dae8f6;
+          margin-bottom: 20px;
+          .content-list-data-orderCode {
+            height: 55px;
+            line-height: 55px;
+            background-color: #eef6fe;
             font-size: 14px;
+            color: #505050;
           }
-          .content-list-data-merchandise {
-            width: 350px;
-            .commodity-name {
-              position: relative;
-              top: -74px;
-              left: 108px;
-              color: #505050;
+          .content-list-datas {
+            .data-item {
+              height: 90px;
+              float: left;
+              margin-top: 18px;
+              font-size: 14px;
             }
-            .classify {
-              position: relative;
-              left: 108px;
-              top: -62px;
-              color: #808080;
+            .content-list-data-merchandise {
+              width: 350px;
+              .commodity-name {
+                position: relative;
+                top: -74px;
+                left: 108px;
+                color: #505050;
+              }
+              .classify {
+                position: relative;
+                left: 108px;
+                top: -62px;
+                color: #808080;
+              }
             }
-          }
-          .content-list-data-price {
-            width: 140px;
-          }
-          .content-list-data-number {
-            width: 120px;
-          }
-          .content-list-data-mOperation {
-            width: 130px;
-          }
-          .content-list-data-realPay {
-            width: 150px;
-          }
-          .content-list-data-status {
-            width: 180px;
-            text-align: left;
-          }
-          .content-list-data-tOperation {
-            width: 100px;
-            .immediately-pay {
-              font-weight: bold;
-              width: 97px;
-              height: 30px;
-              color: #ffffff;
-              background-color: #ff5f27;
-              border: 1px solid #ff5f27;
-              outline: none;
-              border-radius: 3px;
+            .content-list-data-price {
+              width: 140px;
             }
-            .immediately-pay:hover {
-              background-color: #ff6c39;
+            .content-list-data-number {
+              width: 120px;
             }
-            .close-order {
-              width: 97px;
-              margin-top: 14px;
-              color: #505050;
-              padding: 0px;
+            .content-list-data-mOperation {
+              width: 130px;
             }
-            .close-order:hover {
-              color: #20a0ff;
+            .content-list-data-realPay {
+              width: 150px;
             }
-            .order-desc {
-              padding: 0px;
-              color: #505050;
+            .content-list-data-status {
+              width: 180px;
+              text-align: left;
             }
-            .order-desc:hover {
-              color: #20a0ff;
+            .content-list-data-tOperation {
+              width: 100px;
+              .immediately-pay {
+                font-weight: bold;
+                width: 97px;
+                height: 30px;
+                color: #ffffff;
+                background-color: #ff5f27;
+                border: 1px solid #ff5f27;
+                outline: none;
+                border-radius: 3px;
+              }
+              .immediately-pay:hover {
+                background-color: #ff6c39;
+              }
+              .close-order {
+                width: 97px;
+                margin-top: 14px;
+                color: #505050;
+                padding: 0px;
+              }
+              .close-order:hover {
+                color: #20a0ff;
+              }
+              .order-desc {
+                padding: 0px;
+                color: #505050;
+              }
+              .order-desc:hover {
+                color: #20a0ff;
+              }
             }
           }
         }

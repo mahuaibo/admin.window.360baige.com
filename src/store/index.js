@@ -17,8 +17,7 @@ const state = {
     head: localStorage.getItem('head'),
     name: localStorage.getItem('username') + localStorage.getItem('positionName'),
     path: '',
-    // domain: 'http://192.168.1.171:30000/cloud/window/v1'
-    domain: 'http://123.56.6.206:30000/cloud/window/v1'
+    domain: 'http://192.168.0.101:30000/cloud/window/v1'
   },
   userPositionList: {
     list: {}
