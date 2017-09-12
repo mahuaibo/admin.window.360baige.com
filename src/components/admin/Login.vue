@@ -77,7 +77,7 @@
     components: {CommonHeader, CommonSidebar, AdminUserPosition},
     data () {
       return {
-        weChatCodeUrl: 'https://open.weixin.qq.com/connect/qrconnect?appid=wxe8d941078f9472af&redirect_uri=' + window.location.href + '&response_type=code&scope=snsapi_login&state=STATE#wechat_redirect',
+        weChatCodeUrl: 'https://open.weixin.qq.com/connect/qrconnect?appid=wxe8d941078f9472af&redirect_uri=' + window.location.origin + '&response_type=code&scope=snsapi_login&state=STATE#wechat_redirect',
         loginDataForm: {
           username: null,
           password: null

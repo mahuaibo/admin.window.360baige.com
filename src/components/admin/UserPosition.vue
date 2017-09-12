@@ -68,9 +68,11 @@
             current.publicParameters.name = localStorage.getItem('username') + localStorage.getItem('positionName')
             localStorage.setItem('userPositionId', data.userPositionId)
             localStorage.setItem('accessToken', response.data.data.accessToken)
-            window.location.href = '#/application/center'
             current.userPositionId = data.userPositionId
             current.publicParameters.identityListDialog = false
+            window.opener = null
+            window.open(window.location.origin + '#/application/center', '_self')
+            window.close()
           } else {
             current.promptInfo('error', '角色切换失败！')
           }
