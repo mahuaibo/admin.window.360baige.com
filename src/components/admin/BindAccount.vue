@@ -9,70 +9,72 @@
         </div>
       </div>
     </div>
-    <div class="bind_tips_wrap" style="background-color: #f9f9f9;">
-      <div class="bind_tips" style="padding:45px 32%;line-height: 24px;color:#808080;font-size: 14px;">
-        为了给您更好的操作体验，请选择注册账号绑定或绑定已有账号。以后使用用户名或微信均可登录。
-      </div>
-    </div>
     <div class="layout-container">
-      <div class="switch-control">
-        <label class="switch-control-left" id="register-account" @click="toggleBindMode(1)">绑定注册账号</label>
-        <label class="switch-control-middle"></label>
-        <label class="switch-control-right" id="existing-account" @click="toggleBindMode(2)">绑定已有账号</label>
+      <div class="bind_tips_wrap" style="background-color: #f9f9f9;">
+        <div class="bind_tips" style="padding:45px 32%;line-height: 24px;color:#808080;font-size: 14px;">
+          为了给您更好的操作体验，请选择注册账号绑定或绑定已有账号。以后使用用户名或微信均可登录。
+        </div>
       </div>
-      <div id="registerFormId">
-        <el-form :model="registerForm" ref="registerForm" :rules="registerRules">
-          <el-form-item prop="username">
-            <el-input type="text" placeholder="请输入用户名" v-model="registerForm.username">
-              <template slot="prepend">用 &nbsp;&nbsp;&nbsp;户&nbsp;&nbsp; 名</template>
-            </el-input>
-          </el-form-item>
-          <el-form-item prop="password">
-            <el-input type="password" placeholder="建议至少使用两种字符组合" v-model="registerForm.password"
-                      class="registerForm-input">
-              <template slot="prepend">设 置 密 码</template>
-            </el-input>
-          </el-form-item>
-          <el-form-item prop="confPassword">
-            <el-input type="password" placeholder="请再次输入密码" v-model="registerForm.confPassword"
-                      class="registerForm-input">
-              <template slot="prepend">确 认 密 码</template>
-            </el-input>
-          </el-form-item>
-          <el-form-item prop="phone">
-            <el-input placeholder="请输入验证码" v-model="registerForm.phone" class="registerForm-input">
-              <template slot="prepend">手 &nbsp;&nbsp;&nbsp;机&nbsp;&nbsp; 号</template>
-            </el-input>
-          </el-form-item>
-          <el-form-item prop="captcha">
-            <el-input placeholder="请输入短信验证码" v-model="registerForm.captcha" class="registerForm-input">
-              <template slot="prepend">短信验证码</template>
-              <el-button slot="append" calss="phone-captcha" @click="getVerificationCode('registerForm')">获取验证码
-              </el-button>
-            </el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button class="register-button" @click="submitForm('registerForm')">绑定注册账号</el-button>
-          </el-form-item>
-        </el-form>
-      </div>
-      <div id="loginFormId" style="display: none">
-        <el-form :model="loginForm" :rules="loginDataRules" ref="loginForm">
-          <el-form-item label="" prop="username">
-            <input style="display:none"/>
-            <el-input placeholder="请输入账号/手机号/邮箱" v-model="loginForm.username" class="registerForm-input">
-              <template slot="prepend">用 &nbsp;&nbsp;户&nbsp;&nbsp; 名</template>
-            </el-input>
-          </el-form-item>
-          <el-form-item label="" prop="password">
-            <el-input type="password" placeholder="请输入密码" v-model="loginForm.password" class="registerForm-input">
-              <template slot="prepend">密 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 码</template>
-            </el-input>
-          </el-form-item>
-          <el-form-item id="box">
-            <el-button class="login-button" @click="submitForm('loginForm')">绑定已有账号</el-button>
-          </el-form-item>
-        </el-form>
+      <div class="layout-container-form">
+        <div class="switch-control">
+          <label class="switch-control-left" id="register-account" @click="toggleBindMode(1)">绑定注册账号</label>
+          <label class="switch-control-middle"></label>
+          <label class="switch-control-right" id="existing-account" @click="toggleBindMode(2)">绑定已有账号</label>
+        </div>
+        <div id="registerFormId">
+          <el-form :model="registerForm" ref="registerForm" :rules="registerRules">
+            <el-form-item prop="username">
+              <el-input type="text" placeholder="请输入用户名" v-model="registerForm.username">
+                <template slot="prepend">用 &nbsp;&nbsp;&nbsp;户&nbsp;&nbsp; 名</template>
+              </el-input>
+            </el-form-item>
+            <el-form-item prop="password">
+              <el-input type="password" placeholder="建议至少使用两种字符组合" v-model="registerForm.password"
+                        class="registerForm-input">
+                <template slot="prepend">设 置 密 码</template>
+              </el-input>
+            </el-form-item>
+            <el-form-item prop="confPassword">
+              <el-input type="password" placeholder="请再次输入密码" v-model="registerForm.confPassword"
+                        class="registerForm-input">
+                <template slot="prepend">确 认 密 码</template>
+              </el-input>
+            </el-form-item>
+            <el-form-item prop="phone">
+              <el-input placeholder="请输入验证码" v-model="registerForm.phone" class="registerForm-input">
+                <template slot="prepend">手 &nbsp;&nbsp;&nbsp;机&nbsp;&nbsp; 号</template>
+              </el-input>
+            </el-form-item>
+            <el-form-item prop="captcha">
+              <el-input placeholder="请输入短信验证码" v-model="registerForm.captcha" class="registerForm-input">
+                <template slot="prepend">短信验证码</template>
+                <el-button slot="append" calss="phone-captcha" @click="getVerificationCode('registerForm')">获取验证码
+                </el-button>
+              </el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button class="register-button" @click="submitForm('registerForm')">绑定注册账号</el-button>
+            </el-form-item>
+          </el-form>
+        </div>
+        <div id="loginFormId" style="display: none">
+          <el-form :model="loginForm" :rules="loginDataRules" ref="loginForm">
+            <el-form-item label="" prop="username">
+              <input style="display:none"/>
+              <el-input placeholder="请输入账号/手机号/邮箱" v-model="loginForm.username" class="registerForm-input">
+                <template slot="prepend">用 &nbsp;&nbsp;户&nbsp;&nbsp; 名</template>
+              </el-input>
+            </el-form-item>
+            <el-form-item label="" prop="password">
+              <el-input type="password" placeholder="请输入密码" v-model="loginForm.password" class="registerForm-input">
+                <template slot="prepend">密 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 码</template>
+              </el-input>
+            </el-form-item>
+            <el-form-item id="box">
+              <el-button class="login-button" @click="submitForm('loginForm')">绑定已有账号</el-button>
+            </el-form-item>
+          </el-form>
+        </div>
       </div>
     </div>
     <el-dialog title="选择身份" :visible.sync="publicParameters.identityListDialog" :close-on-click-modal="false">
@@ -336,50 +338,53 @@
       }
     }
     .layout-container {
-      width: 390px;
-      position: relative;
-      top: 30px;
-      margin: 0 auto;
-      .login-button, .register-button {
-        min-width: 390px;
-        color: #ffffff;
-        background-color: #31a7ff;
-        border: 0px solid #ffffff;
-      }
-      .switch-control {
+      min-height: 656px;
+      height: calc(100vh - 124px);
+      .layout-container-form {
+        padding-top: 30px;
         width: 390px;
-        font-size: 24px;
-        text-align: center;
-        margin-bottom: 30px;
-        padding-bottom: 8px;
-        border-bottom: 1px solid #cadced;
-        .switch-control-left {
-          float: left;
-          display: inline-block;
-          width: 194.5px;
-          border-bottom: 3px solid #31a7ff;
-          padding-bottom: 11px;
+        margin: 0 auto;
+        .login-button, .register-button {
+          min-width: 390px;
+          color: #ffffff;
+          background-color: #31a7ff;
+          border: 0px solid #ffffff;
         }
-        .switch-control-middle {
-          display: inline-block;
-          border-right: 1px solid #2c3e50;
-          height: 24px;
-          margin-top: 5px;
-          margin-left: 0px;
-        }
-        .switch-control-right {
-          float: right;
-          display: inline-block;
-          width: 194.5px;
-          padding-bottom: 11px;
+        .switch-control {
+          width: 390px;
+          font-size: 24px;
+          text-align: center;
+          margin-bottom: 30px;
+          padding-bottom: 8px;
+          border-bottom: 1px solid #cadced;
+          .switch-control-left {
+            color: #373d41;
+            float: left;
+            display: inline-block;
+            width: 194.5px;
+            border-bottom: 3px solid #31a7ff;
+            padding-bottom: 11px;
+          }
+          .switch-control-middle {
+            display: inline-block;
+            border-right: 1px solid #373d41;
+            height: 24px;
+            margin-top: 5px;
+            margin-left: 0px;
+          }
+          .switch-control-right {
+            color: #373d41;
+            float: right;
+            display: inline-block;
+            width: 194.5px;
+            padding-bottom: 11px;
+          }
         }
       }
     }
     .layout-container-tail {
       background: $color;
       height: 46px;
-      position: absolute;
-      bottom: 0;
       width: 100%;
       .layout-container-tail-text {
         color: #ffffff;
