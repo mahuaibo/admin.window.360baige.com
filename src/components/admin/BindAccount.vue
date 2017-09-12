@@ -51,9 +51,6 @@
             <el-input placeholder="请输入短信验证码" v-model="registerForm.captcha" class="registerForm-input">
               <template slot="prepend">短信验证码</template>
               <el-button slot="append" calss="phone-captcha" @click="getVerificationCode('registerForm')">获取验证码
-
-
-
               </el-button>
             </el-input>
           </el-form-item>
