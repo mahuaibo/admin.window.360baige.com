@@ -4,8 +4,8 @@
       <div class="layout-sidebar-header-content">
         <img class="logo" src="../../assets/logo.png" height="38"/>
         <div class="action-buttons">
-          <label @click="handleClick('/admin/register')">注册</label> | <label
-          @click="handleClick('/admin/login')">登陆</label>
+          <label @click="handleClick('/admin/register')">注册</label> |
+          <label @click="handleClick('/admin/login')">登陆</label>
         </div>
       </div>
     </div>
@@ -37,7 +37,9 @@
           <div class="loginbox-right-prompt" style="color: #fe5b5a;"> — 快速登陆 — </div>
           <div class="loginbox-right-icon">
             <img src="../../assets/login-qq.png" height="35" width="35"/>
-            <img src="../../assets/login-weixin.png" style="margin-top: 5px;height:35px;width: 35px;"/>
+            <a :href="weChatCodeUrl">
+              <img src="../../assets/login-weixin.png" style="margin-top: 5px;height:35px;width: 35px;"/>
+            </a>
           </div>
         </div>
       </div>
@@ -50,14 +52,25 @@
     </el-dialog>
   </div>
 </template>
+
 <script>
   import axios from 'axios'
-  import { mapGetters, mapActions } from 'vuex'
+  import {mapGetters, mapActions} from 'vuex'
   import CommonHeader from '@/components/common/Header'
   import CommonSidebar from '@/components/common/Sidebar'
   import AdminUserPosition from '@/components/admin/UserPosition'
-
   export default {
+    created () {
+      var reg = new RegExp('(^|&)code=([^&]*)(&|$)', 'i')
+      var r = window.location.search.substr(1).match(reg)
+      if (r === null) {
+        return
+      }
+      var code = unescape(r[2])
+      if (code !== undefined && code !== '' && code !== null) {
+        this.weChatBindStatus(code)
+      }
+    },
     computed: {
       ...mapGetters([
         'publicParameters'
@@ -66,6 +79,7 @@
     components: {CommonHeader, CommonSidebar, AdminUserPosition},
     data () {
       return {
+        weChatCodeUrl: 'https://open.weixin.qq.com/connect/qrconnect?appid=wxe8d941078f9472af&redirect_uri=http://audit.dev.360baige.com&response_type=code&scope=snsapi_login&state=STATE#wechat_redirect',
         loginDataForm: {
           username: null,
           password: null
@@ -101,7 +115,7 @@
             }).then(function (response) {
               console.log(response.data)
               if (response.data.code === '200') {
-                localStorage.setItem('username', current.loginDataForm.username)
+                localStorage.setItem('username', response.data.data.username)
                 localStorage.setItem('accessTicket', response.data.data.accessTicket)
                 current.publicParameters.identityListDialog = true
               } else {
@@ -114,6 +128,29 @@
             console.log('error submit!!')
             return false
           }
+        })
+      },
+      // 获取微信用户绑定转态
+      weChatBindStatus (code) {
+        var current = this
+        axios({
+          method: 'POST',
+          url: this.publicParameters.domain + '/user/weChatLogin',
+          params: {code: code}
+        }).then(function (response) {
+          console.log(response.data)
+          if (response.data.code === '200') {
+            localStorage.setItem('username', response.data.data.username)
+            localStorage.setItem('accessTicket', response.data.data.accessTicket)
+            current.publicParameters.identityListDialog = true
+          } else if (response.data.code === '600') {
+            window.location.href = '#/admin/bindAccount?openId=' + response.data.data.openId
+          } else {
+            current.promptInfo('warning', '非法操作！')
+            window.location.href = '#/admin/login'
+          }
+        }).catch(function (error) {
+          console.log(error)
         })
       },
       resetForm (formName) {

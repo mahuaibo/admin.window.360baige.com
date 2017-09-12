@@ -323,6 +323,7 @@
     text-align: left;
     display: none;
     .operating-menu-content {
+      padding: 5px 0px 5px 0px;
       border: 1px solid #e9e9e9;
       border-radius: 5px;
       position: absolute;

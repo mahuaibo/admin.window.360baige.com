@@ -4,6 +4,7 @@ import Home from '@/components/Home'
 
 import Login from '@/components/admin/Login'
 import Register from '@/components/admin/Register'
+import BindAccount from '@/components/admin/BindAccount'
 import Info from '@/components/admin/Info'
 import ModifyPwd from '@/components/admin/ModifyPwd'
 import CompanyInfo from '@/components/company/Info'
@@ -29,6 +30,11 @@ export default new Router({
     component: Login,
     path: '/admin/login',
     alias: 'login'
+  }, {
+    name: 'bindAccount',
+    component: BindAccount,
+    path: '/admin/bindAccount',
+    alias: 'bindAccount'
   }, {
     name: 'home',
     component: Home,
