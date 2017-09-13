@@ -1,6 +1,6 @@
 <template>
   <div class="common-sidebar">
-    <div style="color:#ffffff;font-size: 16px;">
+    <div class="common-sidebar-list">
       <div class="menu-item" id="center" @click="handleClick('/application/center'),setStyle('center')" ref="center">
         <img src="../../assets/center.png" height="20" width="20"/>
         <label>应用中心</label>
@@ -21,7 +21,7 @@
   </div>
 </template>
 <script>
-  import { mapGetters, mapActions } from 'vuex'
+  import {mapGetters, mapActions} from 'vuex'
 
   export default {
     mounted () {
@@ -64,22 +64,25 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-  .menu-item {
-    height: 70px;
-    text-align: left;
-    padding-left: 34px;
-    line-height: 70px;
-    img {
-      vertical-align: middle;
+  .common-sidebar {
+    .common-sidebar-list{
+      color:#ffffff;font-size: 16px;
     }
-    label {
-      margin-left: 17px;
+    .menu-item {
+      height: 70px;
+      text-align: left;
+      padding-left: 34px;
+      line-height: 70px;
+      img {
+        vertical-align: middle;
+      }
+      label {
+        margin-left: 17px;
+      }
+    }
+    .menu-item:hover {
+      background-color: #4b5880;
+      border-right: 8px solid #69df8a;
     }
   }
-
-  .menu-item:hover {
-    background-color: #4b5880;
-    border-right: 8px solid #69df8a;
-  }
-
 </style>

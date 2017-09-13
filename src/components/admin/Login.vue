@@ -1,48 +1,48 @@
 <template>
   <div class="layout">
-    <div class="layout-sidebar-header">
-      <div class="layout-sidebar-header-content">
-        <img class="logo" src="../../assets/logo.png" height="38"/>
-        <div class="action-buttons">
+    <div class="login-sidebar-header">
+      <div class="login-sidebar-header-content">
+        <img class="login-sidebar-header-logo" src="../../assets/logo.png" height="38"/>
+        <div class="login-sidebar-header-action-buttons">
           <label @click="handleClick('/admin/register')">注册</label> |
           <label @click="handleClick('/admin/login')">登陆</label>
         </div>
       </div>
     </div>
-    <div class="layout-container">
-      <div class="login-box">
-        <div class="layout-container-left">
+    <div class="login-container">
+      <div class="login-container-loginBox">
+        <div class="login-container-left">
           <el-form :model="loginDataForm" :rules="loginDataRules" ref="loginDataForm">
-            <el-form-item label="" prop="username" style="width: 288px;">
+            <el-form-item label="" prop="username" class="login-container-left-username">
               <input style="display:none"/>
               <el-input v-model="loginDataForm.username" placeholder="请输入用户名"
                         @keyup.enter.native="submitForm('loginDataForm')" autoComplete="off"></el-input>
             </el-form-item>
-            <el-form-item label="" prop="password" style="width: 288px;">
+            <el-form-item label="" prop="password" class="login-container-left-password">
               <el-input type="password" v-model="loginDataForm.password" placeholder="请输入密码"
                         @keyup.enter.native="submitForm('loginDataForm')" autoComplete="off"></el-input>
             </el-form-item>
-            <el-form-item id="box" style="width: 288px;">
-              <el-button class="login-button" @click="submitForm('loginDataForm')">登陆</el-button>
+            <el-form-item id="box" class="login-container-left-button">
+              <el-button class="login-container-left-button-login" @click="submitForm('loginDataForm')">登陆</el-button>
             </el-form-item>
           </el-form>
         </div>
-        <div class="layout-container-right">
-          <div class="loginbox-right-register">
-            <div type="text" @click="handleClick('/admin/register')" style="color: #31a7ff;padding: 0;">免费注册</div>
+        <div class="login-container-right">
+          <div class="login-container-right-operating">
+            <div type="text" @click="handleClick('/admin/register')">免费注册</div>
           </div>
-          <div class="loginbox-right-prompt" style="color: #fe5b5a;"> — 快速登陆 — </div>
-          <div class="loginbox-right-icon">
-            <img src="../../assets/login-qq.png" height="35" width="35"/>
+          <div class="login-container-right-quickLogin"> — 快速登陆 — </div>
+          <div class="login-container-right-icon">
+            <a href=""><img src="../../assets/login-qq.png" height="35" width="35"/></a>
             <a :href="weChatCodeUrl">
-              <img src="../../assets/login-weixin.png" style="margin-top: 5px;height:35px;width: 35px;"/>
+              <img src="../../assets/login-weixin.png" class="login-container-right-icon-wechat"/>
             </a>
           </div>
         </div>
       </div>
     </div>
-    <div class="layout-container-tail">
-      <label class="layout-container-tail-text">Copyright © 2015 粤ICP备15062920号</label>
+    <div class="login-container-tail">
+      <label class="login-container-tail-text">Copyright © 2015 粤ICP备15062920号</label>
     </div>
     <el-dialog title="选择身份" :visible.sync="publicParameters.identityListDialog" :close-on-click-modal="false">
       <admin-user-position></admin-user-position>
@@ -112,7 +112,7 @@
               }
             }).then(function (response) {
               console.log(response.data)
-              if (response.data.code === '200') {
+              if (response.data.code === '200') { // 登录成功报错cookie
                 localStorage.setItem('username', response.data.data.username)
                 localStorage.setItem('head', response.data.data.head)
                 localStorage.setItem('accessTicket', response.data.data.accessTicket)
@@ -138,13 +138,14 @@
           params: {code: code}
         }).then(function (response) {
           console.log(response.data)
-          if (response.data.code === '200') {
+          if (response.data.code === '200') { // 登录成功报错cookie
             localStorage.setItem('username', response.data.data.username)
+            localStorage.setItem('head', response.data.data.head)
             localStorage.setItem('accessTicket', response.data.data.accessTicket)
             current.publicParameters.identityListDialog = true
-          } else if (response.data.code === '600') {
+          } else if (response.data.code === '600') { // 账号未绑定转到绑定
             window.location.href = '#/admin/bindAccount?openId=' + response.data.data.openId
-          } else {
+          } else { // 非法操作返回登录页
             current.promptInfo('warning', '非法操作！')
             window.location.href = '#/admin/login'
           }
@@ -208,18 +209,18 @@
   $color: #002f5c !default;
   .layout {
     height: 100vh;
-    .layout-sidebar-header {
-      .layout-sidebar-header-content {
+    .login-sidebar-header {
+      .login-sidebar-header-content {
         background: $color;
         height: 78px;
         width: 100%;
-        .logo {
+        .login-sidebar-header-logo {
           position: absolute;
           left: 192px;
           margin-top: 20px;
           vertical-align: middle;
         }
-        .action-buttons {
+        .login-sidebar-header-action-buttons {
           color: #ffffff;
           position: absolute;
           right: 192px;
@@ -231,14 +232,14 @@
         }
       }
     }
-    .layout-container {
+    .login-container {
       min-height: 656px;
       background: url("../../assets/bg.jpg") no-repeat;
       background-position: center;
       height: calc(100vh - 124px);
       width: 100%;
     }
-    .login-box {
+    .login-container-loginBox {
       width: 516px;
       height: 238px;
       border: 1px solid #cadced;
@@ -247,12 +248,15 @@
       position: absolute;
       right: 192px;
       top: 240px;
-      .layout-container-left {
+      .login-container-left {
         width: 318px;
         margin-top: 42px;
         margin-left: 30px;
         border-right: 1px solid #cadced;
-        .login-button {
+        .login-container-left-username, .login-container-left-password, .login-container-left-button {
+          width: 288px;
+        }
+        .login-container-left-button-login {
           width: 288px;
           height: 38px;
           float: right;
@@ -261,33 +265,44 @@
           border: 0px solid #ffffff;
         }
       }
-      .layout-container-right {
+      .login-container-right {
         width: 170px;
         height: 88%;
         margin-left: 348px;
         position: absolute;
         margin-top: -222px;
-        .loginbox-right-register {
+        .login-container-right-operating {
           padding-top: 48px;
           font-size: 14px;
+          div {
+            color: #31a7ff;
+            padding: 0;
+            cursor: pointer;
+          }
         }
-        .loginbox-right-prompt {
+        .login-container-right-quickLogin {
+          color: #fe5b5a;
           padding-top: 16px;
           font-size: 14px;
         }
-        .loginbox-right-icon {
+        .login-container-right-icon {
           width: 35px;
           padding-top: 18px;
           font-size: 14px;
           margin-left: 68px;
+          .login-container-right-icon-wechat {
+            margin-top: 5px;
+            height: 35px;
+            width: 35px;
+          }
         }
       }
     }
-    .layout-container-tail {
+    .login-container-tail {
       background: $color;
       height: 46px;
       width: 100%;
-      .layout-container-tail-text {
+      .login-container-tail-text {
         color: #ffffff;
         font-weight: bold;
         position: relative;

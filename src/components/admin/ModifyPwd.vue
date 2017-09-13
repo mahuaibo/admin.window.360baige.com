@@ -1,6 +1,6 @@
 <template>
   <div class="modify-pwd">
-    <el-form :model="modifyPwd" :rules="rules" ref="modifyPwd" label-width="100px" style="padding:0px 10px 0px 0px;">
+    <el-form :model="modifyPwd" :rules="rules" ref="modifyPwd" label-width="100px" class="modify-pwd-form">
       <el-form-item label="旧密码:" prop="pass">
         <el-input type="password" v-model="modifyPwd.pass" placeholder="请输入" auto-complete="off"></el-input>
       </el-form-item>
@@ -99,6 +99,10 @@
   }
 </script>
 <style lang="scss" scoped>
+  .modify-pwd-from {
+    padding: 0px 10px 0px 0px;
+  }
+
   .modify-button {
     width: 100%;
     float: right;

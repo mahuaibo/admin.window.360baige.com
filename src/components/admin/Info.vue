@@ -1,47 +1,11 @@
-<style lang="scss">
-  .el-upload-list__item {
-    display: none;
-  }
-
-  .head-upload {
-    float: right;
-    span {
-      position: absolute;
-      color: #728ca5;
-      height: 22px;
-      line-height: 22px;
-      font-size: 12px;
-      background-color: #cadced;
-      width: 84px;
-      margin-top: 14px;
-      border-top-right-radius: 20px;
-      border-bottom-right-radius: 20px;
-    }
-  }
-
-  .modify-button {
-    color: #ffffff;
-    width: 100%;
-    float: right;
-    background-color: #31a7ff;
-    border: 0px solid #ffffff;
-  }
-
-  .modify-button:hover {
-    color: #ffffff;
-  }
-</style>
-
 <template>
   <div class="admin-info">
-    <el-form :model="myData" :rules="userInfoRules" ref="myData" label-width="100px" style="padding:0px 10px 0px 0px;">
-      <el-form-item label="头像:" prop="head" style="text-align: left;">
-        <el-upload
-          :action="publicParameters.domain + '/user/uploadHead?accessToken=' + accessToken + '&&id=' + myData.id"
-          type="drag" :thumbnail-mode="true" name="uploadFile" :on-success="uploadSuccess"
-          style="height: 48px;">
-          <img :src="myData.head" height="48" width="48"
-               style="float: left;border-radius: 5px;border:1px solid #cadced;background: #cadced;"/>
+    <el-form :model="myData" :rules="userInfoRules" ref="myData" label-width="100px" class="admin-info-from">
+      <el-form-item label="头像:" prop="head" class="admin-info-from-head">
+        <el-upload type="drag" :thumbnail-mode="true" name="uploadFile" :on-success="uploadSuccess"
+                   :action="publicParameters.domain + '/user/uploadHead?accessToken=' + accessToken + '&&id=' + myData.id"
+                   class="admin-info-from-headUpload">
+          <img :src="myData.head" height="48" width="48" class="admin-info-from-headImg"/>
           <div class="el-dragger__text head-upload">
             <span class="buttom">点击上传</span>
           </div>
@@ -64,7 +28,7 @@
 </template>
 <script>
   import axios from 'axios'
-  import { mapGetters, mapActions } from 'vuex'
+  import {mapGetters, mapActions} from 'vuex'
 
   export default {
     created () {
@@ -138,7 +102,6 @@
         })
       },
       uploadSuccess (response, file, fileList) {
-        console.log(response)
         this.myData.head = response.head
       },
       promptInfo (type, info) { // type success成功   warning警告   error失败
@@ -148,3 +111,53 @@
     }
   }
 </script>
+<style lang="scss">
+  .el-upload-list__item {
+    display: none;
+  }
+
+  .head-upload {
+    float: right;
+    span {
+      position: absolute;
+      color: #728ca5;
+      height: 22px;
+      line-height: 22px;
+      font-size: 12px;
+      background-color: #cadced;
+      width: 84px;
+      margin-top: 14px;
+      border-top-right-radius: 20px;
+      border-bottom-right-radius: 20px;
+    }
+  }
+
+  .modify-button {
+    color: #ffffff;
+    width: 100%;
+    float: right;
+    background-color: #31a7ff;
+    border: 0px solid #ffffff;
+  }
+
+  .modify-button:hover {
+    color: #ffffff;
+  }
+</style>
+<style lang="scss" scoped>
+  .admin-info-from {
+    padding: 0px 10px 0px 0px;
+    .admin-info-from-head {
+      text-align: left;
+    }
+    .admin-info-from-headUpload {
+      height: 48px;
+    }
+    .admin-info-from-headImg {
+      float: left;
+      border-radius: 5px;
+      border: 1px solid #cadced;
+      background: #cadced;
+    }
+  }
+</style>

@@ -1,8 +1,8 @@
 <template>
   <div class="common-header">
     <div class="common-header-return" v-if="publicParameters.returnButtom">
-      <el-button class="back-button" type="text" @click="handleClick(publicParameters.path)">
-        <img style="margin-top: 8px;" src="../../assets/back.png" height="12" width="12"/>
+      <el-button class="common-header-return-button" type="text" @click="handleClick(publicParameters.path)">
+        <img src="../../assets/back.png"/>
         <label>返回</label>
       </el-button>
     </div>
@@ -49,8 +49,8 @@
       <div class="message">
         <div class="message-content">
           <div class="message-item-head">
-            <label style="position:absolute;left: 25px;color:#505050;font-size: 14px;">消息</label>
-            <label style="position:absolute;right:25px;font-size: 12px;color: #808080;">清空</label>
+            <label class="message-item-head-name">消息</label>
+            <label class="message-item-head-operation">清空</label>
           </div>
           <div class="message-item" v-for="val in messageList.list">{{ val.title }} </div>
           <div class="message-item-bottom" @click="viewAll">查看全部</div>
@@ -286,9 +286,14 @@
     height: 58px;
     line-height: 58px;
     margin-left: 40px;
-    .back-button {
+    .common-header-return-button {
       font-size: 14px;
       color: #505050;
+      img {
+        padding-top: 1px;
+        width: 12px;
+        height: 12px;
+      }
     }
   }
 
@@ -391,6 +396,18 @@
         height: 40px;
         line-height: 40px;
         border-bottom: 1px solid #e9e9e9;
+        .message-item-head-name {
+          position: absolute;
+          left: 25px;
+          color: #505050;
+          font-size: 14px;
+        }
+        .message-item-head-operation {
+          position: absolute;
+          right: 25px;
+          font-size: 12px;
+          color: #808080;
+        }
       }
       .message-item {
         color: #505050;
@@ -401,6 +418,10 @@
         padding-left: 25px;
         padding-right: 25px;
         border-bottom: 1px solid #f6f6f6;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+
       }
       .message-item:hover {
         color: #ffffff;

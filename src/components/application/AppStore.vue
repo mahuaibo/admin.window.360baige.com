@@ -1,51 +1,33 @@
 <template>
   <div class="index">
     <div class="appStore-operatingArea">
-      <div class="appCenter-seek">
-        <el-input class="appStore-seek" placeholder="请输入名称..." icon="search" v-model="appStore.appSeek"
-                  :on-icon-click="handleIconClick" style="width: 298px;height: 38px;"></el-input>
-      </div>
-      <!--<el-select v-model="appStore.appType" class="appStore-choicebox"> &lt;!&ndash; :visible-change="typeFilter()" &ndash;&gt;-->
-      <!--<el-option v-for="item in appStoreData.appTypeList" :label="item.label" :value="item.value"></el-option>-->
-      <!--</el-select>-->
+      <el-input class="appStore-operatingArea-seek" placeholder="请输入名称..." icon="search"
+                v-model="appStore.appSeek"
+                :on-icon-click="handleIconClick"></el-input>
     </div>
-    <div class="appStore-list-div">
-      <div class="appStore-list">
-        <div class="appStore-list-noData" v-if="appStoreData.appList==''">暂无数据</div>
+    <div class="appStore-list">
+      <div class="appStore-list-data">
+        <div class="appStore-list-data-noData" v-if="appStoreData.appList==''">暂无数据</div>
         <div v-for="val in appStoreData.appList" class="appStore-app-card" v-else>
-          <div class="appStore-app-card-left">
-            <img :src="val.image" @click="appDetail(val)" style="width: 70px;height: 70px;border-radius: 20px;">
-            <el-button style="font-size:12px;margin-top:6px;width:70px;height:22px;" type="primary" size="mini">
+          <div class="appStore-list-data-card-left">
+            <img :src="val.image" @click="appDetail(val)" class="appStore-list-data-card-left-img">
+            <el-button class="appStore-list-data-card-left-button" type="primary" size="mini">
               <label v-if=" val.subscriptionStatus == 0" @click="subscribe(val)">订阅</label>
               <label v-else-if=" val.subscriptionStatus == 1" @click="unsubscribe(val)">退订</label>
             </el-button>
           </div>
-          <div class="appStore-app-card-right">
+          <div class="appStore-list-data-card-right">
             <div @click="appDetail(val)">
-              <div
-                style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;font-size: 16px;color: #505050;margin-top: 2px;">
-                {{ val.name }}
-              </div>
-              <div
-                style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;font-size: 14px;color: #808080;margin-top: 2px;">
-                {{ val.desc }}
-
-
-              </div>
-              <div
-                style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;font-size: 12px;color: #ff5500;margin-top: 2px;">
-                ￥{{ money(val.price) }}
+              <div class="appStore-list-data-card-right-name">{{ val.name }}</div>
+              <div class="appStore-list-data-card-right-desc">{{ val.desc }}</div>
+              <div class="appStore-list-data-card-right-price">￥{{ money(val.price) }}
                 <label v-if="val.payCycle==1">/月</label>
                 <label v-else-if="val.payCycle==2">/季</label>
                 <label v-else-if="val.payCycle==3">/半年</label>
                 <label v-else-if="val.payCycle==2">/年</label>
               </div>
             </div>
-            <div class="subscription" style="margin-top: 16px;">订阅<label style="color: #ff5500;"> {{ val.subscription
-              }} </label>次
-
-
-            </div>
+            <div class="appStore-list-data-card-right-subscription">订阅<label> {{ val.subscription }} </label>次</div>
           </div>
         </div>
       </div>
@@ -147,60 +129,95 @@
 </script>
 <style lang="scss" scoped>
   .appStore-operatingArea {
-    height: 38px;
-    padding-top: 12px;
-    padding-bottom: 30px;
-    .appCenter-seek {
-      position: absolute;
-      left: 42px;
+    line-height: 36px;
+    text-align: left;
+    margin-top: 12px;
+    padding: 0px 20px 32px 46px;
+    .appStore-operatingArea-seek {
+      width: 298px;
+      height: 38px;
     }
   }
 
-  .appStore-list-div {
-    width: 1098px;
-    overflow: hidden;
-    .appStore-list {
+  .appStore-list {
+    min-width: 1098px;
+    height: calc(100vh - 175px);
+    overflow-x: auto;
+    overflow-y: auto;
+    margin: 0px 20px 0px 20px;
+    .appStore-list-data {
       width: 1093px;
-      overflow-y: auto;
-      overflow-x: hidden;
-      margin-left: 20px;
-      margin-right: 20px;
-      height: calc(100vh - 150px);
       .appStore-list-noData {
         color: #5e7382;
         font-size: 14px;
       }
+      .appStore-app-card {
+        min-width: 216px;
+        min-height: 106px;
+        float: left;
+        padding-left: 24px;
+        padding-right: 24px;
+        padding-bottom: 44px;
+        .appStore-list-data-card-left {
+          width: 70px;
+          height: 106px;
+          float: left;
+          .appStore-list-data-card-left-img {
+            width: 70px;
+            height: 70px;
+            border-radius: 20px;
+          }
+          .appStore-list-data-card-left-button {
+            font-size: 12px;
+            margin-top: 6px;
+            width: 70px;
+            height: 22px;
+          }
+        }
+        .appStore-list-data-card-right {
+          width: 130px;
+          height: 108px;
+          float: right;
+          margin-left: 16px;
+          text-align: left;
+          .appStore-list-data-card-right-name {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 16px;
+            color: #505050;
+            margin-top: 2px;
+          }
+          .appStore-list-data-card-right-desc {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 14px;
+            color: #808080;
+            margin-top: 2px;
+          }
+          .appStore-list-data-card-right-price {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 12px;
+            color: #ff5500;
+            margin-top: 2px;
+          }
+          .appStore-list-data-card-right-subscription {
+            margin-top: 16px;
+            font-size: 12px;
+            margin-bottom: 0px;
+            height: 22px;
+            line-height: 22px;
+            text-align: right;
+            color: #808080;
+            span {
+              color: #ff5500;
+            }
+          }
+        }
+      }
     }
   }
-
-  .appStore-app-card {
-    width: 216px;
-    height: 106px;
-    float: left;
-    padding-left: 24px;
-    padding-right: 24px;
-    padding-bottom: 44px;
-    .appStore-app-card-left {
-      width: 70px;
-      height: 106px;
-      float: left;
-    }
-    .appStore-app-card-right {
-      width: 130px;
-      height: 108px;
-      float: right;
-      margin-left: 16px;
-      text-align: left;
-    }
-  }
-
-  .subscription {
-    font-size: 12px;
-    margin-bottom: 0px;
-    height: 22px;
-    line-height: 22px;
-    text-align: right;
-    color: #808080;
-  }
-
 </style>

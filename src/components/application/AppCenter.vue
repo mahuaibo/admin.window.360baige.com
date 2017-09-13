@@ -1,33 +1,33 @@
 <template>
   <div class="index">
     <div class="appCenter-operatingArea">
-      <div class="appCenter-seek">
+      <div class="appCenter-operatingArea-seek">
         <el-input placeholder="请输入名称..." icon="search" v-model="appListData.appSeek"
-                  :on-icon-click="refreshDataList" style="width: 298px;height: 38px;"></el-input>
+                  :on-icon-click="appCenterRefreshListData" class="appCenter-operatingArea-seek-input"></el-input>
         <el-button type="success" @click="handleClick('/application/store')"
-                   style="float:right;width:108px;height:34px">
-          <label>应用商店</label>
+                   class="appCenter-operatingArea-seek-button">
+          <span>应用商店</span>
         </el-button>
       </div>
     </div>
     <div class="appCenter-list">
-      <el-table :data="appCenterData.list" style="width: 100%" max-height="510">
-        <el-table-column label="应用图标" width="180">
+      <el-table :data="appCenterData.list" max-height="510">
+        <el-table-column label="应用图标">
           <template scope="scope">
-            <span><img :src="scope.row.image" width="30" height="30" style="padding-top: 8px;"/></span>
+            <img :src="scope.row.image" class="appCenter-list-img"/>
           </template>
         </el-table-column>
-        <el-table-column label="应用名称" width="180">
+        <el-table-column label="应用名称">
           <template scope="scope">
             <span>{{ scope.row.name }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="服务截止时间" width="220">
+        <el-table-column label="服务截止时间">
           <template scope="scope">
-            <span style="color: red;">{{ toDatetime(scope.row.endTime) }}</span>
+            <span class="appCenter-list-entTime">{{ toDatetime(scope.row.endTime) }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="状态" width="180">
+        <el-table-column label="状态">
           <template scope="scope">
             <el-button size="small" type="text" @click="disableApp(scope.row)" v-if="scope.row.status==0">启用</el-button>
             <el-button size="small" type="text" @click="enableApp(scope.row)" v-else>停用</el-button>
@@ -36,24 +36,21 @@
         <el-table-column label="操作">
           <template scope="scope">
             <el-button size="small" type="text" @click="enterApp(scope.row)">进入</el-button>
-            <!--<el-button size="small" type="text" @click="unsubscribeApp(scope.row)">退订</el-button>-->
           </template>
         </el-table-column>
       </el-table>
     </div>
-    <div class="cappCenter-paging">
-      <el-pagination @size-change="refreshDataList" @current-change="refreshDataList"
-                     :current-page.sync="appListData.current" :page-sizes="[50, 100, 200]"
-                     :page-size="appListData.pageSize" layout="total, sizes, prev, pager, next, jumper"
-                     :total="appListData.total">
+    <div class="appCenter-paging">
+      <el-pagination @size-change="appCenterRefreshListData" @current-change="appCenterRefreshListData" :page-sizes="[50, 100, 200]"
+                     :current-page.sync="appListData.current" :total="appListData.total"
+                     :page-size="appListData.pageSize" layout="total, sizes, prev, pager, next, jumper">
       </el-pagination>
     </div>
   </div>
 </template>
 <script>
   import axios from 'axios'
-  import { mapGetters, mapActions } from 'vuex'
-
+  import {mapGetters, mapActions} from 'vuex'
   export default {
     created () {
       this.publicParameters.returnButtom = false
@@ -86,7 +83,7 @@
         'initApplicationData',
         'handleClick'
       ]),
-      refreshDataList (ev) {  // 搜索
+      appCenterRefreshListData (ev) {  // 搜索
         this.initApplicationData(this.appListData)
       },
       enterApp (index) { // 进入应用
@@ -97,11 +94,6 @@
         } else {
           this.messageRemind('warning', '请续费后使用...')
         }
-      },
-      unsubscribeApp (index) { // 退订
-        this.submitData.url = ''
-        this.submitData.appId = index.id
-        console.log('待定...')
       },
       enableApp (index) { // 启用
         this.submitData.url = this.publicParameters.domain + '/application/modifyStatus'
@@ -154,17 +146,34 @@
     padding-left: 20px;
     padding-right: 20px;
     text-align: left;
-    .appCenter-seek {
+    .appCenter-operatingArea-seek {
       margin-bottom: 32px;
+      .appCenter-operatingArea-seek-input {
+        width: 298px;
+        height: 38px;
+      }
+      .appCenter-operatingArea-seek-button {
+        float: right;
+        width: 108px;
+        height: 34px
+      }
     }
   }
 
   .appCenter-list {
     padding-left: 20px;
     padding-right: 20px;
+    .appCenter-list-img {
+      width: 30px;
+      height: 30px;
+      margin-top: 8px;
+    }
+    .appCenter-list-entTime {
+      color: red;
+    }
   }
 
-  .cappCenter-paging {
+  .appCenter-paging {
     float: right;
     margin-top: 30px;
     margin-right: 20px;

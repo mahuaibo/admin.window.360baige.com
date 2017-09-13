@@ -1,21 +1,21 @@
 <template>
   <div class="layout">
-    <div class="layout-sidebar-header">
-      <div class="layout-sidebar-header-content">
-        <img class="logo" src="../../assets/logo.png" height="38"/>
-        <div class="action-buttons">
+    <div class="bindAccount-sidebar-header">
+      <div class="bindAccount-sidebar-header-content">
+        <img class="bindAccount-logo" src="../../assets/logo.png" height="38"/>
+        <div class="bindAccount-action-buttons">
           <label @click="handleClick('/admin/register')">注册</label> |
           <label @click="handleClick('/admin/login')">登陆</label>
         </div>
       </div>
     </div>
-    <div class="layout-container">
-      <div class="bind_tips_wrap" style="background-color: #f9f9f9;">
-        <div class="bind_tips" style="padding:45px 32%;line-height: 24px;color:#808080;font-size: 14px;">
-          为了给您更好的操作体验，请选择注册账号绑定或绑定已有账号。以后使用用户名或微信均可登录。
+    <div class="bindAccount-container">
+      <div class="bindAccount-prompts">
+        <div class="bindAccount-promptsText">
+          <span>为了给您更好的操作体验，请选择注册账号绑定或绑定已有账号。以后使用用户名或微信均可登录。</span>
         </div>
       </div>
-      <div class="layout-container-form">
+      <div class="bindAccount-form">
         <div class="switch-control">
           <label class="switch-control-left" id="register-account" @click="toggleBindMode(1)">绑定注册账号</label>
           <label class="switch-control-middle"></label>
@@ -29,14 +29,12 @@
               </el-input>
             </el-form-item>
             <el-form-item prop="password">
-              <el-input type="password" placeholder="建议至少使用两种字符组合" v-model="registerForm.password"
-                        class="registerForm-input">
+              <el-input type="password" placeholder="建议至少使用两种字符组合" v-model="registerForm.password" class="registerForm-input">
                 <template slot="prepend">设 置 密 码</template>
               </el-input>
             </el-form-item>
             <el-form-item prop="confPassword">
-              <el-input type="password" placeholder="请再次输入密码" v-model="registerForm.confPassword"
-                        class="registerForm-input">
+              <el-input type="password" placeholder="请再次输入密码" v-model="registerForm.confPassword" class="registerForm-input">
                 <template slot="prepend">确 认 密 码</template>
               </el-input>
             </el-form-item>
@@ -48,7 +46,8 @@
             <el-form-item prop="captcha">
               <el-input placeholder="请输入短信验证码" v-model="registerForm.captcha" class="registerForm-input">
                 <template slot="prepend">短信验证码</template>
-                <el-button slot="append" calss="phone-captcha" @click="getVerificationCode('registerForm')">获取验证码
+                <el-button slot="append" calss="phone-captcha" @click="getVerificationCode('registerForm')">
+                  <span>获取验证码</span>
                 </el-button>
               </el-input>
             </el-form-item>
@@ -60,7 +59,7 @@
         <div id="loginFormId" style="display: none">
           <el-form :model="loginForm" :rules="loginDataRules" ref="loginForm">
             <el-form-item label="" prop="username">
-              <input style="display:none"/>
+              <input style="display: none"/>
               <el-input placeholder="请输入账号/手机号/邮箱" v-model="loginForm.username" class="registerForm-input">
                 <template slot="prepend">用 &nbsp;&nbsp;户&nbsp;&nbsp; 名</template>
               </el-input>
@@ -87,11 +86,10 @@
 </template>
 <script>
   import axios from 'axios'
-  import { mapGetters, mapActions } from 'vuex'
+  import {mapGetters, mapActions} from 'vuex'
   import CommonHeader from '@/components/common/Header'
   import CommonSidebar from '@/components/common/Sidebar'
   import AdminUserPosition from '@/components/admin/UserPosition'
-
   export default {
     components: {CommonHeader, CommonSidebar, AdminUserPosition},
     created () {
@@ -315,17 +313,17 @@
   $color: #002f5c !default;
   .layout {
     height: 100vh;
-    .layout-sidebar-header {
-      .layout-sidebar-header-content {
+    .bindAccount-sidebar-header {
+      .bindAccount-sidebar-header-content {
         background: $color;
         height: 78px;
         width: 100%;
-        .logo {
+        .bindAccount-logo {
           position: absolute;
           left: 192px;
           margin-top: 20px;
         }
-        .action-buttons {
+        .bindAccount-action-buttons {
           color: #ffffff;
           position: absolute;
           right: 192px;
@@ -337,10 +335,19 @@
         }
       }
     }
-    .layout-container {
+    .bindAccount-container {
       min-height: 656px;
       height: calc(100vh - 124px);
-      .layout-container-form {
+      .bindAccount-prompts {
+        background-color: #f9f9f9;
+      }
+      .bindAccount-promptsText {
+        padding: 45px 32%;
+        line-height: 24px;
+        color: #808080;
+        font-size: 14px;
+      }
+      .bindAccount-form {
         padding-top: 30px;
         width: 390px;
         margin: 0 auto;

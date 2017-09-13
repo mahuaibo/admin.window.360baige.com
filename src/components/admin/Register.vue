@@ -1,16 +1,16 @@
 <template>
   <div class="layout">
-    <div class="layout-sidebar-header">
-      <div class="layout-sidebar-header-content">
-        <img class="logo" src="../../assets/logo.png" height="38"/>
-        <div class="action-buttons">
+    <div class="register-sidebar-header">
+      <div class="register-sidebar-header-content">
+        <img class="register-sidebar-header-logo" src="../../assets/logo.png" height="38"/>
+        <div class="register-sidebar-header-action-buttons">
           <label @click="handleClick('/admin/register')">注册</label> | <label
           @click="handleClick('/admin/login')">登陆</label>
         </div>
       </div>
     </div>
-    <div class="layout-container">
-      <div class="layout-container-slogan">欢迎注册 百鸽用户</div>
+    <div class="register-container">
+      <div class="register-container-slogan">欢迎注册 百鸽用户</div>
       <el-form :model="registerForm" ref="registerForm" :rules="registerRules">
         <el-form-item prop="username">
           <el-input type="text" placeholder="请输入用户名" v-model="registerForm.username">
@@ -29,9 +29,6 @@
             <template slot="prepend">确 认 密 码</template>
           </el-input>
         </el-form-item>
-        <!--<el-input placeholder="建议使用常用手机" v-model="registerForm.captcha" class="registerForm-input">-->
-        <!--<template slot="prepend">验 &nbsp;&nbsp;&nbsp;证&nbsp;&nbsp; 码</template>-->
-        <!--</el-input>-->
         <el-form-item prop="phone">
           <el-input placeholder="请输入验证码" v-model="registerForm.phone" class="registerForm-input">
             <template slot="prepend">手 &nbsp;&nbsp;&nbsp;机&nbsp;&nbsp; 号</template>
@@ -40,7 +37,8 @@
         <el-form-item prop="captcha">
           <el-input placeholder="请输入短信验证码" v-model="registerForm.captcha" class="registerForm-input">
             <template slot="prepend">短信验证码</template>
-            <el-button slot="append" calss="phone-captcha" @click="getVerificationCode('registerForm')">获取验证码
+            <el-button slot="append" calss="phone-captcha" @click="getVerificationCode('registerForm')">
+              <span>获取验证码</span>
             </el-button>
           </el-input>
         </el-form-item>
@@ -49,17 +47,16 @@
         </el-form-item>
       </el-form>
     </div>
-    <div class="layout-container-tail">
-      <label class="layout-container-tail-text">Copyright © 2015 粤ICP备15062920号</label>
+    <div class="register-container-tail">
+      <label class="register-container-tail-text">Copyright © 2015 粤ICP备15062920号</label>
     </div>
   </div>
 </template>
 <script>
   import axios from 'axios'
-  import { mapGetters, mapActions } from 'vuex'
+  import {mapGetters, mapActions} from 'vuex'
   import CommonHeader from '@/components/common/Header'
   import CommonSidebar from '@/components/common/Sidebar'
-
   export default {
     computed: {
       ...mapGetters([
@@ -73,7 +70,6 @@
           callback(new Error(' 请输入用户名！ 支持中文、字母、数字、_ 的组合，4-20个字符'))
         } else {
           var objRegExp = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]+$/
-          console.log(objRegExp.test(value))
           if (!objRegExp.test(value)) {
             callback(new Error(' 仅支持中文、字母、数字、_ 组合,且 _ 不能开始或结尾，4-20个字符'))
           }
@@ -235,17 +231,17 @@
   $color: #002f5c !default;
   .layout {
     height: 100vh;
-    .layout-sidebar-header {
-      .layout-sidebar-header-content {
+    .register-sidebar-header {
+      .register-sidebar-header-content {
         background: $color;
         height: 78px;
         width: 100%;
-        .logo {
+        .register-sidebar-header-logo {
           position: absolute;
           left: 192px;
           margin-top: 20px;
         }
-        .action-buttons {
+        .register-sidebar-header-action-buttons {
           color: #ffffff;
           position: absolute;
           right: 192px;
@@ -257,12 +253,12 @@
         }
       }
     }
-    .layout-container {
+    .register-container {
       width: 388px;
       min-height: 656px;
       height: calc(100vh - 124px);
       margin: 0 auto;
-      .layout-container-slogan {
+      .register-container-slogan {
         font-size: 30px;
         color: #373d41;
         padding: 40px 0;
@@ -274,11 +270,11 @@
         border: 0px solid #ffffff;
       }
     }
-    .layout-container-tail {
+    .register-container-tail {
       background: $color;
       height: 46px;
       width: 100%;
-      .layout-container-tail-text {
+      .register-container-tail-text {
         color: #ffffff;
         font-weight: bold;
         position: relative;
@@ -286,12 +282,11 @@
         top: 12px;
       }
     }
-  }
-
-  .phone-captcha {
-    font-size: 12px;
-    background-color: #e2effd;
-    color: #5c6873;
+    .phone-captcha {
+      font-size: 12px;
+      background-color: #e2effd;
+      color: #5c6873;
+    }
   }
 
   .el-form-item-popm {

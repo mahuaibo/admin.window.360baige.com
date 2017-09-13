@@ -1,79 +1,42 @@
-<style lang="scss">
-  .el-upload-list__item {
-    display: none !important;
-  }
-
-  .modify-button {
-    color: #ffffff !important;
-    width: 100% !important;
-    float: right !important;
-    background-color: #31a7ff !important;
-    border: 0px solid #ffffff !important;
-  }
-
-  .modify-button:hover {
-    color: #ffffff !important;
-  }
-
-  .logo-upload {
-    float: right !important;
-    span {
-      position: absolute !important;
-      color: #728ca5 !important;
-      height: 22px !important;
-      line-height: 22px !important;
-      font-size: 12px !important;
-      background-color: #cadced !important;
-      width: 84px !important;
-      margin-top: 12px !important;
-      border-top-right-radius: 20px !important;
-      border-bottom-right-radius: 20px !important;
-    }
-  }
-</style>
 <template>
   <div class="company-info">
-    <div>
-      <el-form :model="companyData" :rules="companyRules" ref="companyData" label-width="100px"
-               style="padding:0px 10px 0px 0px;">
-        <el-form-item label="LOGO:" prop="logo" style="text-align: left;">
-          <el-upload style="height: 48px;" type="drag" :thumbnail-mode="true"
-                     name="uploadFile" :on-success="uploadSuccess"
-                     :action="publicParameters.domain + '/company/uploadLogo?accessToken=' + accessToken + '&&id=' + companyData.id">
-            <img :src="companyData.logo" height="48" width="48"
-                 style="float: left;border-radius: 5px;border:1px solid #cadced;background: #cadced;"/>
-            <div class="el-dragger__text logo-upload">
-              <span class="buttom">点击上传</span>
-            </div>
-          </el-upload>
-        </el-form-item>
-        <el-form-item label="企业名称" prop="name">
-          <el-input v-model="companyData.name" placeholder="请输入企业名称..." :disabled="true"></el-input>
-        </el-form-item>
-        <el-form-item label="企业简称" prop="short_name">
-          <el-input v-model="companyData.short_name" placeholder="请输入简称..."></el-input>
-        </el-form-item>
-        <el-form-item label="企业地址" prop="address">
-          <el-input v-model="companyData.address" placeholder="请输入企业地址..."></el-input>
-        </el-form-item>
-        <el-form-item label="企业简介" prop="brief">
-          <el-input type="textarea" v-model="companyData.brief" resize="none" :autosize="{ minRows: 2, maxRows: 2}"
-                    placeholder="请输入企业简介..."></el-input>
-        </el-form-item>
-        <el-form-item label="企业备注" prop="remark">
-          <el-input type="textarea" v-model="companyData.remark" resize="none" :autosize="{ minRows: 2, maxRows: 2}"
-                    placeholder="请输入企业备注..."></el-input>
-        </el-form-item>
-        <el-form-item label=" ">
-          <el-button class="modify-button" @click="submitForm('companyData')">修改</el-button>
-        </el-form-item>
-      </el-form>
-    </div>
+    <el-form :model="companyData" :rules="companyRules" ref="companyData" label-width="100px" class="company-info-form">
+      <el-form-item label="LOGO:" prop="logo" class="company-info-form-logo">
+        <el-upload class="company-info-form-logo-upload" type="drag" :thumbnail-mode="true"
+                   :action="publicParameters.domain + '/company/uploadLogo?accessToken=' + accessToken + '&&id=' + companyData.id"
+                   name="uploadFile" :on-success="uploadSuccess">
+          <img :src="companyData.logo" height="48" width="48" class="company-info-form-logo-img">
+          <div class="el-dragger__text logo-upload">
+            <span class="buttom">点击上传</span>
+          </div>
+        </el-upload>
+      </el-form-item>
+      <el-form-item label="企业名称" prop="name">
+        <el-input v-model="companyData.name" placeholder="请输入企业名称..." :disabled="true"></el-input>
+      </el-form-item>
+      <el-form-item label="企业简称" prop="short_name">
+        <el-input v-model="companyData.short_name" placeholder="请输入简称..."></el-input>
+      </el-form-item>
+      <el-form-item label="企业地址" prop="address">
+        <el-input v-model="companyData.address" placeholder="请输入企业地址..."></el-input>
+      </el-form-item>
+      <el-form-item label="企业简介" prop="brief">
+        <el-input type="textarea" v-model="companyData.brief" resize="none" :autosize="{ minRows: 2, maxRows: 2}"
+                  placeholder="请输入企业简介..."></el-input>
+      </el-form-item>
+      <el-form-item label="企业备注" prop="remark">
+        <el-input type="textarea" v-model="companyData.remark" resize="none" :autosize="{ minRows: 2, maxRows: 2}"
+                  placeholder="请输入企业备注..."></el-input>
+      </el-form-item>
+      <el-form-item label=" ">
+        <el-button class="modify-button" @click="submitForm('companyData')">修改</el-button>
+      </el-form-item>
+    </el-form>
   </div>
 </template>
 <script>
   import axios from 'axios'
-  import { mapGetters, mapActions } from 'vuex'
+  import {mapGetters, mapActions} from 'vuex'
 
   export default {
     created () {
@@ -153,3 +116,54 @@
     }
   }
 </script>
+<style lang="scss">
+  .el-upload-list__item {
+    display: none !important;
+  }
+
+  .company-info {
+    company-info-form {
+      padding: 0px 10px 0px 0px;
+      .company-info-form-logo {
+        text-align: left;
+        .company-info-form-logo-upload {
+          height: 48px;
+        }
+        .company-info-form-logo-img {
+          float: left;
+          border-radius: 5px;
+          border: 1px solid #cadced;
+          background: #cadced;
+        }
+      }
+    }
+  }
+
+  .modify-button {
+    color: #ffffff !important;
+    width: 100% !important;
+    float: right !important;
+    background-color: #31a7ff !important;
+    border: 0px solid #ffffff !important;
+  }
+
+  .modify-button:hover {
+    color: #ffffff !important;
+  }
+
+  .logo-upload {
+    float: right !important;
+    span {
+      position: absolute !important;
+      color: #728ca5 !important;
+      height: 22px !important;
+      line-height: 22px !important;
+      font-size: 12px !important;
+      background-color: #cadced !important;
+      width: 84px !important;
+      margin-top: 12px !important;
+      border-top-right-radius: 20px !important;
+      border-bottom-right-radius: 20px !important;
+    }
+  }
+</style>

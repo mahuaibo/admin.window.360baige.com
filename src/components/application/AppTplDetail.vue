@@ -1,50 +1,53 @@
 <template>
   <div class="index">
-    <div class="tplDetail-head">
-      <div class="tplDetail-head-left">
+    <div class="appTplDetail">
+      <div class="appTplDetail-left">
         <img :src="appTplData.image" class="application-image">
         <div type="primary" size="mini" class="application-status" v-if="appTplData.subscriptionStatus==1">已订阅</div>
         <div type="primary" size="mini" class="application-status" v-else>未订阅</div>
       </div>
-      <div class="tplDetail-head-right">
-        <div style="color: #505050;font-weight:bold;" id="productName">{{ appTplData.name }}</div>
-        <el-button type="text" id="more" @click="unfurledProfile(appTplData.desc)" v-if="this.showMore">更多</el-button>
-        <div id="product-desc">
+      <div class="appTplDetail-right">
+        <div class="appTplDetail-right-name" id="productName">{{ appTplData.name }}</div>
+        <el-button type="text" id="appTplDetail-right-descMore" @click="descMore(appTplData.desc)" v-if="this.showMore">
+          <span>更多</span>
+        </el-button>
+        <div id="appTplDetail-right-desc">
           <label>{{ appTplData.desc }}</label>
-          <el-button type="text" id="packUp" style="float:right;" @click="packUpProfile">收起</el-button>
+          <el-button type="text" id="packUp" @click="packUpProfile">收起</el-button>
         </div>
-        <div class="data-feesDesc">
+        <div class="appTplDetail-right-feesDesc">
           <label>费用说明</label>
-          <label style="font-size: 12px;font-weight:normal;">（服务截止: {{ appTplData.endTime }}）</label>
+          <label class="appTplDetail-right-feesDesc-endTime">（服务截止: {{ appTplData.endTime }}）</label>
         </div>
-        <div style="padding-top: 6px;padding-bottom:24px;">该应用功能费用为<span
-          style="color: #ff5f27;font-weight: bold;">￥{{ money(appTplData.price)
-          }}/{{ appTplData.payCycle }}</span>，您可根据需求选择订购。
+        <div class="appTplDetail-right-feesExplain">该应用功能费用为
+          <span class="appTplDetail-right-feesExplain-price">
+          ￥{{ money(appTplData.price)}}/{{ appTplData.payCycle }}，您可根据需求选择订购。
+          </span>
         </div>
         <!--<div style="padding-top: 6px;padding-bottom:24px;">{{ appTplData.priceDesc }}</div>-->
       </div>
     </div>
-    <div class="tplDetail-middle">
+    <div class="appTplDetail-middle">
       <el-row :gutter="24">
         <el-col :span="6">产品</el-col>
         <el-col :span="6">单价</el-col>
         <el-col :span="6">数量</el-col>
         <el-col :span="6">金额</el-col>
       </el-row>
-      <el-row :gutter="24" style="padding-top: 6px;">
-        <el-col :span="6" style="padding-left: 12px;">
-          <div class="data-product">
-            <div class="data-product-price">￥{{ money(appTplData.price) }}</div>
-            <div class="data-product-card">
-              <div class="data-product-text">每{{ appTplData.payCycle }}</div>
+      <el-row :gutter="24" class="appTplDetail-middle-data">
+        <el-col :span="6" class="appTplDetail-middle-data-product">
+          <div class="appTplDetail-middle-data-product-data">
+            <div class="appTplDetail-middle-data-product-price">￥{{ money(appTplData.price) }}</div>
+            <div class="appTplDetail-middle-data-product-card">
+              <div class="appTplDetail-middle-data-product-text">每{{ appTplData.payCycle }}</div>
             </div>
           </div>
         </el-col>
         <el-col :span="6">
-          <div style="height: 104px;line-height: 104px;">￥{{ money(appTplData.price) }}</div>
+          <div class="appTplDetail-middle-data-price">￥{{ money(appTplData.price) }}</div>
         </el-col>
         <el-col :span="6">
-          <div style="height:70px;padding-top: 34px;">
+          <div class="appTplDetail-middle-data-num">
             <el-input-number size="small" v-model="number" @change="handleChange"
                              v-if="appTplData.price!=0||appTplData.price!=0.00" :min="1" :max="12"></el-input-number>
             <el-input-number size="small" v-model="number" @change="handleChange" :disabled="true" :min="1"
@@ -52,39 +55,35 @@
           </div>
         </el-col>
         <el-col :span="6">
-          <div style="height: 104px;line-height: 104px;color: #ff5f27;">￥{{ money(totalPrice) }}</div>
+          <div class="appTplDetail-middle-data-totalPrice">￥{{ money(totalPrice) }}</div>
         </el-col>
       </el-row>
     </div>
-    <div class="tplDetail-bottom">
-      <div style="color: #505050;font-weight:bold;">支付方式</div>
-      <div style="width: 222px;height:42px;margin-top: 24px;">
-        <div v-model="payMode" id="weChatPay" @click="optionPayMode('weChatPay')">
-          <img src="../../assets/weixin.png" class="pay-image">
-          <label style="padding-left:6px;letter-spacing:14px;">微信</label>
+    <div class="appTplDetail-bottom">
+      <div class="appTplDetail-bottom-payWay">支付方式</div>
+      <div class="appTplDetail-bottom-img">
+        <div v-model="payMode" id="appTplDetail-bottom-img-weChatPay" @click="optionPayMode('weChatPay')">
+          <img src="../../assets/weixin.png" class="appTplDetail-bottom-imgs">
+          <label class="appTplDetail-bottom-img-weChatText">微信</label>
         </div>
-        <div v-model="payMode" id="aliPay" @click="optionPayMode('aliPay')">
-          <img src="../../assets/zhifubao.png" class="pay-image">
-          <label style="padding-left:6px; ">支付宝</label>
+        <div v-model="payMode" id="appTplDetail-bottom-img-aliPay" @click="optionPayMode('aliPay')">
+          <img src="../../assets/zhifubao.png" class="appTplDetail-bottom-imgs">
+          <label class="appTplDetail-bottom-img-aliText">支付宝</label>
         </div>
       </div>
     </div>
-    <div style="float:right;text-align:right;width: 100%">
-      <el-button class="confirm-order" type="primary" @click="immediatePayment" v-if="status===0">立即支付
-
-
-      </el-button>
+    <div class="appTplDetail-immediatePayment">
+      <el-button class="confirm-order" type="primary" @click="immediatePayment" v-if="status===0">立即支付</el-button>
     </div>
     <el-dialog title="微信支付" v-model="payDialog" size="large" :before-close="closeWindow" :close-on-click-modal="false">
       <div><img :src="payImage" height="256" width="256"/></div>
-      <div>使用微信扫一扫支付</div>
-      <div style="height:40px;"></div>
+      <div class="pay-prompting">使用微信扫一扫支付</div>
     </el-dialog>
   </div>
 </template>
 <script>
   import axios from 'axios'
-  import { mapGetters, mapActions } from 'vuex'
+  import {mapGetters, mapActions} from 'vuex'
 
   export default {
     created () {
@@ -195,19 +194,19 @@
         this.totalPrice = (this.appTplData.price * this.number).toFixed(2)
       },
       // 应用介绍->更多
-      unfurledProfile (data) {
-        var productDesc = document.getElementById('product-desc')
-        productDesc.style.height = Math.ceil(data.length / (document.getElementById('productName').clientWidth / 14)) * 20 + 6 + 'px'
+      descMore (data) {
+        var productDesc = document.getElementById('appTplDetail-right-desc')
+        productDesc.style.height = Math.ceil(data.length / (document.getElementById('productName').clientWidth / 14)) * 24 + 6 + 'px'
         productDesc.style.width = '100%'
-        document.getElementById('more').style.display = 'none'
+        document.getElementById('appTplDetail-right-descMore').style.display = 'none'
         document.getElementById('packUp').style.display = 'inline'
       },
       // 应用介绍->收起
       packUpProfile () {
-        var productDesc = document.getElementById('product-desc')
-        productDesc.style.height = '20px'
+        var productDesc = document.getElementById('appTplDetail-right-desc')
+        productDesc.style.height = '24px'
         productDesc.style.width = '550px'
-        document.getElementById('more').style.display = 'inline'
+        document.getElementById('appTplDetail-right-descMore').style.display = 'inline'
         document.getElementById('packUp').style.display = 'none'
       },
       // 立即支付
@@ -293,13 +292,13 @@
       optionPayMode (index) {
         if (index === 'weChatPay') {
           document.getElementById(index).style.border = '1px solid #ff5f27'
-          document.getElementById('aliPay').style.border = '1px solid #f0f0f0'
-          document.getElementById('aliPay').style.borderLeft = '0px solid #ffffff'
+          document.getElementById('appTplDetail-bottom-img-aliPay').style.border = '1px solid #f0f0f0'
+          document.getElementById('appTplDetail-bottom-img-aliPay').style.borderLeft = '0px solid #ffffff'
         } else {
           this.messageRemind('warning', '猿类努力开发中...')
 //          document.getElementById(index).style.border = '1px solid #ff5f27'
-//          document.getElementById('weChatPay').style.border = '1px solid #f0f0f0'
-//          document.getElementById('weChatPay').style.borderRadius = '0px solid #ffffff'
+//          document.getElementById('appTplDetail-bottom-img-weChatPay').style.border = '1px solid #f0f0f0'
+//          document.getElementById('appTplDetail-bottom-img-weChatPay').style.borderRadius = '0px solid #ffffff'
         }
       },
       messageRemind (type, info) { // type success成功   warning警告   error失败
@@ -327,11 +326,11 @@
     margin-right: 20px;
   }
 
-  .tplDetail-head {
+  .appTplDetail {
     font-size: 14px;
     min-height: 118px;
     border-bottom: 1px solid #f0f0f0;
-    .tplDetail-head-left {
+    .appTplDetail-left {
       width: 70px;
       height: 106px;
       float: left;
@@ -352,77 +351,127 @@
         line-height: 22px;
       }
     }
-    .tplDetail-head-right {
+    .appTplDetail-right {
       margin-top: 12px;
       padding-left: 132px;
       text-align: left;
-      #more {
+      .appTplDetail-right-name {
+        color: #505050;
+        font-weight: bold;
+      }
+      #appTplDetail-right-descMore {
         float: right;
       }
-      #product-desc {
+      #appTplDetail-right-desc {
         padding-top: 6px;
-        height: 20px;
+        height: 24px;
         width: 550px;
         overflow: hidden
       }
       #packUp {
         display: none;
+        float: right;
       }
-      .data-feesDesc {
+      .appTplDetail-right-feesDesc {
         color: #505050;
         font-weight: bold;
         padding-top: 12px;
+        .appTplDetail-right-feesDesc-endTime {
+          font-size: 12px;
+          font-weight: normal;
+        }
+      }
+      .appTplDetail-right-feesExplain {
+        padding-top: 6px;
+        padding-bottom: 24px;
+        .appTplDetail-right-feesExplain-price {
+          color: #ff5f27;
+          font-weight: bold;
+        }
       }
     }
   }
 
-  .tplDetail-middle {
+  .appTplDetail-middle {
     font-size: 14px;
     padding-top: 24px;
     padding-bottom: 24px;
     border-bottom: 1px solid #f0f0f0;
-    .data-product {
-      width: 220px;
-      height: 102px;
-      line-height: 102px;
-      border: 1px solid #ff5f27;
-      background-color: #ff5f27;
-      font-size: 14px;
-      .data-product-price {
-        float: left;
-        width: 163px;
-        height: 102px;
-        font-size: 24px;
+    .appTplDetail-middle-data {
+      padding-top: 6px;
+      .appTplDetail-middle-data-product {
+        padding-left: 12px;
+        .appTplDetail-middle-data-product-data {
+          min-width: 222px;
+          max-width: 222px;
+          height: 102px;
+          line-height: 102px;
+          border: 1px solid #ff5f27;
+          background-color: #ff5f27;
+          font-size: 14px;
+          .appTplDetail-middle-data-product-price {
+            float: left;
+            width: 163px;
+            height: 100px;
+            font-size: 24px;
+            color: #ff5f27;
+            background: #ffffff;
+          }
+          .appTplDetail-middle-data-product-card {
+            float: right;
+            background-color: #f0f0f0;
+            width: 57px;
+            height: 100px;
+            border-bottom-right-radius: 25px;
+          }
+          .appTplDetail-middle-data-product-text {
+            margin: 20px;
+            min-width: 20px;
+            min-height: 57px;
+            line-height: 25px;
+          }
+        }
+      }
+      .appTplDetail-middle-data-price {
+        height: 104px;
+        line-height: 104px;
+      }
+      .appTplDetail-middle-data-num {
+        height: 70px;
+        padding-top: 34px;
+      }
+      .appTplDetail-middle-data-totalPrice {
+        height: 104px;
+        line-height: 104px;
         color: #ff5f27;
-        background: #ffffff;
-      }
-      .data-product-card {
-        float: right;
-        background-color: #f0f0f0;
-        width: 57px;
-        height: 102px;
-        border-bottom-right-radius: 25px;
-      }
-      .data-product-text {
-        margin: 20px;
-        width: 20px;
-        height: 57px;
-        line-height: 25px;
       }
     }
   }
 
-  .tplDetail-bottom {
+  .appTplDetail-bottom {
     text-align: left;
     padding-top: 24px;
-    #weChatPay {
+    .appTplDetail-bottom-payWay {
+      color: #505050;
+      font-weight: bold;
+    }
+    .appTplDetail-bottom-img {
+      width: 222px;
+      height: 42px;
+      margin-top: 24px;
+    }
+    #appTplDetail-bottom-img-weChatPay {
       height: 42px;
       line-height: 42px;
       border: 1px solid #ff5f27;
       display: inline-block;
       width: 49%;
+      .appTplDetail-bottom-img-weChatText {
+        padding-left: 6px;
+        letter-spacing: 14px;
+      }
     }
-    #aliPay {
+    #appTplDetail-bottom-img-aliPay {
       height: 42px;
       line-height: 42px;
       display: inline-block;
@@ -430,15 +479,28 @@
       border-top: 1px solid #f0f0f0;
       border-right: 1px solid #f0f0f0;
       border-bottom: 1px solid #f0f0f0;
-      float: right
+      float: right;
+      .appTplDetail-bottom-img-aliText {
+        padding-left: 6px;
+      }
     }
-    .pay-image {
+    .appTplDetail-bottom-imgs {
       width: 20px;
       height: 20px;
-      padding-left: 18px;
+      margin-left: 16px;
       vertical-align: middle;
       margin-bottom: 3px;
     }
+  }
+
+  .appTplDetail-immediatePayment {
+    float: right;
+    text-align: right;
+    width: 100%
+  }
+
+  .pay-prompting {
+    padding-bottom: 40px;
   }
 
   .confirm-order {

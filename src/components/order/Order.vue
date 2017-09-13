@@ -24,11 +24,13 @@
       <div class="order-main-content">
         <div class="order-main-content-empty" v-if="orderListData.total===0">
           暂无数据
+
         </div>
         <div class="order-main-content-list" v-else>
           <div class="order-main-content-list-item" v-for="val in orderData.list">
             <div class="order-main-content-list-item-title">
               订单号：{{ val.code }}
+
             </div>
             <div class="order-main-content-list-item-table">
               <div class="order-main-content-list-item-table-item">
@@ -48,17 +50,14 @@
                 <div class="text">{{ money(val.totalPrice) }}</div>
               </div>
               <div class="order-main-content-list-item-table-item">
-                <div v-if="val.status===0" class="text">
-                  <label style="color: #505050;">待付款</label>
-                </div>
-                <div v-else-if="val.status===4" class="text">
-                  <label style="color: #505050;">交易完成</label>
-                </div>
+                <div v-if="val.status===0" class="text">待付款</div>
+                <div v-else-if="val.status===4" class="text">交易完成</div>
               </div>
               <div class="order-main-content-list-item-table-item">
                 <div v-if="val.status===0" class="text2">
                   <button v-if="shixiao(val.createTime)" class="immediately-pay" @click="closeOrder(val)">
                     订单超时
+
                   </button>
                   <button v-else class="immediately-pay" @click="immediatelyPay(val)">立即支付</button>
                   <div>
@@ -85,8 +84,7 @@
 </template>
 <script>
   import axios from 'axios'
-  import { mapGetters, mapActions } from 'vuex'
-
+  import {mapGetters, mapActions} from 'vuex'
   export default {
     created () {
       this.publicParameters.returnButtom = false
@@ -134,24 +132,32 @@
       },
       // 关闭订单
       closeOrder (val) {
-        var current = this
-        axios({
-          method: 'POST',
-          url: this.publicParameters.domain + '/order/cancel',
-          params: {
-            accessToken: localStorage.getItem('accessToken'),
-            id: val.id
-          }
-        }).then(function (response) {
-          console.log(response.data)
-          if (response.data.code === '200') {
-            current.messageRemind('success', response.data.message)
-            current.initOrderListData(current.orderListData)
-          } else {
-            current.messageRemind('error', response.data.message)
-          }
-        }).catch(function (error) {
-          console.log(error)
+        this.$confirm('确认关闭订单吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          var current = this
+          axios({
+            method: 'POST',
+            url: this.publicParameters.domain + '/order/cancel',
+            params: {
+              accessToken: localStorage.getItem('accessToken'),
+              id: val.id
+            }
+          }).then(function (response) {
+            console.log(response.data)
+            if (response.data.code === '200') {
+              current.messageRemind('success', response.data.message)
+              current.initOrderListData(current.orderListData)
+            } else {
+              current.messageRemind('error', response.data.message)
+            }
+          }).catch(function (error) {
+            console.log(error)
+          })
+        }).catch(() => {
+          console.log('取消操作！')
         })
       },
       // 立即支付
@@ -256,6 +262,7 @@
                 float: left;
                 font-size: 14px;
                 .text {
+                  color: #505050;
                   line-height: 110px;
                   overflow: hidden;
                   text-overflow: ellipsis;
@@ -332,7 +339,7 @@
     .order-page {
       min-width: $min-width-order !important;
       text-align: right;
-      padding: 0 20px;
+      padding: 20px 20px 0px 20px;
     }
   }
 </style>

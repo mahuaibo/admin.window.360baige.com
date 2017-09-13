@@ -15,7 +15,6 @@ import Account from '@/components/account/Account'
 import TransactionDetail from '@/components/account/TransactionDetail'
 import Order from '@/components/order/Order'
 import Logger from '@/components/logger/Logger'
-import SystemMessage from '@/components/system/Message'
 
 Vue.use(Router)
 
@@ -90,11 +89,6 @@ export default new Router({
       component: Logger,
       path: '/logger/list',
       alias: 'logger'
-    }, {
-      name: 'systemMessage',
-      component: SystemMessage,
-      path: '/system/message',
-      alias: 'systemMessage'
     }]
   }]
 })

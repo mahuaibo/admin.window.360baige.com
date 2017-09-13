@@ -1,17 +1,16 @@
 <template>
   <div class="admin-user-position">
     <div v-for="val in userPositionList.list" class="identityTab" @click="identitySwitch(val)">
-      <div class="userPosition" style="width: 202px;height: 74px;border: 1px solid #31a7ff;border-radius: 2px;"
-           v-if="val.userPositionId==userPositionId">
+      <div class="admin-user-position-userPosition current-userPosition" v-if="val.userPositionId==userPositionId">
         <label class="identityTab-identityImg">
-          <img class="logo" :src="val.companyLogo" height="52" width="52"/>
+          <img :src="val.companyLogo" height="52" width="52"/>
         </label>
         <div class="identityTab-companyName">{{ val.companyName }}</div>
         <div class="identityTab-userPositionName">{{ val.userPositionName }}</div>
       </div>
-      <div class="userPosition" v-else>
+      <div class="admin-user-position-userPosition" v-else>
         <label class="identityTab-identityImg">
-          <img class="logo" :src="val.companyLogo" height="52" width="52"/>
+          <img :src="val.companyLogo" height="52" width="52"/>
         </label>
         <div class="identityTab-companyName">{{ val.companyName }}</div>
         <div class="identityTab-userPositionName">{{ val.userPositionName }}</div>
@@ -22,7 +21,6 @@
 <script>
   import axios from 'axios'
   import {mapGetters, mapActions} from 'vuex'
-
   export default {
     created () {
       this.getUserPositionList()
@@ -43,7 +41,7 @@
         'getUserPositionList'
       ]),
       identitySwitch (data) {
-        if (data.userPositionId + '' === localStorage.getItem('userPositionId')) {
+        if (data.userPositionId + '' === this.userPositionId) {
           return
         }
         var params = {}
@@ -98,7 +96,13 @@
     width: 200px;
     height: 72px;
     border: 1px solid #ffffff;
-    .userPosition:hover {
+    .current-userPosition {
+      width: 202px;
+      height: 74px;
+      border: 1px solid #31a7ff;
+      border-radius: 2px;
+    }
+    .admin-user-position-userPosition:hover {
       cursor: pointer;
       width: 202px;
       height: 74px;

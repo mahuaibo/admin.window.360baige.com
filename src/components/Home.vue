@@ -127,7 +127,7 @@
       .layout-container-wrapper {
         overflow: hidden !important;
         background: white;
-        height: calc(100vh - 100px);
+        height: calc(100vh - 58px);
         overflow: scroll;
         padding: 20px;
       }

@@ -1,20 +1,20 @@
 <template>
   <div class="index">
     <div class="comtent-list">
-      <el-table :data="loggerData.list" style="width: 100%" max-height="810">
+      <el-table :data="loggerData.list" max-height="810">
         <el-table-column label="操作时间" width="213">
           <template scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.createTime }}</span>
+            <span>{{ scope.row.createTime }}</span>
           </template>
         </el-table-column>
         <el-table-column label="操作类型" width="214">
           <template scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.type }}</span>
+            <span>{{ scope.row.type }}</span>
           </template>
         </el-table-column>
         <el-table-column label="操作描述">
           <template scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.remark }}</span>
+            <span>{{ scope.row.remark }}</span>
           </template>
         </el-table-column>
         <el-table-column label="IP地址" width="214">
