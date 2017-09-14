@@ -1,3 +1,10 @@
+<style>
+  .el-tabs__item {
+    color: #505050;
+    padding: 0px 25px;
+    height: 44px;
+  }
+</style>
 <template>
   <div class="order">
     <div class="order-tab">
@@ -22,16 +29,10 @@
         <div class="order-main-title-item">交易操作</div>
       </div>
       <div class="order-main-content">
-        <div class="order-main-content-empty" v-if="orderListData.total===0">
-          暂无数据
-
-        </div>
+        <div class="order-main-content-empty" v-if="orderListData.total===0">暂无数据</div>
         <div class="order-main-content-list" v-else>
           <div class="order-main-content-list-item" v-for="val in orderData.list">
-            <div class="order-main-content-list-item-title">
-              订单号：{{ val.code }}
-
-            </div>
+            <div class="order-main-content-list-item-title">订单号：{{ val.code }}</div>
             <div class="order-main-content-list-item-table">
               <div class="order-main-content-list-item-table-item">
                 <div class="photo">
@@ -55,10 +56,7 @@
               </div>
               <div class="order-main-content-list-item-table-item">
                 <div v-if="val.status===0" class="text2">
-                  <button v-if="shixiao(val.createTime)" class="immediately-pay" @click="closeOrder(val)">
-                    订单超时
-
-                  </button>
+                  <button v-if="shixiao(val.createTime)" class="immediately-pay" @click="closeOrder(val)">订单超时</button>
                   <button v-else class="immediately-pay" @click="immediatelyPay(val)">立即支付</button>
                   <div>
                     <el-button type="text" class="close-order" @click="closeOrder(val)">关闭订单</el-button>
@@ -192,7 +190,8 @@
   .order {
     .order-tab {
       min-width: $min-width-order !important;
-      padding: 12px 20px 32px 20px;
+      padding: 0px 20px 12px 20px;
+      font-weight: bold;
     }
     .order-main {
       min-width: $min-width-order !important;
@@ -219,6 +218,7 @@
         min-width: $min-width-order !important;
         width: calc(100vw - 360px) !important;
         overflow: hidden;
+        box-shadow:0px 15px 10px -15px #ececec inset;
         .order-main-content-empty {
           height: 80px !important;
           line-height: 80px;

@@ -325,7 +325,7 @@
   .operating-menu {
     position: absolute;
     top: 58px;
-    right: 60px;
+    right: 42px;
     font-size: 14pt;
     min-height: 170px;
     min-width: 170px;
@@ -361,7 +361,7 @@
     s {
       position: absolute;
       top: -20px;
-      right: 0px;
+      right: 16px;
       border-color: transparent transparent #e9e9e9 transparent;
       border-style: dashed dashed solid dashed;
       border-width: 10px;
@@ -380,7 +380,7 @@
   .message {
     position: absolute;
     top: 56px;
-    right: 42px;
+    right: -8px;
     font-size: 14pt;
     min-height: 242px;
     min-width: 322px;
@@ -418,6 +418,8 @@
         padding-left: 25px;
         padding-right: 25px;
         border-bottom: 1px solid #f6f6f6;
+
+        font-family: ms sans serif, arial;
         text-overflow: ellipsis;
         overflow: hidden;
         white-space: nowrap;
@@ -438,7 +440,7 @@
     s {
       position: absolute;
       top: -18px;
-      right: 86px;
+      right: 135px;
       border-color: transparent transparent #e9e9e9 transparent;
       border-style: dashed dashed solid dashed;
       border-width: 10px;

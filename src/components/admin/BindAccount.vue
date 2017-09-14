@@ -29,12 +29,14 @@
               </el-input>
             </el-form-item>
             <el-form-item prop="password">
-              <el-input type="password" placeholder="建议至少使用两种字符组合" v-model="registerForm.password" class="registerForm-input">
+              <el-input type="password" placeholder="建议至少使用两种字符组合" v-model="registerForm.password"
+                        class="registerForm-input">
                 <template slot="prepend">设 置 密 码</template>
               </el-input>
             </el-form-item>
             <el-form-item prop="confPassword">
-              <el-input type="password" placeholder="请再次输入密码" v-model="registerForm.confPassword" class="registerForm-input">
+              <el-input type="password" placeholder="请再次输入密码" v-model="registerForm.confPassword"
+                        class="registerForm-input">
                 <template slot="prepend">确 认 密 码</template>
               </el-input>
             </el-form-item>

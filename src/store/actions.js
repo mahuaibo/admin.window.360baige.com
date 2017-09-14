@@ -1,4 +1,4 @@
-// 跳转页面
+// 公共参数
 export const getUserPositionList = ({commit}, index, row) => commit('getUserPositionList', index, row)
 // 跳转页面
 export const handleClick = ({commit}, index, row) => commit('handleClick', index, row)
