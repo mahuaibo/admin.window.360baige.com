@@ -16,7 +16,6 @@ const state = {
     returnButtom: false,
     name: localStorage.getItem('username') + localStorage.getItem('positionName'),
     path: '',
-<<<<<<< HEAD
     // domain: 'http://192.168.0.113:30000/cloud/window/v1'
     // domain: 'http://123.56.6.206:30000/cloud/window/v1'
     domain: 'http://192.168.0.100:30000/cloud/window/v1'
