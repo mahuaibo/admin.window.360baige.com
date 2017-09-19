@@ -7,7 +7,7 @@
       </el-button>
     </div>
     <div class="common-header-right">
-      <img class="roleLogo" :src="publicParameters.head" height="24" width="24"/>
+      <img class="roleLogo" :src="head" height="24" width="24"/>
       <div class="operating-menu">
         <div class="operating-menu-content">
           <div class="operating-menu-item" @click="openBox('identity')" @mouseover="moveShow('changeIdentity')"
@@ -86,7 +86,7 @@
   export default {
     components: {AdminUserPosition, CompanyInfo, AdminInfo, ModifyPwd},
     created () {
-      this.publicParameters.head = localStorage.getItem('head')
+      this.head = localStorage.getItem('head')
     },
     computed: {
       ...mapGetters([
@@ -103,6 +103,7 @@
         callback()
       }
       return {
+        head: '',
         changeIdentity: 1,
         companyInfor: 1,
         userInfor: 1,

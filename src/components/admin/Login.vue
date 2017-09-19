@@ -138,7 +138,7 @@
           params: {code: code}
         }).then(function (response) {
           console.log(response.data)
-          if (response.data.code === '200') { // 登录成功报错cookie
+          if (response.data.code === '200') { // 登录成功保存cookie
             localStorage.setItem('username', response.data.data.username)
             localStorage.setItem('head', response.data.data.head)
             localStorage.setItem('accessTicket', response.data.data.accessTicket)

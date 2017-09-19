@@ -4,10 +4,8 @@
       <div class="appCenter-operatingArea-seek">
         <el-input placeholder="请输入名称..." icon="search" v-model="appListData.appSeek"
                   :on-icon-click="appCenterRefreshListData" class="appCenter-operatingArea-seek-input"></el-input>
-        <el-button type="success" @click="handleClick('/application/store')"
-                   class="appCenter-operatingArea-seek-button">
-          <span>应用商店</span>
-        </el-button>
+        <img src="../../assets/app_store.png" @click="handleClick('/application/store')"
+             class="appCenter-operatingArea-seek-button">
       </div>
     </div>
     <div class="appCenter-list">
@@ -41,7 +39,8 @@
       </el-table>
     </div>
     <div class="appCenter-paging">
-      <el-pagination @size-change="appCenterRefreshListData" @current-change="appCenterRefreshListData" :page-sizes="[50, 100, 200]"
+      <el-pagination @size-change="appCenterRefreshListData" @current-change="appCenterRefreshListData"
+                     :page-sizes="[50, 100, 200]"
                      :current-page.sync="appListData.current" :total="appListData.total"
                      :page-size="appListData.pageSize" layout="total, sizes, prev, pager, next, jumper">
       </el-pagination>

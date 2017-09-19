@@ -23,7 +23,6 @@
   import CommonHeader from '@/components/common/Header'
   import CommonSidebar from '@/components/common/Sidebar'
   import { mapActions } from 'vuex'
-
   export default {
     components: {CommonHeader, CommonSidebar},
     created () {
@@ -125,7 +124,7 @@
         height: 58px;
       }
       .layout-container-wrapper {
-        overflow: hidden !important;
+        overflow: hidden;
         background: white;
         height: calc(100vh - 58px);
         overflow: scroll;
