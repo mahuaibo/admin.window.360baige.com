@@ -21,8 +21,8 @@
         </div>
         <div class="appTplDetail-right-feesExplain">该应用功能费用为
           <span class="appTplDetail-right-feesExplain-price">
-          ￥{{ money(appTplData.price)}}/{{ appTplData.payCycle }}，您可根据需求选择订购。
-          </span>
+          ￥{{ money(appTplData.price)}}/{{ appTplData.payCycle }}
+          </span>，您可根据需求选择订购。
         </div>
         <!--<div style="padding-top: 6px;padding-bottom:24px;">{{ appTplData.priceDesc }}</div>-->
       </div>
@@ -72,7 +72,7 @@
         </div>
       </div>
     </div>
-    <button @click="immediatePayment2">立即支付</button>
+    <!--<button @click="immediatePayment2">立即支付</button>-->
     <div class="appTplDetail-immediatePayment">
       <el-button class="confirm-order" type="primary" @click="immediatePayment" v-if="status===0">立即支付</el-button>
     </div>
