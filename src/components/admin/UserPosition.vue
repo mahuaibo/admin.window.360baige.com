@@ -20,7 +20,8 @@
 </template>
 <script>
   import axios from 'axios'
-  import {mapGetters, mapActions} from 'vuex'
+  import { mapGetters, mapActions } from 'vuex'
+
   export default {
     created () {
       this.getUserPositionList()
@@ -71,9 +72,10 @@
             localStorage.setItem('accessToken', response.data.data.accessToken)
             current.userPositionId = data.userPositionId
             current.publicParameters.identityListDialog = false
-            window.opener = null
-            window.open(window.location.origin + '#/application/center', '_self')
-            window.close()
+            window.location.href = window.location.origin + '#/application/center'
+//            window.opener = null
+//            window.open(window.location.origin + '#/application/center', '_self')
+//            window.close()
           } else {
             current.promptInfo('error', '角色切换失败！')
           }
