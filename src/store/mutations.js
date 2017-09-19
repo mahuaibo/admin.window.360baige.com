@@ -2,7 +2,7 @@ import axios from 'axios'
 import router from '.././router'
 
 // /////////////////////////////accessToken验证////////////////
-function verifyLoginAccessToken() {
+function verifyLoginAccessToken () {
   if (localStorage.getItem('accessToken') === null) {
     router.push('/admin/login')
   }
@@ -33,7 +33,7 @@ export const getUserPositionList = (state, index, row) => {
       accessValue: localStorage.getItem('accessToken')
     }
   } else {
-    params = {accessTicket: localStorage.getItem('accessTicket')}
+    params = {accessValue: localStorage.getItem('accessTicket')}
   }
   state.userPositionList.list = []
   axios({
@@ -280,7 +280,7 @@ export const initLoggerListData = (state, index, row) => {
   })
 }
 
-function formatDate(date) {
+function formatDate (date) {
   var myyear = date.getFullYear()
   var mymonth = date.getMonth() + 1
   var myweekday = date.getDate()

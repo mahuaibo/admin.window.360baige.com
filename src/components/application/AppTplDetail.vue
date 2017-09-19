@@ -21,8 +21,8 @@
         </div>
         <div class="appTplDetail-right-feesExplain">该应用功能费用为
           <span class="appTplDetail-right-feesExplain-price">
-          ￥{{ money(appTplData.price)}}/{{ appTplData.payCycle }}，您可根据需求选择订购。
-          </span>
+          ￥{{ money(appTplData.price)}}/{{ appTplData.payCycle }}
+          </span>，您可根据需求选择订购。
         </div>
         <!--<div style="padding-top: 6px;padding-bottom:24px;">{{ appTplData.priceDesc }}</div>-->
       </div>
@@ -72,6 +72,7 @@
         </div>
       </div>
     </div>
+    <!--<button @click="immediatePayment2">立即支付</button>-->
     <div class="appTplDetail-immediatePayment">
       <el-button class="confirm-order" type="primary" @click="immediatePayment" v-if="status===0">立即支付</el-button>
     </div>
@@ -83,7 +84,7 @@
 </template>
 <script>
   import axios from 'axios'
-  import {mapGetters, mapActions} from 'vuex'
+  import { mapGetters, mapActions } from 'vuex'
 
   export default {
     created () {
@@ -208,6 +209,51 @@
         productDesc.style.width = '550px'
         document.getElementById('appTplDetail-right-descMore').style.display = 'inline'
         document.getElementById('packUp').style.display = 'none'
+      },
+      immediatePayment2 () {
+        console.log('确认订单')
+        var current = this
+        if (current.orderId === 0) {
+          axios({
+            method: 'POST',
+            url: this.publicParameters.domain + '/order/add',
+            params: {
+              accessToken: localStorage.getItem('accessToken'),
+              applicationTplId: this.appTplData.id,
+              num: this.number,
+              payType: this.payMode
+            }
+          }).then(function (response) {
+            console.log(response.data)
+            if (response.data.code === '200') {
+//              current.payDialog = true
+              current.codeUrl = response.data.data.codeUrl
+//              current.payImage = current.publicParameters.domain + '/order/qr?size=356&url=' + current.codeUrl
+              window.location.href = current.codeUrl + '&redirect_url=http://wwww.360baige.com'
+//              window.location.open(current.codeUrl)
+              current.payStatusTimer(response.data.data.id)
+              current.orderId = response.data.data.id
+            }
+          }).catch(function (error) {
+            console.log(error)
+          })
+        } else {
+          if (current.codeUrl === '') {
+            console.log('1，' + current.codeUrl)
+//            current.payDialog = true
+//            current.payImage = current.publicParameters.domain + '/order/qr?size=356&url=' + current.codeUrl
+            window.location.href = current.codeUrl + '&redirect_url=http://wwww.360baige.com'
+//            window.location.open(current.codeUrl)
+            current.payStatusTimer(current.orderId)
+          } else {
+            console.log('2，' + current.codeUrl)
+//            current.payDialog = true
+//            current.payImage = current.publicParameters.domain + '/order/qr?size=356&url=' + current.codeUrl
+            window.location.href = current.codeUrl + '&redirect_url=http://wwww.360baige.com'
+//            window.location.open(current.codeUrl)
+            current.payStatusTimer(current.orderId)
+          }
+        }
       },
       // 立即支付
       immediatePayment () {
