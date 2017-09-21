@@ -123,7 +123,8 @@
         if (amount === 0) {
           return '0.00'
         } else {
-          return amount / 100
+          amount = amount / 100
+          return amount.toFixed(2)
         }
       },
       filterList (val) {
