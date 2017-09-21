@@ -2,10 +2,10 @@
   <div class="company-info">
     <el-form :model="companyData" :rules="companyRules" ref="companyData" label-width="100px" class="company-info-form">
       <el-form-item label="LOGO:" prop="logo" class="company-info-form-logo">
-        <el-upload class="company-info-form-logo-upload" type="drag" :thumbnail-mode="true"
-                   :action="publicParameters.domain + '/company/uploadLogo?accessToken=' + accessToken + '&&id=' + companyData.id"
-                   name="uploadFile" :on-success="uploadSuccess">
-          <img :src="companyData.logo" height="48" width="48" class="company-info-form-logo-img">
+        <el-upload type="drag" :thumbnail-mode="true" name="uploadFile" :on-success="uploadSuccess"
+                   :action="publicParameters.domain + '/user/uploadLogo?accessToken=' + accessToken + '&id=' + companyData.id"
+                   class="company-info-from-upload">
+          <img :src="companyData.logo" height="48" width="48" class="company-info-form-img"/>
           <div class="el-dragger__text logo-upload">
             <span class="buttom">点击上传</span>
           </div>
@@ -36,7 +36,7 @@
 </template>
 <script>
   import axios from 'axios'
-  import {mapGetters, mapActions} from 'vuex'
+  import { mapGetters, mapActions } from 'vuex'
 
   export default {
     created () {
@@ -109,61 +109,54 @@
         console.log(response)
         this.companyData.logo = response.head
       },
-      messageRemind (type, info) { // type success成功   warning警告   error失败
-        this.$message({message: info, type: type})
+      messageRemind (type, Info) { // type success成功   warning警告   error失败
+        this.$message({message: Info, type: type})
         return false
       }
     }
   }
 </script>
-<style lang="scss">
-  .el-upload-list__item {
-    display: none !important;
-  }
-
+<style lang="scss" scoped>
   .company-info {
-    company-info-form {
+    .company-info-form {
       padding: 0px 10px 0px 0px;
       .company-info-form-logo {
         text-align: left;
-        .company-info-form-logo-upload {
+        .company-info-from-upload {
           height: 48px;
         }
-        .company-info-form-logo-img {
+        .company-info-form-img {
           float: left;
           border-radius: 5px;
           border: 1px solid #cadced;
           background: #cadced;
         }
+        .logo-upload {
+          float: right;
+          span {
+            position: absolute;
+            color: #728ca5;
+            height: 22px;
+            line-height: 22px;
+            font-size: 12px;
+            background-color: #cadced;
+            width: 84px;
+            margin-top: 14px;
+            border-top-right-radius: 20px;
+            border-bottom-right-radius: 20px;
+          }
+        }
       }
-    }
-  }
-
-  .modify-button {
-    color: #ffffff !important;
-    width: 100% !important;
-    float: right !important;
-    background-color: #31a7ff !important;
-    border: 0px solid #ffffff !important;
-  }
-
-  .modify-button:hover {
-    color: #ffffff !important;
-  }
-
-  .logo-upload {
-    float: right !important;
-    span {
-      position: absolute !important;
-      color: #728ca5 !important;
-      height: 22px !important;
-      line-height: 22px !important;
-      font-size: 12px !important;
-      background-color: #cadced !important;
-      width: 84px !important;
-      margin-top: 12px !important;
-      border-top-right-radius: 20px !important;
-      border-bottom-right-radius: 20px !important;
+      .modify-button {
+        color: #ffffff;
+        width: 100%;
+        float: right;
+        background-color: #31a7ff;
+        border: 0px solid #ffffff;
+      }
+      .modify-button:hover {
+        color: #ffffff;
+      }
     }
   }
 </style>

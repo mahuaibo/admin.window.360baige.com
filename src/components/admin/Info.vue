@@ -1,11 +1,11 @@
 <template>
   <div class="admin-info">
-    <el-form :model="myData" :rules="userInfoRules" ref="myData" label-width="100px" class="admin-info-from">
-      <el-form-item label="头像:" prop="head" class="admin-info-from-head">
+    <el-form :model="myData" :rules="userInfoRules" ref="myData" label-width="100px" class="admin-info-form">
+      <el-form-item label="头像:" prop="head" class="admin-info-form-head">
         <el-upload type="drag" :thumbnail-mode="true" name="uploadFile" :on-success="uploadSuccess"
                    :action="publicParameters.domain + '/user/uploadHead?accessToken=' + accessToken + '&&id=' + myData.id"
-                   class="admin-info-from-headUpload">
-          <img :src="myData.head" height="48" width="48" class="admin-info-from-headImg"/>
+                   class="admin-info-form-headUpload">
+          <img :src="myData.head" height="48" width="48" class="admin-info-form-headImg"/>
           <div class="el-dragger__text head-upload">
             <span class="buttom">点击上传</span>
           </div>
@@ -20,15 +20,12 @@
       <el-form-item label="邮箱:" prop="email">
         <el-input type="string" v-model="myData.email" placeholder="暂未" :disabled="true"></el-input>
       </el-form-item>
-      <!--<el-form-item label=" ">-->
-      <!--<el-button class="modify-button" @click="submitForm('myData')">修改</el-button>-->
-      <!--</el-form-item>-->
     </el-form>
   </div>
 </template>
 <script>
   import axios from 'axios'
-  import {mapGetters, mapActions} from 'vuex'
+  import { mapGetters, mapActions } from 'vuex'
 
   export default {
     created () {
@@ -111,53 +108,37 @@
     }
   }
 </script>
-<style lang="scss">
-  .el-upload-list__item {
-    display: none;
-  }
-
-  .head-upload {
-    float: right;
-    span {
-      position: absolute;
-      color: #728ca5;
-      height: 22px;
-      line-height: 22px;
-      font-size: 12px;
-      background-color: #cadced;
-      width: 84px;
-      margin-top: 14px;
-      border-top-right-radius: 20px;
-      border-bottom-right-radius: 20px;
-    }
-  }
-
-  .modify-button {
-    color: #ffffff;
-    width: 100%;
-    float: right;
-    background-color: #31a7ff;
-    border: 0px solid #ffffff;
-  }
-
-  .modify-button:hover {
-    color: #ffffff;
-  }
-</style>
 <style lang="scss" scoped>
-  .admin-info-from {
-    padding: 0px 10px 0px 0px;
-    .admin-info-from-head {
-      text-align: left;
-    }
-    .admin-info-from-headUpload {
-      height: 48px;
-    }
-    .admin-info-from-headImg {
-      float: left;
-      border-radius: 5px;
-      border: 1px solid #cadced;
-      background: #cadced;
+  .admin-info {
+    .admin-info-form {
+      padding: 0px 10px 0px 0px;
+      .admin-info-form-head {
+        text-align: left;
+        .admin-info-form-headUpload {
+          height: 48px;
+        }
+        .admin-info-form-headImg {
+          float: left;
+          border-radius: 5px;
+          border: 1px solid #cadced;
+          background: #cadced;
+        }
+        .head-upload {
+          float: right;
+          span {
+            position: absolute;
+            color: #728ca5;
+            height: 22px;
+            line-height: 22px;
+            font-size: 12px;
+            background-color: #cadced;
+            width: 84px;
+            margin-top: 14px;
+            border-top-right-radius: 20px;
+            border-bottom-right-radius: 20px;
+          }
+        }
+      }
     }
   }
 </style>

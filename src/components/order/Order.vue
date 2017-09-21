@@ -45,7 +45,7 @@
                 <div class="text">{{ money(val.price) }}</div>
               </div>
               <div class="order-main-content-list-item-table-item">
-                <div class="text">{{ money(val.num) }}</div>
+                <div class="text">{{ val.num }}</div>
               </div>
               <div class="order-main-content-list-item-table-item">
                 <div class="text">{{ money(val.totalPrice) }}</div>
@@ -82,7 +82,8 @@
 </template>
 <script>
   import axios from 'axios'
-  import {mapGetters, mapActions} from 'vuex'
+  import { mapGetters, mapActions } from 'vuex'
+
   export default {
     created () {
       this.publicParameters.returnButtom = false
@@ -218,7 +219,7 @@
         min-width: $min-width-order !important;
         width: calc(100vw - 360px) !important;
         overflow: hidden;
-        box-shadow:0px 15px 10px -15px #ececec inset;
+        box-shadow: 0px 15px 10px -15px #ececec inset;
         .order-main-content-empty {
           height: 80px !important;
           line-height: 80px;
