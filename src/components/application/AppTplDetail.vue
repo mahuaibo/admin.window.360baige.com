@@ -23,6 +23,7 @@
           <span class="appTplDetail-right-feesExplain-price">
           ￥{{ money(appTplData.price)}}/{{ appTplData.payCycle }}
           </span>，您可根据需求选择订购。
+
         </div>
         <!--<div style="padding-top: 6px;padding-bottom:24px;">{{ appTplData.priceDesc }}</div>-->
       </div>
@@ -84,7 +85,7 @@
 </template>
 <script>
   import axios from 'axios'
-  import { mapGetters, mapActions } from 'vuex'
+  import {mapGetters, mapActions} from 'vuex'
 
   export default {
     created () {
@@ -135,7 +136,8 @@
         if (amount === 0) {
           return '0.00'
         } else {
-          return amount / 100
+          amount = amount / 100
+          return amount.toFixed(2)
         }
       },
       // 获取数据
