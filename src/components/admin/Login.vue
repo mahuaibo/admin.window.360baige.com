@@ -33,7 +33,9 @@
           </div>
           <div class="login-container-right-quickLogin"> — 快速登陆 — </div>
           <div class="login-container-right-icon">
-            <a href=""><img src="../../assets/login-qq.png" height="35" width="35"/></a>
+            <a :href="qqCodeUrl">
+              <img src="../../assets/login-qq.png" height="35" width="35"/>
+            </a>
             <a :href="weChatCodeUrl">
               <img src="../../assets/login-weixin.png" class="login-container-right-icon-wechat"/>
             </a>
@@ -58,14 +60,14 @@
   import AdminUserPosition from '@/components/admin/UserPosition'
   export default {
     created () {
-      var reg = new RegExp('(^|&)code=([^&]*)(&|$)', 'i')
-      var r = window.location.search.substr(1).match(reg)
-      if (r === null) {
-        return
-      }
-      var code = unescape(r[2])
+      var code = this.getQueryString('code')
+      var state = this.getQueryString('state')
       if (code !== undefined && code !== '' && code !== null) {
-        this.weChatBindStatus(code)
+        if (state.indexOf('qq') >= 0) {
+          this.qqBindStatus(code)
+        } else {
+          this.weChatBindStatus(code)
+        }
       }
     },
     computed: {
@@ -77,6 +79,7 @@
     components: {CommonHeader, CommonSidebar, AdminUserPosition},
     data () {
       return {
+        qqCodeUrl: 'https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id=101413897&redirect_uri=http://audit.dev.360baige.com&state=qqLogin',
         weChatCodeUrl: 'https://open.weixin.qq.com/connect/qrconnect?appid=wxe8d941078f9472af&redirect_uri=' + window.location.origin + '&response_type=code&scope=snsapi_login&state=STATE#wechat_redirect',
         loginDataForm: {
           username: null,
@@ -99,6 +102,23 @@
         'handleClick',
         'getUserPositionList'
       ]),
+      getQueryString (name) {
+        // 获取当前URL
+        var localUrl = document.location.href
+        // 获取要取得的get参数位置
+        var get = localUrl.indexOf(name + '=')
+        if (get === -1) {
+          return null
+        }
+        // 截取字符串
+        var getPar = localUrl.slice(name.length + get + 1)
+        // 判断截取后的字符串是否还有其他get参数
+        var nextPar = getPar.indexOf('&')
+        if (nextPar !== -1) {
+          getPar = getPar.slice(0, nextPar)
+        }
+        return getPar
+      },
       submitForm (formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
@@ -144,7 +164,35 @@
             localStorage.setItem('accessTicket', response.data.data.accessTicket)
             current.publicParameters.identityListDialog = true
           } else if (response.data.code === '600') { // 账号未绑定转到绑定
-            window.location.href = '#/admin/bindAccount?openId=' + response.data.data.openId
+            window.location.href = '#/admin/bindAccount'
+            localStorage.setItem('openType', response.data.data.openType)
+            localStorage.setItem('openId', response.data.data.openId)
+          } else { // 非法操作返回登录页
+            current.promptInfo('warning', '非法操作！')
+            window.location.href = '#/admin/login'
+          }
+        }).catch(function (error) {
+          console.log(error)
+        })
+      },
+      // 获取QQ用户绑定转态
+      qqBindStatus (code) {
+        var current = this
+        axios({
+          method: 'POST',
+          url: this.publicParameters.domain + '/user/qqLogin',
+          params: {code: code}
+        }).then(function (response) {
+          console.log(response.data)
+          if (response.data.code === '200') { // 登录成功保存cookie
+            localStorage.setItem('username', response.data.data.username)
+            localStorage.setItem('head', response.data.data.head)
+            localStorage.setItem('accessTicket', response.data.data.accessTicket)
+            current.publicParameters.identityListDialog = true
+          } else if (response.data.code === '600') { // 账号未绑定转到绑定
+            window.location.href = '#/admin/bindAccount'
+            localStorage.setItem('openType', response.data.data.openType)
+            localStorage.setItem('openId', response.data.data.openId)
           } else { // 非法操作返回登录页
             current.promptInfo('warning', '非法操作！')
             window.location.href = '#/admin/login'

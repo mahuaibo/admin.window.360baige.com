@@ -2,7 +2,7 @@ import axios from 'axios'
 import router from '.././router'
 
 // /////////////////////////////accessToken验证////////////////
-function verifyLoginAccessToken () {
+function verifyLoginAccessToken() {
   if (localStorage.getItem('accessToken') === null) {
     router.push('/admin/login')
   }
@@ -25,7 +25,6 @@ export const initHomeData = (state, index, row) => {
 
 // ///////////////////////用户角色//////////////////////////////
 export const getUserPositionList = (state, index, row) => {
-  console.log(index)
   var params = {}
   if (localStorage.getItem('accessToken')) {
     params = {
@@ -280,7 +279,7 @@ export const initLoggerListData = (state, index, row) => {
   })
 }
 
-function formatDate (date) {
+function formatDate(date) {
   var myyear = date.getFullYear()
   var mymonth = date.getMonth() + 1
   var myweekday = date.getDate()
