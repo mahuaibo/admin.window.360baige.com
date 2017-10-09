@@ -95,7 +95,8 @@
   export default {
     components: {CommonHeader, CommonSidebar, AdminUserPosition},
     created () {
-      this.openId = this.$route.query.openId
+      console.log(this.openType)
+      console.log(this.openId)
     },
     computed: {
       ...mapGetters([
@@ -168,7 +169,8 @@
         }
       }
       return {
-        openId: null,
+        openType: localStorage.getItem('openType'),
+        openId: localStorage.getItem('openId'),
         registerForm: {
           username: null,
           password: null,
@@ -268,6 +270,7 @@
                 password: this.registerForm.password,
                 phone: this.registerForm.phone,
                 verifyCode: this.registerForm.captcha,
+                openType: this.openType,
                 openId: this.openId
               }
             } else {
@@ -275,6 +278,7 @@
                 type: 1,
                 username: this.loginForm.username,
                 password: this.loginForm.password,
+                openType: this.openType,
                 openId: this.openId
               }
             }
@@ -289,11 +293,16 @@
                 localStorage.setItem('username', response.data.data.username)
                 localStorage.setItem('accessTicket', response.data.data.accessTicket)
                 current.publicParameters.identityListDialog = true
+                localStorage.removeItem('openType')
+                localStorage.removeItem('openId')
               } else {
-                current.promptInfo('warning', response.data.message)
+                current.promptInfo('warning', '绑定失败请重新登录！')
+                window.location.href = '#/admin/login'
               }
             }).catch(function (error) {
               console.log(error)
+              current.promptInfo('warning', '系统异常请重新登录！')
+              window.location.href = '#/admin/login'
             })
           } else {
             console.log('error submit!!')

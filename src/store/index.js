@@ -17,8 +17,8 @@ const state = {
     name: localStorage.getItem('username') + localStorage.getItem('positionName'),
     path: '',
     // domain: 'http://123.56.6.206:30000/cloud/window/v1'
-    // domain: 'http://192.168.0.100:30000/cloud/window/v1'
-    domain: 'http://dev.cloud.360baige.com/cloud/window/v1'
+    domain: 'http://192.168.0.101:30000/cloud/window/v1'
+    // domain: 'http://dev.cloud.360baige.com/cloud/window/v1'
   },
   userPositionList: {
     list: {}
