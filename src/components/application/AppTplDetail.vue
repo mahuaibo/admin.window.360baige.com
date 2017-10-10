@@ -75,13 +75,17 @@
         </div>
       </div>
     </div>
-    <!--<button @click="immediatePayment2">立即支付</button>-->
     <div class="appTplDetail-immediatePayment">
       <el-button class="confirm-order" type="primary" @click="immediatePayment" v-if="status===0">立即支付</el-button>
     </div>
-    <el-dialog title="微信支付" v-model="payDialog" size="large" :before-close="closeWindow" :close-on-click-modal="false">
-      <div><img :src="payImage" height="256" width="256"/></div>
-      <div class="pay-prompting">使用微信扫一扫支付</div>
+    <el-dialog :title="payTitle" v-model="payDialog" size="large" :before-close="closeWindow"
+               :close-on-click-modal="false">
+      <div>
+        <img v-if="payType===1" :src="payImage" height="256" width="256"/>
+        <iframe v-else="payType===2" style="margin: 20px" height="200" width="200" frameborder="no" scrolling="no"
+                :src="payUrl"></iframe>
+      </div>
+      <div class="pay-prompting">使用{{payTitle}}扫一扫支付</div>
     </el-dialog>
   </div>
 </template>
@@ -109,11 +113,13 @@
         codeUrl: '',
         timing: null,
         payDialog: false,
-        payMode: 1,
+        payTitle: '微信',
+        payType: 1,
         showMore: false,
         number: 1,
         totalPrice: 0,
         payImage: '',
+        payUrl: '',
         status: 0,
         appTplData: {
           id: '',
@@ -214,124 +220,49 @@
         document.getElementById('appTplDetail-right-descMore').style.display = 'inline'
         document.getElementById('packUp').style.display = 'none'
       },
-      immediatePayment2 () {
-        console.log('确认订单')
-        var current = this
-        if (current.orderId === 0) {
-          axios({
-            method: 'POST',
-            url: this.publicParameters.domain + '/order/add',
-            params: {
-              accessToken: localStorage.getItem('accessToken'),
-              applicationTplId: this.appTplData.id,
-              num: this.number,
-              payType: this.payMode
-            }
-          }).then(function (response) {
-            console.log(response.data)
-            if (response.data.code === '200') {
-//              current.payDialog = true
-              current.codeUrl = response.data.data.codeUrl
-//              current.payImage = current.publicParameters.domain + '/order/qr?size=356&url=' + current.codeUrl
-              window.location.href = current.codeUrl + '&redirect_url=http://wwww.360baige.com'
-//              window.location.open(current.codeUrl)
-              current.payStatusTimer(response.data.data.id)
-              current.orderId = response.data.data.id
-            }
-          }).catch(function (error) {
-            console.log(error)
-          })
-        } else {
-          if (current.codeUrl === '') {
-            console.log('1，' + current.codeUrl)
-            window.location.href = current.codeUrl + '&redirect_url=http://wwww.360baige.com'
-            current.payStatusTimer(current.orderId)
-          } else {
-            console.log('2，' + current.codeUrl)
-            window.location.href = current.codeUrl + '&redirect_url=http://wwww.360baige.com'
-            current.payStatusTimer(current.orderId)
-          }
-        }
-      },
       // 立即支付
       immediatePayment () {
         var selected = document.getElementsByClassName('appTplDetail-bottom-img-item selected')[0].id
         var current = this
         if (selected === 'appTplDetail-bottom-img-aliPay') {
-          console.log('aliPay')
-          if (current.orderId === 0) {
-            axios({
-              method: 'POST',
-              url: this.publicParameters.domain + '/order/add',
-              params: {
-                accessToken: localStorage.getItem('accessToken'),
-                applicationTplId: this.appTplData.id,
-                num: this.number,
-                payType: '2'
-              }
-            }).then(function (response) {
-              console.log(response.data)
-              if (response.data.code === '200') {
-                current.payDialog = true
-                current.codeUrl = response.data.data.codeUrl
-                current.payImage = current.publicParameters.domain + '/order/qr?size=356&url=' + current.codeUrl
-                current.payStatusTimer(response.data.data.id)
-                current.orderId = response.data.data.id
-              }
-            }).catch(function (error) {
-              console.log(error)
-            })
-          } else {
-            if (current.codeUrl === '') {
-              console.log('1，' + current.codeUrl)
-              current.payDialog = true
-              current.payImage = current.publicParameters.domain + '/order/qr?size=356&url=' + current.codeUrl
-              current.payStatusTimer(current.orderId)
-            } else {
-              console.log('2，' + current.codeUrl)
-              current.payDialog = true
-              current.payImage = current.publicParameters.domain + '/order/qr?size=356&url=' + current.codeUrl
-              current.payStatusTimer(current.orderId)
-            }
-          }
+          current.payType = 2
         } else if (selected === 'appTplDetail-bottom-img-weChatPay') {
-          console.log('weChatPay')
-          if (current.orderId === 0) {
-            axios({
-              method: 'POST',
-              url: this.publicParameters.domain + '/order/add',
-              params: {
-                accessToken: localStorage.getItem('accessToken'),
-                applicationTplId: this.appTplData.id,
-                num: this.number,
-                payType: '1'
-              }
-            }).then(function (response) {
-              console.log(response.data)
-              if (response.data.code === '200') {
-                current.payDialog = true
-                current.codeUrl = response.data.data.codeUrl
-                current.payImage = current.publicParameters.domain + '/order/qr?size=356&url=' + current.codeUrl
-                current.payStatusTimer(response.data.data.id)
-                current.orderId = response.data.data.id
-              }
-            }).catch(function (error) {
-              console.log(error)
-            })
-          } else {
-            if (current.codeUrl === '') {
-              console.log('1，' + current.codeUrl)
-              current.payDialog = true
-              current.payImage = current.publicParameters.domain + '/order/qr?size=356&url=' + current.codeUrl
-              current.payStatusTimer(current.orderId)
-            } else {
-              console.log('2，' + current.codeUrl)
-              current.payDialog = true
-              current.payImage = current.publicParameters.domain + '/order/qr?size=356&url=' + current.codeUrl
-              current.payStatusTimer(current.orderId)
-            }
-          }
+          current.payType = 1
+        } else {
+          return
         }
+        axios({
+          method: 'POST',
+          url: this.publicParameters.domain + '/order/add',
+          params: {
+            accessToken: localStorage.getItem('accessToken'),
+            applicationTplId: current.appTplData.id,
+            num: current.number,
+            payType: current.payType,
+            orderId: current.orderId
+          }
+        }).then(function (response) {
+          console.log(response.data)
+          if (response.data.code === '200') {
+            current.payType = response.data.data.PayType
+            current.codeUrl = response.data.data.codeUrl
+            current.orderId = response.data.data.id
+            console.log(current.payType)
+            if (current.payType === 1) {
+              // wechatpay
+              current.payTitle = '微信'
+              current.payImage = current.publicParameters.domain + '/order/qr?size=356&url=' + current.codeUrl
+            } else if (current.payType === 2) {
+              // alipay
+              current.payTitle = '支付宝'
+              current.payUrl = response.data.data.codeUrl
+            }
+            current.payDialog = true
+            current.payStatusTimer(response.data.data.id)
+          }
+        }).catch(function (error) {
+          console.log(error)
+        })
       },
       // 定时获取支付状态
       payStatusTimer (orderId) {
@@ -355,7 +286,9 @@
                   current.orderId = 0
                   current.codeUrl = ''
                   current.handleClick('/application/center')
-                } else if (tradeState !== 'NOTPAY' && tradeState !== 'USERPAYING') {
+                } else if (tradeState === 'WAIT') {
+                  console.log(tradeState)
+                } else if (tradeState === 'FAIL') {
                   console.log(tradeState)
                   clearInterval(current.timing)
                   current.payDialog = false
@@ -377,9 +310,11 @@
         if (index === 'weChatPay') {
           document.getElementById('appTplDetail-bottom-img-aliPay').className = 'appTplDetail-bottom-img-item'
           document.getElementById('appTplDetail-bottom-img-weChatPay').className = 'appTplDetail-bottom-img-item selected'
-        } else {
+          this.payType = 1
+        } else if (index === 'aliPay') {
           document.getElementById('appTplDetail-bottom-img-aliPay').className = 'appTplDetail-bottom-img-item selected'
           document.getElementById('appTplDetail-bottom-img-weChatPay').className = 'appTplDetail-bottom-img-item'
+          this.payType = 2
         }
       },
       messageRemind (type, info) { // type success成功   warning警告   error失败
