@@ -11,6 +11,7 @@ function verifyLoginAccessToken() {
 
 // /////////////////////////////跳转页面/////////////////////////////
 export const handleClick = (state, index, row) => {
+  console.log('1111111111')
   if (typeof index === 'string') {
     router.push(index)
   } else {
@@ -37,7 +38,7 @@ export const getUserPositionList = (state, index, row) => {
   state.userPositionList.list = []
   axios({
     method: 'POST',
-    url: state.publicParameters.domain + '/userPosition/list',
+    url: state.publicParameters.loginDomain + '/userPosition/list',
     params
   }).then(function (response) {
     console.log(response.data)

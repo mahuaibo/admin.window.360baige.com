@@ -15,6 +15,7 @@ import Account from '@/components/account/Account'
 import TransactionDetail from '@/components/account/TransactionDetail'
 import Order from '@/components/order/Order'
 import Logger from '@/components/logger/Logger'
+import DialogLogin from '@/components/admin/DialogLogin'
 
 Vue.use(Router)
 
@@ -34,6 +35,11 @@ export default new Router({
     component: BindAccount,
     path: '/admin/bindAccount',
     alias: 'bindAccount'
+  }, {
+    name: 'dialogLogin',
+    component: DialogLogin,
+    path: '/admin/dialogLogin',
+    alias: 'dialogLogin'
   }, {
     name: 'home',
     component: Home,

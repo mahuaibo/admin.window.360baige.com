@@ -259,7 +259,7 @@
           }
         })
       },
-      // 微信号码绑定
+      // 账号绑定
       submitForm (formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
@@ -285,16 +285,17 @@
             var current = this
             axios({
               method: 'POST',
-              url: this.publicParameters.domain + '/user/bindAccount',
+              url: this.publicParameters.loginDomain + '/user/bindAccount',
               params
             }).then(function (response) {
               console.log(response.data)
               if (response.data.code === '200') {
+                localStorage.clear()
+                localStorage.setItem('head', response.data.data.head)
                 localStorage.setItem('username', response.data.data.username)
                 localStorage.setItem('accessTicket', response.data.data.accessTicket)
+                localStorage.setItem('accessTicket', response.data.data.accessTicket)
                 current.publicParameters.identityListDialog = true
-                localStorage.removeItem('openType')
-                localStorage.removeItem('openId')
               } else {
                 current.promptInfo('warning', '绑定失败请重新登录！')
                 window.location.href = '#/admin/login'

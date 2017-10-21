@@ -24,6 +24,8 @@
           ￥{{ money(appTplData.price)}}/{{ appTplData.payCycle }}
           </span>，您可根据需求选择订购。
 
+
+
         </div>
         <!--<div style="padding-top: 6px;padding-bottom:24px;">{{ appTplData.priceDesc }}</div>-->
       </div>
@@ -103,7 +105,7 @@
     },
     data () {
       return {
-        orderId: 0,
+        orderId: '',
         codeUrl: '',
         timing: null,
         payDialog: false,

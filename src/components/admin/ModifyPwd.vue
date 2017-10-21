@@ -19,7 +19,7 @@
 </template>
 <script>
   import axios from 'axios'
-  import {mapGetters} from 'vuex'
+  import {mapGetters, mapActions} from 'vuex'
   export default {
     computed: {
       ...mapGetters([
@@ -58,6 +58,9 @@
       }
     },
     methods: {
+      ...mapActions([
+        'handleClick'
+      ]),
       submitForm (formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {

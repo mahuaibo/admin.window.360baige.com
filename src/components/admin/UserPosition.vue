@@ -20,7 +20,7 @@
 </template>
 <script>
   import axios from 'axios'
-  import { mapGetters, mapActions } from 'vuex'
+  import {mapGetters, mapActions} from 'vuex'
 
   export default {
     created () {
@@ -61,11 +61,12 @@
         var current = this
         axios({
           method: 'POST',
-          url: this.publicParameters.domain + '/userPosition/getAccessToken',
+          url: this.publicParameters.loginDomain + '/userPosition/getAccessToken',
           params
         }).then(function (response) {
           console.log(response.data)
           if (response.data.code === '200') {
+            localStorage.removeItem('accessTicket')
             localStorage.setItem('positionName', '(' + data.userPositionName + ')')
             current.publicParameters.name = localStorage.getItem('username') + localStorage.getItem('positionName')
             localStorage.setItem('userPositionId', data.userPositionId)
@@ -73,9 +74,6 @@
             current.userPositionId = data.userPositionId
             current.publicParameters.identityListDialog = false
             window.location.href = window.location.origin + '#/application/center'
-//            window.opener = null
-//            window.open(window.location.origin + '#/application/center', '_self')
-//            window.close()
           } else {
             current.promptInfo('error', '角色切换失败！')
           }

@@ -59,28 +59,27 @@
   import CommonSidebar from '@/components/common/Sidebar'
   import AdminUserPosition from '@/components/admin/UserPosition'
   export default {
+    components: {CommonHeader, CommonSidebar, AdminUserPosition},
     created () {
       var code = this.getQueryString('code')
       var state = this.getQueryString('state')
       if (code !== undefined && code !== '' && code !== null) {
         if (state.indexOf('qq') >= 0) {
-          this.qqBindStatus(code)
+          this.thirdPartyLogin(code, 3) // qq登陆
         } else {
-          this.weChatBindStatus(code)
+          this.thirdPartyLogin(code, 2) // 微信登陆
         }
       }
     },
     computed: {
       ...mapGetters([
-        'publicParameters',
-        'wechat'
+        'publicParameters'
       ])
     },
-    components: {CommonHeader, CommonSidebar, AdminUserPosition},
     data () {
       return {
         qqCodeUrl: 'https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id=101413897&redirect_uri=http://audit.dev.360baige.com&state=qqLogin',
-        weChatCodeUrl: 'https://open.weixin.qq.com/connect/qrconnect?appid=wxe8d941078f9472af&redirect_uri=' + window.location.origin + '&response_type=code&scope=snsapi_login&state=STATE#wechat_redirect',
+        weChatCodeUrl: 'https://open.weixin.qq.com/connect/qrconnect?appid=wxe8d941078f9472af&redirect_uri=http://audit.dev.360baige.com&response_type=code&scope=snsapi_login&state=STATE#wechat_redirect',
         loginDataForm: {
           username: null,
           password: null
@@ -102,6 +101,7 @@
         'handleClick',
         'getUserPositionList'
       ]),
+      // 截取url中Get参数
       getQueryString (name) {
         // 获取当前URL
         var localUrl = document.location.href
@@ -119,14 +119,16 @@
         }
         return getPar
       },
+      // 账号登陆
       submitForm (formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
             var current = this
             axios({
               method: 'POST',
-              url: this.publicParameters.domain + '/user/login',
+              url: this.publicParameters.loginDomain + '/user/login',
               params: {
+                loginType: 1,
                 username: this.loginDataForm.username,
                 password: this.loginDataForm.password
               }
@@ -136,6 +138,7 @@
                 localStorage.setItem('username', response.data.data.username)
                 localStorage.setItem('head', response.data.data.head)
                 localStorage.setItem('accessTicket', response.data.data.accessTicket)
+                localStorage.setItem('expireIn', response.data.data.expireIn)
                 current.publicParameters.identityListDialog = true
               } else {
                 current.promptInfo('error', '用户名密码错误！')
@@ -150,38 +153,15 @@
         })
       },
       // 获取微信用户绑定转态
-      weChatBindStatus (code) {
+      thirdPartyLogin (code, type) {
         var current = this
         axios({
           method: 'POST',
-          url: this.publicParameters.domain + '/user/weChatLogin',
-          params: {code: code}
-        }).then(function (response) {
-          console.log(response.data)
-          if (response.data.code === '200') { // 登录成功保存cookie
-            localStorage.setItem('username', response.data.data.username)
-            localStorage.setItem('head', response.data.data.head)
-            localStorage.setItem('accessTicket', response.data.data.accessTicket)
-            current.publicParameters.identityListDialog = true
-          } else if (response.data.code === '600') { // 账号未绑定转到绑定
-            window.location.href = '#/admin/bindAccount'
-            localStorage.setItem('openType', response.data.data.openType)
-            localStorage.setItem('openId', response.data.data.openId)
-          } else { // 非法操作返回登录页
-            current.promptInfo('warning', '非法操作！')
-            window.location.href = '#/admin/login'
+          url: this.publicParameters.loginDomain + '/user/login',
+          params: {
+            loginType: type,
+            code: code
           }
-        }).catch(function (error) {
-          console.log(error)
-        })
-      },
-      // 获取QQ用户绑定转态
-      qqBindStatus (code) {
-        var current = this
-        axios({
-          method: 'POST',
-          url: this.publicParameters.domain + '/user/qqLogin',
-          params: {code: code}
         }).then(function (response) {
           console.log(response.data)
           if (response.data.code === '200') { // 登录成功保存cookie
@@ -209,12 +189,10 @@
         return false
       },
       handleClose (done) {
-        this.$confirm('确认关闭？')
-          .then(_ => {
-            done()
-          })
-          .catch(_ => {
-          })
+        this.$confirm('确认关闭？').then(_ => {
+          done()
+        }).catch(_ => {
+        })
       }
     }
   }

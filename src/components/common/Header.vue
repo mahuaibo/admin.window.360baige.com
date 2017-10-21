@@ -179,19 +179,14 @@
         }).then(() => {
           axios({
             method: 'POST',
-            url: this.publicParameters.domain + '/user/logout',
+            url: this.publicParameters.loginDomain + '/user/logout',
             params: {
               access_token: localStorage.getItem('accessTicket')
             }
           }).then(function (response) {
             console.log(response.data)
             if (response.data.code === '200') {
-              localStorage.removeItem('username')
-              localStorage.removeItem('userPositionId')
-              localStorage.removeItem('accessToken')
-              localStorage.removeItem('head')
-              localStorage.removeItem('positionName')
-              localStorage.removeItem('accessTicket')
+              localStorage.clear()
               window.location.href = '#/admin/login'
             } else {
               window.location.href = '#/'

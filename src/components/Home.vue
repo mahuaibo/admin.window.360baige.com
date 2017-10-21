@@ -22,7 +22,7 @@
 <script>
   import CommonHeader from '@/components/common/Header'
   import CommonSidebar from '@/components/common/Sidebar'
-  import { mapActions } from 'vuex'
+  import {mapGetters, mapActions} from 'vuex'
   export default {
     components: {CommonHeader, CommonSidebar},
     created () {
@@ -31,6 +31,12 @@
         window.location.href = '#/application/center'
       }
       this.initHomeData()
+    },
+    computed: {
+      ...mapGetters([])
+    },
+    data () {
+      return {}
     },
     methods: {
       ...mapActions([
