@@ -19,8 +19,10 @@ const state = {
     path: '',
     // domain: 'http://123.56.6.206:30000/cloud/window/v1'
     loginDomain: 'http://192.168.0.101:30000/cloud/mobile/authority/v1',
-    domain: 'http://192.168.0.101:30000/cloud/window/v1'
+    // domain: 'http://192.168.0.101:30000/cloud/window/v1'
     // domain: 'http://dev.cloud.360baige.com/cloud/window/v1'
+    // domain: 'http://192.168.0.104:30000/cloud/window/v1'
+    domain: 'http://dev.cloud.360baige.com/cloud/window/v1'
   },
   userPositionList: {
     list: [{
